@@ -3,7 +3,6 @@ import discord
 def lineBreak():
     print('---------------------------------')
 
-
 def printServers(client):
     tmp = ""
     for server in client.servers:
