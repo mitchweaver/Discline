@@ -1,7 +1,11 @@
 import discord
+import os
 
 def lineBreak():
     print('---------------------------------')
+
+def clearScreen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def printServers(client):
     tmp = ""
