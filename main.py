@@ -6,15 +6,28 @@ import sys
 import os
 from printutils import *
 from client import client
+<<<<<<< HEAD
 from help import *
+=======
+>>>>>>> 0b187ac... goalpost: message sending
 
 # await client.login('zemajujo@axsup.net', 'testpassword')
 
 token = sys.argv[1]
+<<<<<<< HEAD
 client = client(max_messages=5000)
 servers = []
 prefix = '/'
 
+=======
+client = client(max_messages=100)
+servers = []
+prefix = '/'
+
+currentServer="DisKvlt"
+currentChannel="terminal_discord"
+
+>>>>>>> 0b187ac... goalpost: message sending
 ####### INITIALIZATION ################################################
 def initServers():
     global servers
@@ -23,7 +36,7 @@ def initServers():
         servers.append(server)
 #######################################################################
 
-@client.event
+@client.async_event
 async def on_ready(): 
     print("Client is starting...")
     client.wait_until_login()
@@ -37,6 +50,7 @@ async def on_ready():
     lineBreak()
     printUser(client)
     printServers(client)
+<<<<<<< HEAD
     client.setPrompt("[ ~ ]: ")
     client.setCurrentServer("DisKvlt")
     client.setCurrentChannel("terminal_discord")
@@ -91,5 +105,13 @@ async def on_ready():
             # If all options have been exhausted, it must be chat
             await client.send_message(client.getCurrentChannel(), user_input)
                              
+=======
+    lineBreak()
+>>>>>>> 0b187ac... goalpost: message sending
 
+    while True:
+        a = input("terminal_discord: ")
+        await client.send_message(client.getChannel("terminal_discord"), a)
+                              
+                              
 client.run(token, bot=False)
