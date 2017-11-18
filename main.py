@@ -37,9 +37,10 @@ async def on_ready():
     printUser(client)
     printServers(client)
     client.setPrompt("[ ~ ]: ")
+    client.setCurrentServer("DisKvlt")
+    client.setCurrentChannel("terminal_discord")
 
-
-    
+    await client.logs_from(client.getCurrentChannel)
 
 
     while True:
