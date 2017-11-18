@@ -4,12 +4,9 @@ import os
 def lineBreak():
     print('---------------------------------')
 
-<<<<<<< HEAD
 def clearScreen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-=======
->>>>>>> 0b187ac... goalpost: message sending
 def printServers(client):
     tmp = ""
     for server in client.servers:
