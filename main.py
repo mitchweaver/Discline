@@ -14,6 +14,7 @@ prefix = '/'
 
 currentServer="DisKvlt"
 currentChannel="terminal_discord"
+prompt="[ ~ ]"
 
 ####### INITIALIZATION ################################################
 def initServers():
@@ -40,8 +41,8 @@ async def on_ready():
     lineBreak()
 
     while True:
-        a = input("terminal_discord: ")
-        await client.send_message(client.getChannel("terminal_discord"), a)
+        input = input(prompt)
+        # await client.send_message(client.getChannel("terminal_discord"), a)
                               
                               
 client.run(token, bot=False)
