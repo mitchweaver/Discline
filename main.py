@@ -1,6 +1,7 @@
 import discord
 import curses
 import asyncio
+import logging
 import sys
 import os
 from printutils import *
@@ -10,7 +11,7 @@ from help import *
 # await client.login('zemajujo@axsup.net', 'testpassword')
 
 token = sys.argv[1]
-client = client(max_messages=100)
+client = client(max_messages=5000)
 servers = []
 prefix = '/'
 
@@ -22,7 +23,7 @@ def initServers():
         servers.append(server)
 #######################################################################
 
-@client.async_event
+@client.event
 async def on_ready(): 
     print("Client is starting...")
     client.wait_until_login()
@@ -40,10 +41,12 @@ async def on_ready():
     client.setCurrentServer("DisKvlt")
     client.setCurrentChannel("terminal_discord")
 
-    await client.logs_from(client.getCurrentChannel)
-
+    client.setPrompt("[ ~ ]: ")
 
     while True:
+        messages = client.messages
+        for m in messages: print(m.content)
+        
         lineBreak()
         # Prompt user for input
         user_input = input(client.getPrompt())
@@ -66,6 +69,7 @@ async def on_ready():
                 if command == "server":
                     # TODO: check if arg is a valid server
                     client.setCurrentServer(arg)
+                    client.setCurrentChannel(client.getServer(arg).default_channel)
                     clearScreen()
                     lineBreak()
                     print("Joined server: " + client.getCurrentServerName())
@@ -74,6 +78,8 @@ async def on_ready():
                     # TODO: check if arg is a valid channel
                     client.setCurrentChannel(arg)
                     client.setPrompt("[ " + arg + " ]: ")
+                    async for message in client.logs_from(client.getCurrentChannel(), limit=10):
+                        print(message.clean_content)
             # Else we must have only a command, no argument
             else:
                 command = user_input
@@ -83,7 +89,7 @@ async def on_ready():
         # This must not be a command...
         else: 
             # If all options have been exhausted, it must be chat
-            await client.send_message(client.getCurrentChannel, arg)
+            await client.send_message(client.getCurrentChannel(), user_input)
                              
 
 client.run(token, bot=False)
