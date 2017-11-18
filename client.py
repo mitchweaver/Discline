@@ -9,10 +9,8 @@ class client(discord.Client):
     __prompt=""
 
     def getChannel(self, string):
-        for channel in self.get_all_channels():
-            if channel.name == string: return channel
-        
-        # return discord.utils.find(lambda c: c.name == string, self.get_all_channels())
+        return discord.utils.find(lambda c: c.name == string, \
+                                  self.get_all_channels())
 
     def getServer(self, string):
         return discord.utils.find(lambda s: s.name == string, self.servers)
@@ -32,7 +30,8 @@ class client(discord.Client):
     def getCurrentChannel(self): return self.getChannel(self.__current_channel)
     
     def getChannel(self, string):
-        return discord.utils.find(lambda c: c.name == string, self.get_all_channels())
+        return discord.utils.find(lambda c: c.name == string, \
+                                  self.get_all_channels())
 
     def getServer(self, string):
         return discord.utils.find(lambda s: s.name == string, self.servers)
