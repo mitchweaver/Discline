@@ -6,32 +6,28 @@ from printutils import *
 from client import client
 from help import *
 import ui
+from blessings import Terminal
 
 # await client.login('zemajujo@axsup.net', 'testpassword')
 
 token = sys.argv[1]
-client = client(max_messages=300)
+client = client(max_messages=1000)
+term = Terminal()
 prefix = '/'
+default_prompt = "~"
 
 @client.event
 async def on_ready(): 
-    # print("Client is starting...")
     client.wait_until_login()
-    # if client.is_logged_in:
-        # print("Client has logged in successfully!")
-    # else:
-        # print("Error: Login failed")
-        # quit()
-    # lineBreak()
-    # printUser(client)
-    # printServers(client)
-    client.setPrompt("[ ~ ]: ")
+
+    client.setPrompt(default_prompt)
+
+    ##### init for debugging ###################
     client.setCurrentServer("DisKvlt")
     client.setCurrentChannel("terminal_discord")
+    #############################################
 
-    client.setPrompt("~")
-
-    # Print initial screen
+     # Print initial screen
     ui.printScreen(client, None)
 
     while True:
@@ -41,25 +37,15 @@ async def on_ready():
         # Clear channel log
         channelLog = []
 
-        # Prompt user for input
-        # user_input = input()
-
-        from blessings import Terminal
-
-        term = Terminal()
         # Note: input() needs to be set at 1 line higher than the prompt
         with term.location(len(client.getPrompt()) + 7, term.height - 2):
-            user_input = input()
+            user_input = input().rstrip()
 
-        
-        # Strip trailing white space, (if any)
-        user_input = user_input.rstrip()
-        
         # If input is blank, don't do anything
         if user_input == '': continue
 
         # Check if input is a command
-        if user_input[0] == prefix:
+        elif user_input[0] == prefix:
             # Strip the prefix
             user_input = user_input[1:]
 
@@ -72,17 +58,11 @@ async def on_ready():
                     client.setCurrentServer(arg)
                     client.setCurrentChannel(client.getServer(arg).default_channel)
                     ui.clearScreen()
-                    lineBreak()
-                    # print("Joined server: " + client.getCurrentServerName())
-                    lineBreak()
                 elif command == "channel":
                     # TODO: check if arg is a valid channel
                     client.setCurrentChannel(arg)
                     client.setPrompt(arg)
             
-                    async for msg in client.logs_from(client.getCurrentChannel(), limit=30):
-                        channelLog.insert(0, msg)
-
             # Else we must have only a command, no argument
             else:
                 command = user_input
@@ -93,9 +73,16 @@ async def on_ready():
         else: 
             # If all options have been exhausted, it must be chat
             await client.send_message(client.getCurrentChannel(), user_input)
+        
+        
+        # Fill the log
+        if client.getCurrentChannel is not None:
+            async for msg in client.logs_from(client.getCurrentChannel(), limit=1000):
+                channelLog.insert(0, msg)
 
         # Update the screen
         ui.printScreen(client, channelLog)
                              
+
 
 client.run(token, bot=False)

@@ -1,8 +1,9 @@
 import client
 import blessings
 import os
+from blessings import Terminal
 
-term = blessings.Terminal()
+term = Terminal()
 line_break = ""
 MARGIN = 2
 
@@ -49,12 +50,16 @@ def printChannelLog(channelLog, left_bar_width):
     global term
     global MARGIN
     step = MARGIN
-
+    offset = 0
 
     for msg in channelLog:
-           
+        
+        # check if we've filled the term window, if so, stop printing!
+        if step + MARGIN*2 >= term.height: break
+        
         # Our line, filled with hope to be printed
-        proposed_line = msg.author.display_name + ": " + msg.clean_content.strip()
+        author_prefix = term.green(msg.author.display_name + ": ")
+        proposed_line = author_prefix + term.white(msg.clean_content.strip())
 
         # If our input line actually consists of
         # of multiple lines separated by new-line
@@ -91,7 +96,7 @@ def printChannelLog(channelLog, left_bar_width):
                     # If this section isn't the first line of the comment,
                     # we should offset it to better distinguish it
                     offset = 0
-                    if msg.author.display_name not in sect:
+                    if author_prefix not in sect:
                         offset = len(msg.author.display_name) + 2
 
 
@@ -102,7 +107,7 @@ def printChannelLog(channelLog, left_bar_width):
                     # we don't overwrite it
                     step += 1
 
-                    # Split the line with between what has been printed, and
+                    # Split the line between what has been printed, and
                     # what still remains needing to be printed
                     line = line.split(sect)[1]
 
@@ -113,7 +118,7 @@ def printChannelLog(channelLog, left_bar_width):
             if len(line) > 0:
                 
                 offset = 0
-                if msg.author.display_name not in line:
+                if author_prefix not in line:
                     offset = len(msg.author.display_name) + 2
 
                 with term.location(left_bar_width + MARGIN + offset, step):

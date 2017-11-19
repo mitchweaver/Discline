@@ -15,7 +15,6 @@ class client(discord.Client):
     def getServer(self, string):
         return discord.utils.find(lambda s: s.name == string, self.servers)
 
-
     
     # Note: setting only allows for string types
     def setPrompt(self, string): self.__prompt = string
