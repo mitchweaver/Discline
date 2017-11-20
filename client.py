@@ -1,36 +1,29 @@
 import discord
 
 # inherits from discord.py's Client
-class client(discord.Client):
+class Client(discord.Client):
 
     # NOTE: These are strings!
-    __current_server=""
-    __current_channel=""
-    __prompt=""
+    __current_server = ""
+    __current_channel = ""
+    __prompt = ""
 
-    def getChannel(self, string):
+    def get_channel(self, string):
         return discord.utils.find(lambda c: c.name == string, \
                                   self.get_all_channels())
 
-    def getServer(self, string):
+    def get_server(self, string):
         return discord.utils.find(lambda s: s.name == string, self.servers)
 
-    
+
     # Note: setting only allows for string types
-    def setPrompt(self, string): self.__prompt = string
-    def setCurrentServer(self, string): self.__current_server = string
-    def setCurrentChannel(self, string): self.__current_channel = string
-    
-    def getPrompt(self): return self.__prompt
-    def getCurrentServerName(self): return self.__current_server
-    def getCurrentChannelName(self): return self.__current_channel
+    def set_prompt(self, string): self.__prompt = string
+    def set_current_server(self, string): self.__current_server = string
+    def set_current_channel(self, string): self.__current_channel = string
 
-    def getCurrentServer(self): return self.getServer(self.__current_server)
-    def getCurrentChannel(self): return self.getChannel(self.__current_channel)
-    
-    def getChannel(self, string):
-        return discord.utils.find(lambda c: c.name == string, \
-                                  self.get_all_channels())
+    def get_prompt(self): return self.__prompt
+    def get_current_server_name(self): return self.__current_server
+    def get_current_channel_name(self): return self.__current_channel
 
-    def getServer(self, string):
-        return discord.utils.find(lambda s: s.name == string, self.servers)
+    def get_current_server(self): return self.get_server(self.__current_server)
+    def get_current_channel(self): return self.get_channel(self.__current_channel)

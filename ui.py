@@ -1,62 +1,54 @@
-import client
-import blessings
 import os
 from blessings import Terminal
 
 term = Terminal()
-line_break = ""
+
+# Margins for inside the terminal and between elements
 MARGIN = 2
 
-def printScreen(client, channelLog):
-    global term
+# Index of where the user is at in the channel message log
+index = 0
 
+def print_screen(client, channel_log):
     # Get ready to redraw the screen
     left_bar_width = int(term.width / 7)
-    
+
     # Begin Drawing
-    clearScreen()
+    clear_screen()
 
-    printLeftBar(left_bar_width)
-    printBottomBar()
-    printPrompt(client.getPrompt())
-    if channelLog is not None: 
-        printChannelLog(channelLog, left_bar_width)
+    print_left_bar(left_bar_width)
+    print_bottom_bar()
+    print_prompt(client.get_prompt())
+    if channel_log is not None:
+        print_channel_log(channel_log, left_bar_width)
 
-def printLeftBar(left_bar_width):
-    global term
-    global MARGIN
+def print_left_bar(left_bar_width):
     for i in range(0, term.height - MARGIN):
         with term.location(left_bar_width, i):
             print('|')
 
-def printBottomBar():
-    global term
-    global MARGIN
+def print_bottom_bar():
     for i in range(0, term.width):
         with term.location(i, term.height - MARGIN):
             print('-')
 
-def printPrompt(prompt):
-    global term
+def print_prompt(prompt):
     with term.location(1, term.height - 1):
         print(term.red("[ ") + prompt + term.red(" ]: "))
 
-def clearScreen():
-    global term
+def clear_screen():
     term.clear()
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def printChannelLog(channelLog, left_bar_width):
-    global term
-    global MARGIN
+def print_channel_log(channel_log, left_bar_width):
     step = MARGIN
     offset = 0
 
-    for msg in channelLog:
-        
+    for msg in channel_log:
+
         # check if we've filled the term window, if so, stop printing!
         if step + MARGIN*2 >= term.height: break
-        
+
         # Our line, filled with hope to be printed
         author_prefix = term.green(msg.author.display_name + ": ")
         proposed_line = author_prefix + term.white(msg.clean_content.strip())
@@ -65,7 +57,7 @@ def printChannelLog(channelLog, left_bar_width):
         # of multiple lines separated by new-line
         # characters, we need to accomodate for this.
         # --- Otherwise: lines will just be the one line
-        lines = proposed_line.split("\n") 
+        lines = proposed_line.split("\n")
 
         for line in lines:
 
@@ -74,17 +66,15 @@ def printChannelLog(channelLog, left_bar_width):
 
             # If the line would spill over the screen, we need to wrap it
             max_length = term.width - (left_bar_width + MARGIN*2) - 1
-       
-            
             # if our line is greater than our max length,
             # that means the author has a long-line comment
             # that wasn't using new line chars... We must
             # manually wrap it.
             if len(line) > max_length:
-               
+
                 # Loop through, wrapping the lines until it behaves
                 while len(line) > max_length:
-                   
+
                     line = line.strip()
 
                     # Take a section out of the line based on our max length
