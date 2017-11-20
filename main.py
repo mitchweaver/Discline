@@ -8,7 +8,9 @@ import ui
 # await client.login('zemajujo@axsup.net', 'testpassword')
 
 TOKEN = sys.argv[1]
-client = Client(max_messages=1000)
+MAX_MESSAGES=100
+MAX_LOG_ENTRIES=200
+client = Client(max_messages=MAX_MESSAGES)
 term = Terminal()
 prefix = '/'
 default_prompt = "~"
@@ -75,7 +77,7 @@ async def on_ready():
             
         # Fill the log
         if client.get_current_channel is not None:
-            async for msg in client.logs_from(client.get_current_channel(), limit=1000):
+            async for msg in client.logs_from(client.get_current_channel(), limit=MAX_LOG_ENTRIES):
                 channel_log.insert(0, msg)
 
         # Update the screen
