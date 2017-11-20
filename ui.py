@@ -1,24 +1,22 @@
 import os
 from blessings import Terminal
 from line import Line
+from settings import *
 
-term = Terminal()
-
-# Margins for inside the terminal and between elements
-MARGIN = 2
-
-# Index of where the user is at in the channel message log
-index = 0
+# maximum number of lines that can be on the screen
+# is updated every cycle as to allow automatic resizing
+MAX_LINES = 0
+# the index in the channel log the user is at
+INDEX = 0
 
 def print_screen(client, channel_log):
     # Get ready to redraw the screen
-    left_bar_width = int(term.width / 7)
-
-    # Begin Drawing
+    left_bar_width = term.width // 7
     clear_screen()
 
+    # Begin drawing
     if channel_log is not None:
-        print_channel_log(channel_log, left_bar_width)
+        print_channel_log(client, channel_log, left_bar_width)
     print_left_bar(left_bar_width)
     print_bottom_bar()
     print_prompt(client.get_prompt())
@@ -41,14 +39,13 @@ def clear_screen():
     term.clear()
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def print_channel_log(channel_log, left_bar_width):
+def print_channel_log(client, channel_log, left_bar_width):
+    global INDEX
 
-    # start the first line at our margin
-    step = MARGIN
     # If the line would spill over the screen, we need to wrap it
     # NOTE: term.width is calculating every time this function is called.
     #       Meaning that this will automatically resize the screen.
-    max_length = term.width - (left_bar_width + MARGIN*2) - 1
+    MAX_LENGTH = term.width - (left_bar_width + MARGIN*2) - 1
     # For wrapped lines, offset them to line up with the previous line
     offset = 0
     # List to put our *formatted* lines in, once we have OK'd them to print
@@ -76,15 +73,15 @@ def print_channel_log(channel_log, left_bar_width):
             # that means the author has a long-line comment
             # that wasn't using new line chars...
             # We must manually wrap it.
-            if len(line) > max_length:
+            if len(line) > MAX_LENGTH:
 
                 # Loop through, wrapping the lines until it behaves
-                while len(line) > max_length:
+                while len(line) > MAX_LENGTH:
 
                     line = line.strip()
 
                     # Take a section out of the line based on our max length
-                    sect = line[:max_length - offset]
+                    sect = line[:MAX_LENGTH - offset]
 
                     # Make sure we did not cut a word in half 
                     sect = sect[:sect.strip().rfind(' ')]
@@ -96,11 +93,10 @@ def print_channel_log(channel_log, left_bar_width):
                         offset = len(msg.author.display_name) + 2
 
                     # add in now formatted line!
-                    formatted_lines.append(Line(sect.strip(), offset, step))
+                    formatted_lines.append(Line(sect.strip(), offset))
                    
                     # since we just wrapped a line, we need to make sure
                     # we don't overwrite it next time
-                    step += 1
 
                     # Split the line between what has been formatted, and
                     # what still remains needing to be formatted
@@ -109,18 +105,29 @@ def print_channel_log(channel_log, left_bar_width):
 
             # Once here, the string was either A: already short enough
             # to begin with, or B: made through our while loop and has
-            # since been chopped down to less than our max_length
+            # since been chopped down to less than our MAX_LENGTH
             if len(line) > 0:
                 
                 offset = 0
                 if author_prefix not in line:
                     offset = len(msg.author.display_name) + 2
 
-                formatted_lines.append(Line(line.strip(), offset, step))
+                formatted_lines.append(Line(line.strip(), offset))
                 
-                step += 1
-
     # Once all lines have been formatted, we may now print them
+    # the max number of lines that can be shown on the screen
+    MAX_LINES = term.height - MARGIN * 2
+    # where we should start printing from
+    if INDEX < MAX_LINES: INDEX = MAX_LINES 
+
+    # ----- Trim out list to print out nicely ----- #
+    # trims off the front of the list, until our index
+    del formatted_lines[0:(len(formatted_lines) - INDEX)]
+    # retains the amount of lines for our screen, deletes remainder
+    del formatted_lines[MAX_LINES:]
+
+    step = MARGIN // 2
     for line in formatted_lines:
-        with term.location(left_bar_width + MARGIN + line.offset, line.step):
+        with term.location(left_bar_width + MARGIN + line.offset, step):
             print(line.text)
+            step += 1
