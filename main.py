@@ -1,5 +1,4 @@
 import sys
-import discord
 from printutils import *
 from settings import *
 from client import Client
@@ -8,7 +7,6 @@ import ui
 # import terminalinput
 from threading import Thread
 import asyncio
-from time import sleep
 from serverlog import ServerLog
 from channellog import ChannelLog
 
@@ -87,7 +85,7 @@ def get_input():
             else:
                 prompt = term.red("[") + "#" + client.get_prompt() + term.red("]: ")
             user_input = input(prompt).strip()
-    except(SystemExit): pass
+    except SystemExit: pass
 
 async def input_handler():
     global user_input
@@ -153,7 +151,7 @@ async def input_handler():
         # Update the screen
         ui.print_screen()
 
-        # # start a new input thread
+        # start a new input thread
         t = Thread(target=get_input)
         t.daemon = True
         t.start()
@@ -173,11 +171,11 @@ async def on_message(message):
 
 # start input coroutine
 try: asyncio.get_event_loop().create_task(input_handler())
-except(SystemExit): pass
+except SystemExit: pass
 
 # start the client coroutine
 try: client.run(sys.argv[1], bot=False)
-except(SystemExit): pass
+except SystemExit: pass
 
 # if we are here, the client's loop was cancelled or errored
 try: kill()
