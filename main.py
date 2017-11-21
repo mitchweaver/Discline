@@ -20,7 +20,7 @@ init_complete = False
 
 @client.event
 async def on_ready():
-    client.wait_until_login()
+    await client.wait_until_login()
 
     # these values are set in settings.py
     if DEFAULT_PROMPT is not None:
@@ -79,9 +79,9 @@ async def on_ready():
     ui.print_screen()
 
 async def input_handler():
-    
-    while not init_complete: 
-        await asyncio.sleep(0.5)
+    await client.wait_until_ready()
+
+    while not init_complete: await asyncio.sleep(0.5)
 
     while True:
 
