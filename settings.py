@@ -10,7 +10,7 @@ like MAX_MESSAGES=-1 will break the client. Duh.
 DEFAULT_SERVER="DisKvlt"
 
 # the default channel which will be joined upon startup - CASE SENSITIVE!
-DEFAULT_CHANNEL="general"
+DEFAULT_CHANNEL="terminal_discord"
 
 # the leading character used for commands
 prefix = '/'
@@ -22,10 +22,10 @@ DEFAULT_PROMPT = "~"
 MARGIN = 2
 
 # the max amount of messages to be downloaded + kept
-MAX_MESSAGES=100
+MAX_MESSAGES=101
 
 # the max amount of entries in each channel log to be downloaded + kept
-MAX_LOG_ENTRIES=150
+MAX_LOG_ENTRIES=250
 
 
 
@@ -38,4 +38,5 @@ DO NOT EDIT THESE - SERIOUSLY, DON'T DO IT.
 -------------------------------------------------------------- """
 client = Client(max_messages=MAX_MESSAGES)
 term = Terminal()
-channel_log = []
+# holds ServerLogs from serverlog.py
+server_log_tree = []

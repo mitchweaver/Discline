@@ -25,13 +25,11 @@ def on_scroll(x, y, dx, dy):
 
 def on_press(key):
     pass
-
     # if ui.INDEX < ui.MAX_LINES: ui.INDEX = ui.MAX_LINES
     # ui.INDEX += 10
     # ui.print_screen(client, channel_log)
-
     # try:
-    #     print('alphanumeric key {0} pressed'.format(
+    #     print('{0} pressed'.format(
     #         key.char))
     # except AttributeError:
     #     print('special key {0} pressed'.format(
