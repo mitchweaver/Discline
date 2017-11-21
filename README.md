@@ -1,6 +1,28 @@
 # Terminal Discord
 --------------------
 
+
+## How to use:
+-------------------------
+
+1. Clone the repo
+    
+    git clone https://github.com/mitchweaver/terminal-discord
+    
+2. Find your discord "token"
+    This can be found by going to https://discordapp.com/channels/@me,
+    and opening your browser developer console. This is normally F12 or
+    CTRL-SHIFT-I. Now go to "storage", (may be called something different),
+    and look for the discord url. Clicking this will show you a list of
+    variables, look for "token = 322332r093fwaf032f90323f32f903f23wfa" or
+    something that looks similar.
+    
+3. Launch with python3, using your token as an argument
+
+    python3 main.py $TOKEN
+
+
+
 ### Current Features
 --------------------------
 
@@ -43,7 +65,7 @@ To install dependencies:
 ### Known Bugs
 --------------------------
 
-> Sometimes I my screen doesn't update upon receiving a message
+> Sometimes my screen doesn't update upon receiving a message
 
 This is due to the input loop waiting on user input and therefore not
 freeing up CPU time for the other background loops via asyncio. 
