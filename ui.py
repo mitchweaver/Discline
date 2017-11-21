@@ -41,7 +41,7 @@ def print_prompt(prompt):
         print(term.red("[") + "#" + prompt + term.red("]:"))
 
 def clear_screen():
-    term.clear()
+    # term.clear()
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def print_channel_log(left_bar_width):

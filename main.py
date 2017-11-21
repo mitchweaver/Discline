@@ -16,6 +16,7 @@ from channellog import ChannelLog
 
 message_to_send = ""
 user_input = ""
+init_complete = False
 
 @client.event
 async def on_ready():
@@ -69,20 +70,21 @@ async def on_ready():
         server_log_tree.append(ServerLog(server.name, logs)) 
 
     print("Channels loaded! Found " + str(count) + " messages.")
+    global init_complete
+    init_complete = True
 
 # --------------------------------------------------------------------------- #
 
     # Print initial screen
     ui.print_screen()
 
-    # start input coroutine
-    asyncio.get_event_loop().create_task(input_handler())
-
-@asyncio.coroutine
-def input_handler():
-    yield from client.wait_until_ready()
+async def input_handler():
+    
+    while not init_complete: 
+        await asyncio.sleep(0.5)
 
     while True:
+
         with term.location(len(client.get_prompt()) + 7, term.height - 2):
             user_input = input().rstrip()
 
@@ -102,7 +104,6 @@ def input_handler():
                     # TODO: check if arg is a valid server
                     client.set_current_server(arg)
                     client.set_current_channel(client.get_server(arg).default_channel)
-                    ui.clear_screen()
                 elif command == "channel" or command == 'c':
                     # TODO: check if arg is a valid channel
                     client.set_current_channel(arg)
@@ -118,35 +119,45 @@ def input_handler():
         
         # This must not be a command...
         else: 
-            pass
             # If all options have been exhausted, it must be character
-            yield from client.send_message(client.get_current_channel(), user_input)
+            try: await client.send_message(client.get_current_channel(), user_input)
+            except:
+                try: await client.send_message(client.get_current_channel(), user_input)
+                except: print("Error: could not send message!")
 
         # Update the screen
         ui.print_screen()
 
-        # while the screen is printing, sleep this thread
-        yield from asyncio.sleep(0.1)
-
-        
+        await asyncio.sleep(0.2)
 
 # called whenever the client receives a message (from anywhere)
 @client.event
 async def on_message(message):
 
+    print(message.channel.name)
+    print(message.server.name)
+    print(message.author.name)
+
     # find the server/channel it belongs to and add it
     for server_log in server_log_tree:
-        if server_log.get_name == message.server.name:
+        print("C1")
+        if server_log.get_name() == message.server.name:
+            print("C2")
             for channel_log in server_log.get_logs():
                 if channel_log.get_name() == message.channel.name:
+                    print("C3")
                     channel_log.append(message)
 
     # redraw the screen
-    ui.print_screen()
+    # ui.print_screen()
 
 # kills the program and all its elements gracefully
 def kill():
     ui.clear_screen()
     quit()
+
+
+# start input coroutine
+asyncio.get_event_loop().create_task(input_handler())
 
 client.run(sys.argv[1], bot=False)

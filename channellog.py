@@ -21,4 +21,4 @@ class ChannelLog():
         return self.__server_name
 
     def append(self, message):
-        __logs.append(message)
+        self.__logs.append(message)
