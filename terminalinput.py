@@ -1,6 +1,7 @@
 from pynput import mouse, keyboard
 from settings import *
 import ui
+import settings
 
 def on_move(x, y):
     # print('Pointer moved to {0}'.format(
@@ -24,7 +25,8 @@ def on_scroll(x, y, dx, dy):
     # ui.print_screen(client, channel_log)
 
 def on_press(key):
-    pass
+    if key.char == keyboard.Key.esc: settings.kill()
+    # pass
     # if ui.INDEX < ui.MAX_LINES: ui.INDEX = ui.MAX_LINES
     # ui.INDEX += 10
     # ui.print_screen(client, channel_log)

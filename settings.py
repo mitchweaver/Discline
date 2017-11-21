@@ -25,7 +25,7 @@ MARGIN = 2
 MAX_MESSAGES=101
 
 # the max amount of entries in each channel log to be downloaded + kept
-MAX_LOG_ENTRIES=250
+MAX_LOG_ENTRIES=200
 
 
 
@@ -38,5 +38,10 @@ DO NOT EDIT THESE - SERIOUSLY, DON'T DO IT.
 -------------------------------------------------------------- """
 client = Client(max_messages=MAX_MESSAGES)
 term = Terminal()
-# holds ServerLogs from serverlog.py
 server_log_tree = []
+
+# kills the program and all its elements gracefully
+def kill():
+    try: client.close()
+    except: pass
+    quit()

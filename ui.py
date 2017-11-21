@@ -24,7 +24,6 @@ def print_screen():
     
     print_left_bar(left_bar_width)
     print_bottom_bar()
-    print_prompt(client.get_prompt())
 
 def print_left_bar(left_bar_width):
     for i in range(0, term.height - MARGIN):
@@ -36,12 +35,8 @@ def print_bottom_bar():
         with term.location(i, term.height - MARGIN):
             print('-')
 
-def print_prompt(prompt):
-    with term.location(1, term.height):
-        print(term.red("[") + "#" + prompt + term.red("]:"))
-
 def clear_screen():
-    # term.clear()
+    term.clear()
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def print_channel_log(left_bar_width):

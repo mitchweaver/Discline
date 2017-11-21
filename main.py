@@ -5,7 +5,7 @@ from settings import *
 from client import Client
 from help import *
 import ui
-import terminalinput
+# import terminalinput
 from threading import Thread
 import asyncio
 from time import sleep
@@ -32,9 +32,8 @@ async def on_ready():
         if DEFAULT_CHANNEL is not None:
             client.set_current_channel(DEFAULT_CHANNEL)
 
-
 # --------------- INIT SERVERS --------------------------------------------- #
-    print("Loading channels...")
+    print("Loading channels... \n")
 
     logs = []
     # if the server has already been added,
@@ -70,26 +69,50 @@ async def on_ready():
         server_log_tree.append(ServerLog(server.name, logs)) 
 
     print("Channels loaded! Found " + str(count) + " messages.")
+   
+    # Print initial screen
+    ui.print_screen()
+  
+       
     global init_complete
     init_complete = True
 
-# --------------------------------------------------------------------------- #
+def get_input():
+    global user_input, client, term
 
-    # Print initial screen
-    ui.print_screen()
+    try:
+        with term.location(1, term.height):
+            if client.get_prompt() == DEFAULT_PROMPT:
+                prompt = term.red("[") + " " + client.get_prompt() + " " + term.red("]: ")
+            else:
+                prompt = term.red("[") + "#" + client.get_prompt() + term.red("]: ")
+            user_input = input(prompt).strip()
+    except(SystemExit): pass
 
 async def input_handler():
+    global user_input
     await client.wait_until_ready()
 
+    # Wait until all servers/channels are loaded
     while not init_complete: await asyncio.sleep(0.5)
+   
+    # Start our input thread
+    t = Thread(target=get_input)
+    t.daemon = True
+    t.start()
 
     while True:
 
-        with term.location(len(client.get_prompt()) + 7, term.height - 2):
-            user_input = input().rstrip()
+        # with term.location(len(client.get_prompt()) + 7, term.height - 2):
+        #     user_input = input().rstrip()
 
         # If input is blank, don't do anything
-        if user_input == '': continue
+        if user_input == '': 
+            # while we wait for our input thread to get
+            # some input, let discord.py's coroutines listen
+            # for new events
+            await asyncio.sleep(0.2)
+            continue
 
         # Check if input is a command
         elif user_input[0] == prefix:
@@ -125,39 +148,37 @@ async def input_handler():
                 try: await client.send_message(client.get_current_channel(), user_input)
                 except: print("Error: could not send message!")
 
+        user_input = ""
+
         # Update the screen
         ui.print_screen()
 
-        await asyncio.sleep(0.2)
+        # # start a new input thread
+        t = Thread(target=get_input)
+        t.daemon = True
+        t.start()
 
 # called whenever the client receives a message (from anywhere)
 @client.event
 async def on_message(message):
-
-    print(message.channel.name)
-    print(message.server.name)
-    print(message.author.name)
-
     # find the server/channel it belongs to and add it
     for server_log in server_log_tree:
-        print("C1")
         if server_log.get_name() == message.server.name:
-            print("C2")
             for channel_log in server_log.get_logs():
                 if channel_log.get_name() == message.channel.name:
-                    print("C3")
                     channel_log.append(message)
 
     # redraw the screen
-    # ui.print_screen()
-
-# kills the program and all its elements gracefully
-def kill():
-    ui.clear_screen()
-    quit()
-
+    ui.print_screen()
 
 # start input coroutine
-asyncio.get_event_loop().create_task(input_handler())
+try: asyncio.get_event_loop().create_task(input_handler())
+except(SystemExit): pass
 
-client.run(sys.argv[1], bot=False)
+# start the client coroutine
+try: client.run(sys.argv[1], bot=False)
+except(SystemExit): pass
+
+# if we are here, the client's loop was cancelled or errored
+try: kill()
+except: quit()
