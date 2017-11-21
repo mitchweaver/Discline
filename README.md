@@ -1,6 +1,8 @@
 # Terminal Discord
 --------------------
 
+[!Image](https://0x0.st/s-JP.png)
+
 
 ## How to use:
 -------------------------
