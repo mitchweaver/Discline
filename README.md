@@ -17,9 +17,11 @@
     and look for the discord url. Clicking this will show you a list of
     variables. Look for a line that looks like:
     
-    `"token = 322332r093fwaf032f90323f32f903f23wfa"`.
-    
-3. Launch with python3, using your token as an argument
+    `"token = 322332r093fwaf032f90323f32f903f23wfa"`
+
+3. Edit settings.py to your choosing.
+
+4. Launch with python3, using your token as an argument
 
     `python3 main.py $TOKEN`
 
