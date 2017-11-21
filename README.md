@@ -12,11 +12,12 @@
 2. Find your discord "token"
    
     This can be found by going to https://discordapp.com/channels/@me,
-    and opening your browser developer console. This is normally F12 or
-    CTRL-SHIFT-I. Now click on "storage", (may be called something different),
+    and opening your browser developer console. This is normally `F12` or
+    `CTRL-SHIFT-I`. Now click on "storage", (may be called something different),
     and look for the discord url. Clicking this will show you a list of
-    variables. Look for `"token = 322332r093fwaf032f90323f32f903f23wfa"` or
-    something similar.
+    variables. Look for a line that looks like:
+    
+    `"token = 322332r093fwaf032f90323f32f903f23wfa"`.
     
 3. Launch with python3, using your token as an argument
 
