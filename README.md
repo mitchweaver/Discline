@@ -7,20 +7,20 @@
 
 1. Clone the repo
     
-    git clone https://github.com/mitchweaver/terminal-discord
+    `git clone https://github.com/mitchweaver/terminal-discord`
     
 2. Find your discord "token"
+   
     This can be found by going to https://discordapp.com/channels/@me,
     and opening your browser developer console. This is normally F12 or
-    CTRL-SHIFT-I. Now go to "storage", (may be called something different),
+    CTRL-SHIFT-I. Now click on "storage", (may be called something different),
     and look for the discord url. Clicking this will show you a list of
-    variables, look for "token = 322332r093fwaf032f90323f32f903f23wfa" or
-    something that looks similar.
+    variables. Look for `"token = 322332r093fwaf032f90323f32f903f23wfa"` or
+    something similar.
     
 3. Launch with python3, using your token as an argument
 
-    python3 main.py $TOKEN
-
+    `python3 main.py $TOKEN`
 
 
 ### Current Features
@@ -74,3 +74,21 @@ Currently working on an alternative input method as a workaround.
 > Sometimes when I submit a message the client crashes
 
 No idea as of yet. Looking for a workaround.
+
+### License
+-------------------------------
+
+Licensed under GNU-GPLv3
+
+
+### Legal Disclaimer
+--------------------------------
+
+I take no responsibility if this gets you banned. Discord hasn't put out
+any official statement on whether using their API for 3rd party clients
+is allowed or not. Nobody has been banned for using such things before,
+but they might one day change their mind.
+
+Also, this client uses your token to log in. There is a reason for this.
+Do **NOT** try and edit the code to use client.login("email", "pass") instead
+of the token. This is deprecated and WILL get you banned. You have been warned.
