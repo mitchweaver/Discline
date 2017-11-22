@@ -68,6 +68,22 @@ To install dependencies:
     `pip3 install discord blessings asyncio pynput`
 
 
+# FAQ
+-------------------------
+
+> Yet another discord cli?
+
+I didn't like any of the implementations I found around github. Too buggy.
+Too bloated. Bad UI. No customization. Some, after discord updates, 
+no longer functioning at all.
+
+> Why use a token and not email/password?
+
+Discord's API does allow for email/pass login, but if you were to have
+2FA, (2 factor authentication), enabled on your account, Discord would
+interpret this as a malicious attack against your account and disable it.
+So, because *"Nobody reads the readme"*, I have disabled this.
+
 ### Known Bugs
 --------------------------
 
