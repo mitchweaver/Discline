@@ -104,6 +104,11 @@ def key_input():
             ui.print_screen()
         sleep(0.01)
 
+async def is_typing_handler():
+    while True:
+        if len(input_buffer) > 0:
+            await client.send_typing(client.get_current_channel())
+        await asyncio.sleep(0.2)
 
 async def input_handler():
     global user_input
@@ -119,9 +124,6 @@ async def input_handler():
 
     while True:
 
-        # with term.location(len(client.get_prompt()) + 7, term.height - 2):
-        #     user_input = input().rstrip()
-
         # If input is blank, don't do anything
         if user_input == '': 
             # while we wait for our input thread to get
@@ -131,7 +133,7 @@ async def input_handler():
             continue
 
         # Check if input is a command
-        elif user_input[0] == prefix:
+        if user_input[0] == prefix:
             # Strip the prefix
             user_input = user_input[1:]
 
@@ -148,7 +150,7 @@ async def input_handler():
                             break;
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
-                    for channel in client.get_current_server():
+                    for channel in client.get_current_server().channels:
                         if channel.name == arg:
                             client.set_current_channel(arg)
                             client.set_prompt(arg)
@@ -175,6 +177,8 @@ async def input_handler():
         # Update the screen
         ui.print_screen()
 
+        await asyncio.sleep(0.1)
+
 # called whenever the client receives a message (from anywhere)
 @client.event
 async def on_message(message):
@@ -188,8 +192,12 @@ async def on_message(message):
     # redraw the screen
     ui.print_screen()
 
-# start input coroutine
+# --------------------------------------------------------------------------- #
+
+# start our own coroutines
 try: asyncio.get_event_loop().create_task(input_handler())
+except SystemExit: pass
+try: asyncio.get_event_loop().create_task(is_typing_handler())
 except SystemExit: pass
 
 # start the client coroutine
