@@ -70,7 +70,8 @@ async def on_ready():
         server_log_tree.append(ServerLog(server.name, logs)) 
 
     print("Channels loaded! Found " + str(count) + " messages.")
-  
+ 
+    # completely hide the system's cursor
     hidecursor.hide_cursor()
 
     # Print initial screen

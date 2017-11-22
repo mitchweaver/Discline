@@ -70,12 +70,6 @@ To install dependencies:
 ### Known Bugs
 --------------------------
 
-> Sometimes my screen doesn't update upon receiving a message
-
-This is due to the input loop waiting on user input and therefore not
-freeing up CPU time for the other background loops via asyncio. 
-Currently working on an alternative input method as a workaround.
-
 > Sometimes when I submit a message the client crashes
 
 No idea as of yet. Looking for a workaround.
