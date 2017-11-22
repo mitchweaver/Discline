@@ -65,10 +65,10 @@
 
 To install dependencies:
 
-    `pip3 install discord blessings asyncio pynput`
+    `pip3 install discord blessings asyncio`
 
 
-# FAQ
+### FAQ
 -------------------------
 
 > Yet another discord cli?

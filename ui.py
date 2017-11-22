@@ -97,8 +97,12 @@ def print_channel_log(left_bar_width):
                         msg_lines = []
 
 
-                        r = msg.author.top_role
                         color = ""
+                        
+                        try: r = msg.author.top_role
+                        # if this fails, the user either left or was banned
+                        except: color = get_color(NORMAL_USER_COLOR)
+
                         if r.name == "admin" or r.name == "Admin":
                             color = get_color(ADMIN_COLOR)
                         elif r.name == "mod" or r.name == "Mod": 
