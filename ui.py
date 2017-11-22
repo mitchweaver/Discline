@@ -25,10 +25,10 @@ def print_screen():
     # Begin drawing
     if server_log_tree is not None:
         print_channel_log(left_bar_width)
-    
+
     print_bottom_bar()
 
-    print ("".join(screen_buffer))
+    print("".join(screen_buffer))
     
     print_left_bar(left_bar_width)
 
@@ -152,6 +152,10 @@ def print_channel_log(left_bar_width):
 
                     step = MARGIN // 2
                     for line in formatted_lines:
-                        with term.location(left_bar_width + MARGIN + line.offset, step):
-                            print(line.text)
-                            step += 1
+                        # with term.location(left_bar_width + MARGIN + line.offset, step):
+                        #     print(line.text)
+   
+                        screen_buffer.append(" " * (left_bar_width + MARGIN + line.offset) + line.text + "\n")
+   
+   
+                        step += 1
