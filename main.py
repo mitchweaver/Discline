@@ -10,6 +10,7 @@ import asyncio
 from serverlog import ServerLog
 from channellog import ChannelLog
 from kbhit import KBHit
+import hidecursor
 
 # await client.login('zemajujo@axsup.net', 'testpassword')
 
@@ -30,6 +31,7 @@ async def on_ready():
         client.set_current_server(DEFAULT_SERVER)
         if DEFAULT_CHANNEL is not None:
             client.set_current_channel(DEFAULT_CHANNEL)
+            client.set_prompt(DEFAULT_CHANNEL)
 
 # --------------- INIT SERVERS --------------------------------------------- #
     print("Loading channels... \n")
@@ -52,7 +54,7 @@ async def on_ready():
     for server in client.servers:
         print("loading " + server.name + " ...")
         for channel in server.channels:
-            print("    loading " + channel.name) ; sys.stdin.flush()
+            print("    loading " + channel.name)
             channel_log = []
             try:
                 async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
@@ -68,7 +70,9 @@ async def on_ready():
         server_log_tree.append(ServerLog(server.name, logs)) 
 
     print("Channels loaded! Found " + str(count) + " messages.")
-   
+  
+    hidecursor.hide_cursor()
+
     # Print initial screen
     ui.print_screen()
   
@@ -93,7 +97,7 @@ def key_input():
                 if len(input_buffer) > 0:
                     del input_buffer[-1] # backspace
                 else: 
-                    sleep(0.01)
+                    sleep(0.0075)
                     continue
             else: input_buffer.append(key)
             ui.print_screen()

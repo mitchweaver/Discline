@@ -35,14 +35,15 @@ def print_screen():
     # Print the buffer. NOTE: the end="" is to prevent it
     # printing a new line character, which would add whitespace
     # to the bottom of the terminal
-    print("".join(screen_buffer), end="")
+    print(term.move(0,0) + "".join(screen_buffer), end="")
 
     print_left_bar(left_bar_width)
 
 def print_left_bar(left_bar_width):
-    for i in range(0, term.height - MARGIN - MARGIN//2):
-        with term.location(left_bar_width, i):
-            print('|')
+    for i in range(0, term.height - MARGIN):
+        # with term.location(left_bar_width, i):
+        #     print("|", end="")
+        print(term.move(i, left_bar_width) + "|")
 
 def print_bottom_bar():
     
@@ -65,15 +66,14 @@ def print_bottom_bar():
         else: screen_buffer.append(prompt)
 
 def clear_screen():
-    # term.clear()
-    # os.system('cls' if os.name == 'nt' else 'clear')
+    # instead of "clearing", we're actually just overwriting
+    # everything with white space. This mitigates the massive
+    # screen flashing that goes on with "cls" and "clear"
     del screen_buffer[:]
-    
-    lines = []
-    for i in range(0, term.height + 1):
-        lines.append(" " * term.width + "\n")
-    with term.location(0,0):
-        print("".join(lines))
+    # for i in range(0, term.height + 1):
+    #     lines.append(" " * term.width + "\n")
+    wipe = (" " * (term.width - 1) + "\n") * term.height
+    print(term.move(0,0) + wipe, end="")
 
 def print_channel_log(left_bar_width):
     global INDEX
