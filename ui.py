@@ -102,8 +102,7 @@ def print_channel_log(left_bar_width):
                         if r.name == "admin" or r.name == "Admin": color = term.magenta
                         elif r.name == "mod" or r.name == "Mod": color = term.blue
                         elif r.name == "helper" or r.name == "Helper": color = term.cyan
-                        elif r.name == "trusted" or r.name == "Trusted": color = term.yellow
-                        elif r.name == "bot" or r.name == "Bot": color = term.black
+                        elif r.name == "bot" or r.name == "Bot": color = term.yellow
                         else: color = term.green
                         author_prefix = color + msg.author.display_name + ": "
 
