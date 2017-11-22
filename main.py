@@ -1,14 +1,15 @@
 import sys
+from time import sleep
 from printutils import *
 from settings import *
 from client import Client
 from help import *
 import ui
-# import terminalinput
 from threading import Thread
 import asyncio
 from serverlog import ServerLog
 from channellog import ChannelLog
+from kbhit import KBHit
 
 # await client.login('zemajujo@axsup.net', 'testpassword')
 
@@ -75,17 +76,26 @@ async def on_ready():
     global init_complete
     init_complete = True
 
-def get_input():
-    global user_input, client, term
+def key_input():
+    global user_input, input_buffer
 
-    try:
-        with term.location(1, term.height):
-            if client.get_prompt() == DEFAULT_PROMPT:
-                prompt = term.red("[") + " " + client.get_prompt() + " " + term.red("]: ")
-            else:
-                prompt = term.red("[") + "#" + client.get_prompt() + term.red("]: ")
-            user_input = input(prompt).strip()
-    except SystemExit: pass
+    kb = KBHit()
+
+    while True:
+        if kb.kbhit():
+            key = kb.getch()
+            if ord(key) == 10 or ord(key) == 13: # enter key
+                user_input = "".join(input_buffer)
+                del input_buffer[:]
+            elif ord(key) == 27: kill() # escape
+            elif ord(key) == 127 or ord(key) == 8: 
+                if len(input_buffer) > 0:
+                    del input_buffer[-1] # backspace
+                else: continue
+            else: input_buffer.append(key)
+            ui.print_screen()
+        sleep(0.05)
+
 
 async def input_handler():
     global user_input
@@ -95,8 +105,8 @@ async def input_handler():
     while not init_complete: await asyncio.sleep(0.5)
    
     # Start our input thread
-    t = Thread(target=get_input)
-    t.daemon = True
+    t = Thread(target=key_input)
+    t.daemon = True # thread will die upon main thread exiting
     t.start()
 
     while True:
@@ -150,11 +160,6 @@ async def input_handler():
 
         # Update the screen
         ui.print_screen()
-
-        # start a new input thread
-        t = Thread(target=get_input)
-        t.daemon = True
-        t.start()
 
 # called whenever the client receives a message (from anywhere)
 @client.event

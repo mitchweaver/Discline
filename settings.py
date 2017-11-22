@@ -39,7 +39,7 @@ DO NOT EDIT THESE - SERIOUSLY, DON'T DO IT.
 client = Client(max_messages=MAX_MESSAGES)
 term = Terminal()
 server_log_tree = []
-
+input_buffer = []
 # kills the program and all its elements gracefully
 def kill():
     try: client.close()

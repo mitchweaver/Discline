@@ -1,4 +1,5 @@
 import os
+import sys
 from blessings import Terminal
 from line import Line
 from settings import *
@@ -8,6 +9,9 @@ from settings import *
 MAX_LINES = 0
 # the index in the channel log the user is at
 INDEX = 0
+# buffer to allow for double buffering (stops screen flashing)
+screen_buffer = []
+
 
 """
 TODO: put current server in a top bar - with current channel description
@@ -22,8 +26,11 @@ def print_screen():
     if server_log_tree is not None:
         print_channel_log(left_bar_width)
     
-    print_left_bar(left_bar_width)
     print_bottom_bar()
+
+    print ("".join(screen_buffer))
+    
+    print_left_bar(left_bar_width)
 
 def print_left_bar(left_bar_width):
     for i in range(0, term.height - MARGIN):
@@ -32,8 +39,20 @@ def print_left_bar(left_bar_width):
 
 def print_bottom_bar():
     for i in range(0, term.width):
+        # print bottom line divider
         with term.location(i, term.height - MARGIN):
             print('-')
+
+    # print prompt + input_buffer
+    with term.location(1, term.height):
+        if client.get_prompt() == DEFAULT_PROMPT:
+            prompt = term.red("[") + " " + DEFAULT_PROMPT + " " + term.red("]: ")
+        else:
+            prompt = term.red("[") + "#" + client.get_prompt() + term.red("]: ")
+        
+        if len(input_buffer) > 0: print(prompt + "".join(input_buffer))
+        else: print(prompt)
+    
 
 def clear_screen():
     term.clear()
