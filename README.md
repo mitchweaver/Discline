@@ -75,7 +75,7 @@ To install dependencies:
 
 No idea as of yet. Looking for a workaround.
 
-> *"<some feature>"* isn't working right on Windows!
+> *"\<some feature\>"* isn't working right on Windows!
 
 The fact it works at all cross-platform is impressive enough,
 but I'm working on it.
