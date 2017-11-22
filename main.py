@@ -52,7 +52,7 @@ async def on_ready():
     for server in client.servers:
         print("loading " + server.name + " ...")
         for channel in server.channels:
-            print("    loading " + channel.name)
+            print("    loading " + channel.name) ; sys.stdin.flush()
             channel_log = []
             try:
                 async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
@@ -84,17 +84,20 @@ def key_input():
     while True:
         if kb.kbhit():
             key = kb.getch()
-            if ord(key) == 10 or ord(key) == 13: # enter key
+            ordkey = ord(key)
+            if ordkey == 10 or ordkey == 13: # enter key
                 user_input = "".join(input_buffer)
                 del input_buffer[:]
-            elif ord(key) == 27: kill() # escape
-            elif ord(key) == 127 or ord(key) == 8: 
+            elif ordkey == 27: kill() # escape
+            elif ordkey == 127 or ordkey == 8: 
                 if len(input_buffer) > 0:
                     del input_buffer[-1] # backspace
-                else: continue
+                else: 
+                    sleep(0.01)
+                    continue
             else: input_buffer.append(key)
             ui.print_screen()
-        sleep(0.05)
+        sleep(0.01)
 
 
 async def input_handler():

@@ -22,26 +22,34 @@ def print_screen():
     left_bar_width = term.width // 7
     clear_screen()
 
-    # Begin drawing
+    # initial line margin
+    screen_buffer.append("\n")
+
     if server_log_tree is not None:
         print_channel_log(left_bar_width)
 
+    # second line margin
+    screen_buffer.append("\n")
     print_bottom_bar()
 
-    print("".join(screen_buffer))
-    
+    # Print the buffer. NOTE: the end="" is to prevent it
+    # printing a new line character, which would add whitespace
+    # to the bottom of the terminal
+    print("".join(screen_buffer), end="")
+
     print_left_bar(left_bar_width)
 
 def print_left_bar(left_bar_width):
-    for i in range(0, term.height - MARGIN):
+    for i in range(0, term.height - MARGIN - MARGIN//2):
         with term.location(left_bar_width, i):
             print('|')
 
 def print_bottom_bar():
-    for i in range(0, term.width):
-        # print bottom line divider
-        with term.location(i, term.height - MARGIN):
-            print('-')
+    
+    # with term.location(0, term.height - MARGIN + MARGIN // 2):
+    #     print("-" * term.width)
+
+    screen_buffer.append("-" * term.width + "\n")
 
     # print prompt + input_buffer
     with term.location(1, term.height):
@@ -50,13 +58,22 @@ def print_bottom_bar():
         else:
             prompt = term.red("[") + "#" + client.get_prompt() + term.red("]: ")
         
-        if len(input_buffer) > 0: print(prompt + "".join(input_buffer))
-        else: print(prompt)
-    
+        # if len(input_buffer) > 0: print(prompt + "".join(input_buffer))
+        # else: print(prompt)
+        
+        if len(input_buffer) > 0: screen_buffer.append(prompt + "".join(input_buffer))
+        else: screen_buffer.append(prompt)
 
 def clear_screen():
-    term.clear()
-    os.system('cls' if os.name == 'nt' else 'clear')
+    # term.clear()
+    # os.system('cls' if os.name == 'nt' else 'clear')
+    del screen_buffer[:]
+    
+    lines = []
+    for i in range(0, term.height + 1):
+        lines.append(" " * term.width + "\n")
+    with term.location(0,0):
+        print("".join(lines))
 
 def print_channel_log(left_bar_width):
     global INDEX
@@ -156,6 +173,5 @@ def print_channel_log(left_bar_width):
                         #     print(line.text)
    
                         screen_buffer.append(" " * (left_bar_width + MARGIN + line.offset) + line.text + "\n")
-   
    
                         step += 1
