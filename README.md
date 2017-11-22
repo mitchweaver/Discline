@@ -40,6 +40,8 @@
 * /clear to clear screen, (in case of graphical glitches)
 * typing without a leading prefix will submit to current chat
 * User customization via editing settings.py
+* "<USER> is typing..." support
+* private channels
 
 ### Planned Features
 ---------------------------
@@ -49,9 +51,7 @@
 * /giphy support (submitting first result)
 * comment editing and deletion
 * message searching
-* "<USER> is typing..." support
 * private messaging
-* private channels, (currently not working)
 
 ## Dependencies
 ------------------------
@@ -64,7 +64,7 @@
 
 To install dependencies:
 
-    pip3 install discord blessings asyncio pynput
+    `pip3 install discord blessings asyncio pynput`
 
 
 ### Known Bugs
@@ -73,6 +73,17 @@ To install dependencies:
 > Sometimes when I submit a message the client crashes
 
 No idea as of yet. Looking for a workaround.
+
+> *"<some feature>"* isn't working right on Windows!
+
+The fact it works at all cross-platform is impressive enough,
+but I'm working on it.
+
+> My bug isn't listed here, how can I voice my problem?
+
+If you have a specific issue that isn't listed here or in the
+wiki, post a github issue with a detailed explanation and I can
+try to get it fixed.
 
 ### License
 -------------------------------
@@ -83,10 +94,10 @@ Licensed under GNU-GPLv3
 ### Legal Disclaimer
 --------------------------------
 
-I take no responsibility if this gets you banned. Discord hasn't put out
-any official statement on whether using their API for 3rd party clients
-is allowed or not. Nobody has been banned for using such things before,
-but they might one day change their mind.
+Discord hasn't put out any official statement on whether using their 
+API for 3rd party clients is allowed or not. Nobody has been banned
+for using such things before, but they might one day change their mind.
+With this said, I take no responsibility if this gets you banned.
 
 Also, this client uses your token to log in. There is a reason for this.
 Do **NOT** try and edit the code to use client.login("email", "pass") instead
