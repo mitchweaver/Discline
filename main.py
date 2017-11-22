@@ -140,13 +140,19 @@ async def input_handler():
                 # Split into command and argument
                 command,arg = user_input.split(" ", 1)
                 if command == "server":
-                    # TODO: check if arg is a valid server
-                    client.set_current_server(arg)
-                    client.set_current_channel(client.get_server(arg).default_channel)
+                    # check if arg is a valid server, then switch
+                    for serv in client.servers:
+                        if serv.name == arg:
+                            client.set_current_server(arg)
+                            client.set_current_channel(client.get_server(arg).default_channel)
+                            break;
                 elif command == "channel" or command == 'c':
-                    # TODO: check if arg is a valid channel
-                    client.set_current_channel(arg)
-                    client.set_prompt(arg)
+                    # check if arg is a valid channel, then switch
+                    for channel in client.get_current_server():
+                        if channel.name == arg:
+                            client.set_current_channel(arg)
+                            client.set_prompt(arg)
+                            break;
 
             # Else we must have only a command, no argument
             else:
