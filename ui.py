@@ -99,11 +99,19 @@ def print_channel_log(left_bar_width):
 
                         r = msg.author.top_role
                         color = ""
-                        if r.name == "admin" or r.name == "Admin": color = term.magenta
-                        elif r.name == "mod" or r.name == "Mod": color = term.blue
-                        elif r.name == "helper" or r.name == "Helper": color = term.cyan
-                        elif r.name == "bot" or r.name == "Bot": color = term.yellow
-                        else: color = term.green
+                        if r.name == "admin" or r.name == "Admin":
+                            color = get_color(ADMIN_COLOR)
+                        elif r.name == "mod" or r.name == "Mod": 
+                            color = get_color(MOD_COLOR)
+                        elif r.name == "bot" or r.name == "Bot": 
+                            color = get_color(BOT_COLOR)
+                        elif CUSTOM_ROLE is not None and r.name == CUSTOM_ROLE:
+                            color = get_color(CUSTOM_ROLE_COLOR)
+                        elif CUSTOM_ROLE_2 is not None and r.name == CUSTOM_ROLE_2:
+                            color = get_color(CUSTOM_ROLE_2_COLOR)
+                        elif CUSTOM_ROLE_3 is not None and r.name == CUSTOM_ROLE_3:
+                            color = get_color(CUSTOM_ROLE_3_COLOR)
+                        else: color = get_color(NORMAL_USER_COLOR)
                         author_prefix = color + msg.author.display_name + ": "
 
 
@@ -186,3 +194,18 @@ def print_channel_log(left_bar_width):
                         screen_buffer.append(" " * (left_bar_width + MARGIN + line.offset) + line.text + "\n")
    
                         step += 1
+
+# takes in a string, returns the appropriate term.color
+def get_color(string):
+    if string == "white":   return term.white
+    if string == "black":   return term.black
+    if string == "red":     return term.red
+    if string == "blue":    return term.blue
+    if string == "yellow":  return term.yellow
+    if string == "cyan":    return term.cyan
+    if string == "magenta": return term.magenta
+    if string == "green":   return term.green
+   
+    # if we're here, someone has one of their settings.py
+    # colors defined wrong. We'll be nice and just return white.
+    return term.white

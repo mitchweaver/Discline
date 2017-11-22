@@ -43,6 +43,7 @@
 * User customization via editing settings.py
 * "<USER> is typing..." support
 * private channels
+* colored output, with user definable colors and custom roles
 
 ### Planned Features
 ---------------------------

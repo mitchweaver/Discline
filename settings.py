@@ -28,13 +28,24 @@ MAX_MESSAGES=101
 # the max amount of entries in each channel log to be downloaded + kept
 MAX_LOG_ENTRIES=200
 
+# Colors - Available options:
+# "white", "red", "blue", "green", "yellow", "cyan", "magenta", "black"
+ADMIN_COLOR = "magenta"
+MOD_COLOR = "blue"
+BOT_COLOR = "yellow"
+NORMAL_USER_COLOR = "green"
 
-
+# here you can define your own custom roles - NOTE: text must match exactly!
+CUSTOM_ROLE = ""
+CUSTOM_ROLE_COLOR = ""
+CUSTOM_ROLE_2 = ""
+CUSTOM_ROLE_2_COLOR = ""
+CUSTOM_ROLE_3 = ""
+CUSTOM_ROLE_3_COLOR = ""
 
 
 
 # ----------- Internal-Use Variables Below ----------------- #
-
 """ ----------------------------------------------------------
 DO NOT EDIT THESE - SERIOUSLY, DON'T DO IT.
 -------------------------------------------------------------- """
