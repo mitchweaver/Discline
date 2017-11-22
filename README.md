@@ -96,10 +96,12 @@ Licensed under GNU-GPLv3
 --------------------------------
 
 Discord hasn't put out any official statement on whether using their 
-API for 3rd party clients is allowed or not. Nobody has been banned
-for using such things before, but they might one day change their mind.
-With this said, I take no responsibility if this gets you banned.
+API for 3rd party clients is allowed or not. They *have* said that using
+their API to make "self-bots" is against their ToS. By self-bots, it is
+my understanding they mean automating non-bot accounts as bots.
+My code has no automated functions, or any on_events that provide features
+not included in the official client. 
 
-Also, this client uses your token to log in. There is a reason for this.
-Do **NOT** try and edit the code to use client.login("email", "pass") instead
-of the token. This is deprecated and WILL get you banned. You have been warned.
+Nobody has been banned for using things like this before, but Discord
+might one day change their mind. With this said, I take **no** responsibility
+if this gets you banned.
