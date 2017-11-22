@@ -19,6 +19,7 @@ prefix = '/'
 DEFAULT_PROMPT = "~"
 
 # Margins for inside the terminal and between elements. NOTE: must be >= 2
+# NOTE: some ratios have weird glitches. Just experiment.
 MARGIN = 2
 
 # the max amount of messages to be downloaded + kept
@@ -26,6 +27,7 @@ MAX_MESSAGES=101
 
 # the max amount of entries in each channel log to be downloaded + kept
 MAX_LOG_ENTRIES=200
+
 
 
 
@@ -42,6 +44,9 @@ server_log_tree = []
 input_buffer = []
 # kills the program and all its elements gracefully
 def kill():
+    import asyncio
     try: client.close()
+    except: pass
+    try: asyncio.get_event_loop().close()
     except: pass
     quit()

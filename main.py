@@ -107,8 +107,11 @@ def key_input():
 async def is_typing_handler():
     while True:
         if len(input_buffer) > 0:
-            await client.send_typing(client.get_current_channel())
-        await asyncio.sleep(0.2)
+            if input_buffer[0] != "/":
+                try: await client.send_typing(client.get_current_channel())
+                except: pass
+        try: await asyncio.sleep(0.2)
+        except: pass
 
 async def input_handler():
     global user_input
@@ -147,14 +150,14 @@ async def input_handler():
                         if serv.name == arg:
                             client.set_current_server(arg)
                             client.set_current_channel(client.get_server(arg).default_channel)
-                            break;
+                            break
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
                     for channel in client.get_current_server().channels:
                         if channel.name == arg:
                             client.set_current_channel(arg)
                             client.set_prompt(arg)
-                            break;
+                            break
                 elif command == "nick":
                     # try: 
                     await client.change_nickname(client.get_current_server().me, arg)
@@ -166,8 +169,15 @@ async def input_handler():
                 command = user_input
                 # if command == "help": print_help()
                 if command == "clear": ui.clear_screen()
-                if command == "quit": kill()
-                if command == "exit": kill()
+                elif command == "quit": kill()
+                elif command == "exit": kill()
+                elif command == "shrug": input_buffer.append("¯\_(ツ)_/¯")
+                elif command == "table_flip": input_buffer.append("(ノಠ益ಠ)ノ彡┻━┻")
+                elif command == "unflip": input_buffer.append("┬──┬ ノ( ゜-゜ノ)")
+                elif command == "zoidberg": input_buffer.append("(/) (°,,°) (/)")
+                elif command == "lenny": input_buffer.append("( ͡° ͜ʖ ͡°)")
+                elif command == "lennyx5": input_buffer.append("( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)")
+                elif command == "glasses": input_buffer.append("(•_•) ( •_•)>⌐■-■ (⌐■_■)")
         
         # This must not be a command...
         else: 
