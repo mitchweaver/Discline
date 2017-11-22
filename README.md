@@ -82,6 +82,7 @@ no longer functioning at all.
 Discord's API does allow for email/pass login, but if you were to have
 2FA, (2 factor authentication), enabled on your account, Discord would
 interpret this as a malicious attack against your account and disable it.
+
 So, because *"Nobody reads the readme"*, I have disabled this.
 
 ### Known Bugs
