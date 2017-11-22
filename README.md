@@ -36,6 +36,7 @@
 * upon init, download all logs from what the client can see
 * /channel to switch channel
 * /server to switch server
+* /nick to change nickname (per server)
 * /help to display help, (note: may not be current)
 * /clear to clear screen, (in case of graphical glitches)
 * typing without a leading prefix will submit to current chat

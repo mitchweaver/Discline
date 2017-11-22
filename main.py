@@ -141,7 +141,7 @@ async def input_handler():
             if ' ' in user_input:
                 # Split into command and argument
                 command,arg = user_input.split(" ", 1)
-                if command == "server":
+                if command == "server" or command == 's':
                     # check if arg is a valid server, then switch
                     for serv in client.servers:
                         if serv.name == arg:
@@ -155,6 +155,11 @@ async def input_handler():
                             client.set_current_channel(arg)
                             client.set_prompt(arg)
                             break;
+                elif command == "nick":
+                    # try: 
+                    await client.change_nickname(client.get_current_server().me, arg)
+                    # except: # you don't have permission to do this here
+                        # pass
 
             # Else we must have only a command, no argument
             else:
