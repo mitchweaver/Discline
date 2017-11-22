@@ -96,7 +96,19 @@ def print_channel_log(left_bar_width):
                         # The lines of this unformatted message
                         msg_lines = []
 
-                        author_prefix = term.green(msg.author.display_name + ": ")
+
+                        r = msg.author.top_role
+                        color = ""
+                        if r.name == "admin" or r.name == "Admin": color = term.magenta
+                        elif r.name == "mod" or r.name == "Mod": color = term.blue
+                        elif r.name == "helper" or r.name == "Helper": color = term.cyan
+                        elif r.name == "trusted" or r.name == "Trusted": color = term.yellow
+                        elif r.name == "bot" or r.name == "Bot": color = term.black
+                        else: color = term.green
+                        author_prefix = color + msg.author.display_name + ": "
+
+
+
                         proposed_line = author_prefix + term.white(msg.clean_content.strip())
 
                         # If our message actually consists of

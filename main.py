@@ -159,10 +159,10 @@ async def input_handler():
                             client.set_prompt(arg)
                             break
                 elif command == "nick":
-                    # try: 
-                    await client.change_nickname(client.get_current_server().me, arg)
-                    # except: # you don't have permission to do this here
-                        # pass
+                    try: 
+                        await client.change_nickname(client.get_current_server().me, arg)
+                    except: # you don't have permission to do this here
+                        pass
 
             # Else we must have only a command, no argument
             else:
@@ -171,13 +171,34 @@ async def input_handler():
                 if command == "clear": ui.clear_screen()
                 elif command == "quit": kill()
                 elif command == "exit": kill()
-                elif command == "shrug": input_buffer.append("¯\_(ツ)_/¯")
-                elif command == "table_flip": input_buffer.append("(ノಠ益ಠ)ノ彡┻━┻")
-                elif command == "unflip": input_buffer.append("┬──┬ ノ( ゜-゜ノ)")
-                elif command == "zoidberg": input_buffer.append("(/) (°,,°) (/)")
-                elif command == "lenny": input_buffer.append("( ͡° ͜ʖ ͡°)")
-                elif command == "lennyx5": input_buffer.append("( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)")
-                elif command == "glasses": input_buffer.append("(•_•) ( •_•)>⌐■-■ (⌐■_■)")
+
+
+
+                elif command == "shrug": 
+                    try: await client.send_message(client.get_current_channel(), "¯\_(ツ)_/¯")
+                    except: pass
+                elif command == "tableflip": 
+                    try: await client.send_message(client.get_current_channel(), "(╯°□°）╯︵ ┻━┻")
+                    except: pass
+                elif command == "unflip":
+                    try: await client.send_message(client.get_current_channel(), "┬──┬ ノ( ゜-゜ノ)")
+                    except: pass
+                elif command == "zoidberg": 
+                    try: await client.send_message(client.get_current_channel(), "(/) (°,,°) (/)")
+                    except: pass
+                elif command == "lenny": 
+                    try: await client.send_message(client.get_current_channel(), "( ͡° ͜ʖ ͡°)")
+                    except: pass
+                elif command == "lennyx5": 
+                    try: await client.send_message(client.get_current_channel(), "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)")
+                    except: pass
+                elif command == "glasses": 
+                    try: await client.send_message(client.get_current_channel(), "(•_•) ( •_•)>⌐■-■ (⌐■_■)")
+                    except: pass
+                elif command == "walking_my_mods": 
+                    try: await client.send_message(client.get_current_channel(), "⌐( ͡° ͜ʖ ͡°) ╯╲___卐卐卐卐")
+                    except: pass
+
         
         # This must not be a command...
         else: 
@@ -211,9 +232,11 @@ async def on_message(message):
 
 # start our own coroutines
 try: asyncio.get_event_loop().create_task(input_handler())
-except SystemExit: pass
+except: pass
+# SystemExit: pass
 try: asyncio.get_event_loop().create_task(is_typing_handler())
-except SystemExit: pass
+except: pass
+# SystemExit: pass
 
 # start the client coroutine
 try: client.run(sys.argv[1], bot=False)
