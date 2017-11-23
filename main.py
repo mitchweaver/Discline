@@ -22,6 +22,9 @@ init_complete = False
 async def on_ready():
     await client.wait_until_login()
 
+    # completely hide the system's cursor
+    hidecursor.hide_cursor()
+
     # these values are set in settings.py
     if DEFAULT_PROMPT is not None:
         client.set_prompt(DEFAULT_PROMPT)
@@ -71,13 +74,9 @@ async def on_ready():
 
     print("Channels loaded! Found " + str(count) + " messages.")
  
-    # completely hide the system's cursor
-    hidecursor.hide_cursor()
-
     # Print initial screen
     ui.print_screen()
   
-       
     global init_complete
     init_complete = True
 
@@ -105,6 +104,10 @@ def key_input():
         sleep(0.01)
 
 async def is_typing_handler():
+
+    # Wait until all servers/channels are loaded
+    while not init_complete: await asyncio.sleep(0.5)
+    
     while True:
         if len(input_buffer) > 0:
             if input_buffer[0] != "/":
