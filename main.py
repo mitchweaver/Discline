@@ -3,7 +3,6 @@ from time import sleep
 from printutils import *
 from settings import *
 from client import Client
-from help import *
 import ui
 from threading import Thread
 import asyncio
@@ -35,6 +34,10 @@ async def on_ready():
         if DEFAULT_CHANNEL is not None:
             client.set_current_channel(DEFAULT_CHANNEL)
             client.set_prompt(DEFAULT_CHANNEL)
+            client.STATE.set_channel_log()
+
+    # If user does not have a config set, display welcome screen
+    else: client.STATE.set_welcome()
 
 # --------------- INIT SERVERS --------------------------------------------- #
     print("Loading channels... \n")
@@ -153,6 +156,7 @@ async def input_handler():
                         if serv.name == arg:
                             client.set_current_server(arg)
                             client.set_current_channel(client.get_server(arg).default_channel)
+                            client.STATE.set_channel_log()
                             break
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
@@ -160,6 +164,7 @@ async def input_handler():
                         if channel.name == arg:
                             client.set_current_channel(arg)
                             client.set_prompt(arg)
+                            client.STATE.set_channel_log()
                             break
                 elif command == "nick":
                     try: 
@@ -170,10 +175,13 @@ async def input_handler():
             # Else we must have only a command, no argument
             else:
                 command = user_input
-                # if command == "help": print_help()
                 if command == "clear": ui.clear_screen()
                 elif command == "quit": kill()
                 elif command == "exit": kill()
+                elif command == "help": client.STATE.set_help()
+                elif command == "servers": client.STATE.set_servers()
+                elif command == "channels": client.STATE.set_channels()
+                elif command == "welcome": client.STATE.set_welcome()
 
 
 

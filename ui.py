@@ -12,11 +12,6 @@ INDEX = 0
 # buffer to allow for double buffering (stops screen flashing)
 screen_buffer = []
 
-
-"""
-TODO: put current server in a top bar - with current channel description
-"""
-
 def print_screen():
     # Get ready to redraw the screen
     left_bar_width = term.width // 7
@@ -66,6 +61,7 @@ def print_bottom_bar():
         else: screen_buffer.append(prompt)
 
 def clear_screen():
+
     # instead of "clearing", we're actually just overwriting
     # everything with white space. This mitigates the massive
     # screen flashing that goes on with "cls" and "clear"
@@ -198,6 +194,9 @@ def print_channel_log(left_bar_width):
                         screen_buffer.append(" " * (left_bar_width + MARGIN + line.offset) + line.text + "\n")
    
                         step += 1
+
+                    # return as not to loop through all channels unnecessarily
+                    return
 
 # takes in a string, returns the appropriate term.color
 def get_color(string):
