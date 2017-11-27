@@ -231,6 +231,14 @@ async def on_message(message):
     # redraw the screen
     ui.print_screen()
 
+@client.event
+async def on_message_edit(msg_old, msg_new):
+    msg_new.content = msg_new.content + " *(edited)*"
+
+    # redraw the screen
+    ui.print_screen()
+
+
 # --------------------------------------------------------------------------- #
 
 # start our own coroutines
