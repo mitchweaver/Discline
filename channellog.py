@@ -22,3 +22,9 @@ class ChannelLog():
 
     def append(self, message):
         self.__logs.append(message)
+
+    def index(self, message):
+        return self.__logs.index(message)
+
+    def insert(self, i, message):
+        self.__logs.insert(i, message)

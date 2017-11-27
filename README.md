@@ -44,6 +44,7 @@
 * "<USER> is typing..." support
 * private channels
 * colored output, with user definable colors and custom roles
+* Log updates when users edit messages
 
 ### Planned Features
 ---------------------------
@@ -61,11 +62,10 @@
 * [Python 3.5+](https://www.python.org/downloads/)
 * [discord.py](https://github.com/Rapptz/discord.py)
 * [blessings.py](https://pypi.python.org/pypi/blessings/)
-* [asyncio](https://docs.python.org/3/library/asyncio.html)
 
 To install dependencies:
 
-    `pip3 install discord blessings asyncio`
+    `pip3 install discord blessings`
 
 
 ### FAQ
@@ -95,7 +95,8 @@ No idea as of yet. Looking for a workaround.
 > \<some feature\> isn't working right on Windows!
 
 The fact the client works at all cross-platform is surprising
-enough, but I'm working on it.
+enough, but I'm working on it. If something breaks in windows,
+post a github issue and I will try and work it out.
 
 > My bug isn't listed here, how can I voice my problem?
 
