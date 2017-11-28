@@ -1,8 +1,9 @@
-import os
+from os import system
 import sys
 from blessings import Terminal
 from line import Line
 from settings import *
+from discord import ChannelType
 
 # maximum number of lines that can be on the screen
 # is updated every cycle as to allow automatic resizing
@@ -20,8 +21,10 @@ def print_screen():
     # initial line margin
     screen_buffer.append("\n")
 
+# -------- Print Main Screen ------------------------- #
     if server_log_tree is not None:
         print_channel_log(left_bar_width)
+# ---------------------------------------------------- #
 
     # second line margin
     screen_buffer.append("\n")
@@ -160,7 +163,8 @@ def print_channel_log(left_bar_width):
 
                                     # Split the line between what has been formatted, and
                                     # what still remains needing to be formatted
-                                    line = line.split(sect)[1]
+                                    if len(line) > len(sect):
+                                        line = line.split(sect)[1]
 
 
                             # Once here, the string was either A: already short enough
@@ -197,6 +201,108 @@ def print_channel_log(left_bar_width):
 
                     # return as not to loop through all channels unnecessarily
                     return
+
+def print_serverlist():
+
+    if len(client.servers) == 0:
+        print("Error: You are not in any servers.")
+        return
+
+    buffer = []
+    for server in client.servers:
+        buffer.append(server.name + "\n")
+            
+    system("clear")
+    system("echo '" + "Available Servers: \n" \
+        + "---------------------------- \n \n" \
+        + "".join(buffer) \
+        + "\n \n" \
+        + "(press \'q\' to quit this dialog) \n" \
+        + "' | less")
+
+def print_channellist():
+    if len(client.servers) == 0:
+        print("Error: You are not in any servers.")
+        return
+    
+    if len(client.get_current_server().channels) == 0:
+        print("Error: Does this server not have any channels?")
+        return
+
+    buffer = []
+    for channel in client.get_current_server().channels:
+        if channel.type == ChannelType.text:
+            buffer.append(channel.name + "\n")
+
+    system("clear")
+    system("echo '" + "Available Channels in " \
+           + client.get_current_server_name() + ": \n" \
+           + "---------------------------- \n \n" \
+           + "".join(buffer) \
+           + "\n \n" \
+           + "(press \'q\' to quit this dialog) \n" \
+           + "' | less")
+
+def print_userlist():
+    if len(client.servers) == 0:
+        print("Error: You are not in any servers.")
+        return
+    
+    if len(client.get_current_server().channels) == 0:
+        print("Error: Does this server not have any channels?")
+        return
+
+    nonroles = []
+    admins = []
+    mods = []
+    bots = []
+    everything_else = []
+
+    for member in client.get_current_server().members:
+        if member is None: continue # happens if a member left the server
+        
+        if member.top_role.name == "admin" or member.top_role.name == "Admin":
+            admins.append(member)
+        elif member.top_role.name == "mod" or member.top_role.name == "Mod":
+            mods.append(member)
+        elif member.top_role.name == "bot" or member.top_role.name == "Bot":
+            bots.append(member)
+        elif member.top_role.is_everyone: nonroles.append(member)
+        else: everything_else.append(member)
+
+    buffer = []
+    
+    if admins is not None:
+        for admin in admins:
+            buffer.append(admin.name + " - **" + admin.top_role.name + "** \n")
+    if mods is not None:
+        for mod in mods:
+            buffer.append(mod.name + " - *" + mod.top_role.name + "* \n")
+    if bots is not None:
+        for bot in bots:
+            buffer.append(bot.name + " - (bot) \n")
+
+    buffer.append("\n---------------------------- \n\n")
+
+    if everything_else is not None:
+        for some_role in everything_else:
+            buffer.append(some_role.name + " - (" + some_role.top_role.name + ") \n")
+    
+    buffer.append("\n---------------------------- \n\n")
+    
+    if nonroles is not None:
+        for member in nonroles:
+            buffer.append(member.name + "\n")
+
+    system("clear")
+    system("echo '" + "Members in " \
+           + client.get_current_server_name() + ": \n" \
+           + "---------------------------- \n \n" \
+           + "".join(buffer) \
+           + "\n \n" \
+           + "(press \'q\' to quit this dialog) \n" \
+           + "' | less")
+
 
 # takes in a string, returns the appropriate term.color
 def get_color(string):

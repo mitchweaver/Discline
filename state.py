@@ -2,6 +2,9 @@ class State():
 
     __state = ""
 
+    def clone(self, state):
+        self.__state = state.__state
+
     def set_channel_log(self):
         self.__state = "channel_log"
 
@@ -17,8 +20,6 @@ class State():
     def set_welcome(self):
         self.__state = "welcome"
 
-
-
     def is_channel_log(self):
         return self.__state == "channel_log"
 
@@ -33,3 +34,8 @@ class State():
 
     def is_welcome(self):
         return self.__state == "welcome"
+
+
+
+    def print(self):
+        print(self.__state)

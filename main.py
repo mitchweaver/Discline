@@ -10,6 +10,7 @@ from serverlog import ServerLog
 from channellog import ChannelLog
 from kbhit import KBHit
 import hidecursor
+from discord import ChannelType
 
 # await client.login('zemajujo@axsup.net', 'testpassword')
 
@@ -29,15 +30,13 @@ async def on_ready():
         client.set_prompt(DEFAULT_PROMPT)
     else: client.set_prompt('~')
 
+
+    # setup default states and servers, if set
     if DEFAULT_SERVER is not None:
         client.set_current_server(DEFAULT_SERVER)
         if DEFAULT_CHANNEL is not None:
             client.set_current_channel(DEFAULT_CHANNEL)
             client.set_prompt(DEFAULT_CHANNEL)
-            client.STATE.set_channel_log()
-
-    # If user does not have a config set, display welcome screen
-    else: client.STATE.set_welcome()
 
 # --------------- INIT SERVERS --------------------------------------------- #
     print("Loading channels... \n")
@@ -47,7 +46,8 @@ async def on_ready():
     # just refresh the log list
     # for server_log in server_log_tree:
     #     if server_log.get_name() == server.name:
-    #         server_log.clear_logs()
+    #         server_log.clear_logs(
+        # setup default states and servers, if set)
     #         for channel in server.channels:
     #             channel_log = []
     #             async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
@@ -60,17 +60,18 @@ async def on_ready():
     for server in client.servers:
         print("loading " + server.name + " ...")
         for channel in server.channels:
-            print("    loading " + channel.name)
-            channel_log = []
-            try:
-                async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
-                    count+=1
-                    channel_log.insert(0, msg)
-                logs.append(ChannelLog(server.name, channel.name, channel_log))
-            except:
-                # https forbidden exception, you don't have priveleges for
-                # this channel!
-                continue
+            if channel.type == ChannelType.text:
+                print("    loading " + channel.name)
+                channel_log = []
+                try:
+                    async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
+                        count+=1
+                        channel_log.insert(0, msg)
+                    logs.append(ChannelLog(server.name, channel.name, channel_log))
+                except:
+                    # https forbidden exception, you don't have priveleges for
+                    # this channel!
+                    continue
 
         # add it to the tree
         server_log_tree.append(ServerLog(server.name, logs)) 
@@ -156,7 +157,6 @@ async def input_handler():
                         if serv.name == arg:
                             client.set_current_server(arg)
                             client.set_current_channel(client.get_server(arg).default_channel)
-                            client.STATE.set_channel_log()
                             break
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
@@ -164,7 +164,6 @@ async def input_handler():
                         if channel.name == arg:
                             client.set_current_channel(arg)
                             client.set_prompt(arg)
-                            client.STATE.set_channel_log()
                             break
                 elif command == "nick":
                     try: 
@@ -178,10 +177,13 @@ async def input_handler():
                 if command == "clear": ui.clear_screen()
                 elif command == "quit": kill()
                 elif command == "exit": kill()
-                elif command == "help": client.STATE.set_help()
-                elif command == "servers": client.STATE.set_servers()
-                elif command == "channels": client.STATE.set_channels()
-                elif command == "welcome": client.STATE.set_welcome()
+                elif command == "help": 
+                    ui.print_help()
+                elif command == "servers": ui.print_serverlist()
+                elif command == "channels": ui.print_channellist()
+                elif command == "users": ui.print_userlist()
+                elif command == "members": ui.print_userlist()
+                elif command == "welcome": pass
 
 
 
@@ -229,6 +231,8 @@ async def input_handler():
 # called whenever the client receives a message (from anywhere)
 @client.event
 async def on_message(message):
+    if not init_complete: return
+
     # find the server/channel it belongs to and add it
     for server_log in server_log_tree:
         if server_log.get_name() == message.server.name:
@@ -241,6 +245,7 @@ async def on_message(message):
 
 @client.event
 async def on_message_edit(msg_old, msg_new):
+    if not init_complete: return
     msg_new.content = msg_new.content + " *(edited)*"
 
     # redraw the screen

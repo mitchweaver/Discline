@@ -1,5 +1,4 @@
 import discord
-import state
 
 # inherits from discord.py's Client
 class Client(discord.Client):
@@ -8,8 +7,7 @@ class Client(discord.Client):
     __current_server = ""
     __current_channel = ""
     __prompt = ""
-    STATE = state.State()
-
+    
     def get_channel(self, string):
         return discord.utils.find(lambda c: c.name == string, \
                                   self.get_all_channels())
