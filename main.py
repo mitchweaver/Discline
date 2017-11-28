@@ -10,7 +10,8 @@ from serverlog import ServerLog
 from channellog import ChannelLog
 from kbhit import KBHit
 import hidecursor
-from discord import ChannelType
+import discord
+from help import print_help
 
 # await client.login('zemajujo@axsup.net', 'testpassword')
 
@@ -30,13 +31,15 @@ async def on_ready():
         client.set_prompt(DEFAULT_PROMPT)
     else: client.set_prompt('~')
 
-
-    # setup default states and servers, if set
     if DEFAULT_SERVER is not None:
         client.set_current_server(DEFAULT_SERVER)
         if DEFAULT_CHANNEL is not None:
             client.set_current_channel(DEFAULT_CHANNEL)
             client.set_prompt(DEFAULT_CHANNEL)
+
+    if DEFAULT_GAME is not None:
+        await client.change_presence(game=discord.Game(name=DEFAULT_GAME), \
+                                     status=None,afk=False)
 
 # --------------- INIT SERVERS --------------------------------------------- #
     print("Loading channels... \n")
@@ -60,7 +63,7 @@ async def on_ready():
     for server in client.servers:
         print("loading " + server.name + " ...")
         for channel in server.channels:
-            if channel.type == ChannelType.text:
+            if channel.type == discord.ChannelType.text:
                 print("    loading " + channel.name)
                 channel_log = []
                 try:
@@ -170,6 +173,10 @@ async def input_handler():
                         await client.change_nickname(client.get_current_server().me, arg)
                     except: # you don't have permission to do this here
                         pass
+                elif command == "game":
+                    try:
+                        await client.change_presence(game=discord.Game(name=arg),status=None,afk=False)
+                    except: pass
 
             # Else we must have only a command, no argument
             else:
@@ -177,8 +184,7 @@ async def input_handler():
                 if command == "clear": ui.clear_screen()
                 elif command == "quit": kill()
                 elif command == "exit": kill()
-                elif command == "help": 
-                    ui.print_help()
+                elif command == "help": print_help()
                 elif command == "servers": ui.print_serverlist()
                 elif command == "channels": ui.print_channellist()
                 elif command == "users": ui.print_userlist()

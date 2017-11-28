@@ -303,7 +303,6 @@ def print_userlist():
            + "(press \'q\' to quit this dialog) \n" \
            + "' | less")
 
-
 # takes in a string, returns the appropriate term.color
 def get_color(string):
     if string == "white":   return term.white

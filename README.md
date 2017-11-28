@@ -46,6 +46,7 @@
 * colored output, with user definable colors and custom roles
 * Log updates when users edit messages
 * /channels, /servers, /users to view information
+* /game to update the "Now playing: " status
 * use /help for more commands
 
 ### Planned Features

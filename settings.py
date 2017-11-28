@@ -18,6 +18,9 @@ prefix = '/'
 # the default prompt when not in a channel
 DEFAULT_PROMPT = "~"
 
+# the default 'playing ' status in discord
+DEFAULT_GAME = ""
+
 # Margins for inside the terminal and between elements. NOTE: must be >= 2
 # NOTE: some ratios have weird glitches. Just experiment.
 MARGIN = 2
