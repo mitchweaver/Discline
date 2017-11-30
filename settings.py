@@ -31,6 +31,10 @@ MAX_MESSAGES=101
 # the max amount of entries in each channel log to be downloaded + kept
 MAX_LOG_ENTRIES=200
 
+# the denominator used to calculate the width of the "left bar"
+# NOTE: larger number here, the smaller the bar will be
+LEFT_BAR_DIVIDER = 9
+
 # ---------------- COLOR SETTINGS ------------------------------------ #
 # "white", "red", "blue", "green", "yellow", "cyan", "magenta", "black"
 SERVER_DISPLAY_COLOR = "cyan"

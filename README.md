@@ -4,6 +4,11 @@
 ![Image](https://0x0.st/soYP.png)
 
 
+
+
+# WARNING: CURRENTLY MAC/LINUX ONLY UNTIL I FIND A FIX!
+
+
 ## How to use:
 -------------------------
 
@@ -65,10 +70,11 @@
 * [Python 3.5+](https://www.python.org/downloads/)
 * [discord.py](https://github.com/Rapptz/discord.py)
 * [blessings.py](https://pypi.python.org/pypi/blessings/)
+* asyncio
 
 To install dependencies:
 
-    `pip3 install discord blessings`
+    `pip3 install asyncio discord blessings`
 
 
 ### FAQ

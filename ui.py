@@ -17,7 +17,7 @@ screen_buffer = []
 
 def print_screen():
     # Get ready to redraw the screen
-    left_bar_width = term.width // 8
+    left_bar_width = term.width // LEFT_BAR_DIVIDER
     clear_screen()
 
     # top bar
