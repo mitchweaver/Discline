@@ -98,7 +98,8 @@ def print_channel_log(left_bar_width):
 
                         color = ""
                         
-                        try: r = msg.author.top_role
+                        try: 
+                            r = msg.author.top_role
                             if r.name == "admin" or r.name == "Admin":
                                 color = get_color(ADMIN_COLOR)
                             elif r.name == "mod" or r.name == "Mod": 
