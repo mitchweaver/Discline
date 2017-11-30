@@ -4,9 +4,7 @@
 ![Image](https://0x0.st/soYP.png)
 
 
-
-
-# WARNING: CURRENTLY MAC/LINUX ONLY UNTIL I FIND A FIX!
+### WARNING: Currently Mac/Linux only until I find a fix!
 
 
 ## How to use:
