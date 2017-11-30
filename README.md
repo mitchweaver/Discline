@@ -1,7 +1,7 @@
 # Terminal Discord
 --------------------
 
-![Image](https://0x0.st/s-w9.png)
+![Image](https://0x0.st/soYP.png)
 
 
 ## How to use:
