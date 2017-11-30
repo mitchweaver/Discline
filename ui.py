@@ -20,8 +20,10 @@ def print_screen():
     left_bar_width = term.width // 7
     clear_screen()
 
-    # initial line margin
-    screen_buffer.append("\n")
+    # top bar
+    # print_top_bar()
+    # TEMP:
+    screen_buffer.append("\n \n")
 
 # -------- Print Main Screen ------------------------- #
     if server_log_tree is not None:
@@ -39,31 +41,68 @@ def print_screen():
 
     print_left_bar(left_bar_width)
 
+    print_top_bar()
+
 def print_left_bar(left_bar_width):
-    for i in range(0, term.height - MARGIN):
-        # with term.location(left_bar_width, i):
-        #     print("|", end="")
+    for i in range(2, term.height - MARGIN):
         print(term.move(i, left_bar_width) + "|")
 
-def print_bottom_bar():
-    
-    # with term.location(0, term.height - MARGIN + MARGIN // 2):
-    #     print("-" * term.width)
+    buffer = []
+    count = 0
+    for channel in client.get_current_server().channels:
+        if len(channel.name) < left_bar_width:
+            if channel == client.get_current_channel():
+                buffer.append(term.green + channel.name + term.normal + "\n")
+            else: buffer.append(channel.name + "\n")
+        count += 1
+        # should the server have *too many channels!*, stop them
+        # from spilling over the screen
+        if count == term.height - 5: break
 
+    with term.location(1, 2):
+        print("".join(buffer))
+
+def print_top_bar():
+    # screen_buffer.append(" " + "Server: " + get_color(SERVER_DISPLAY_COLOR) \
+    #                      + client.get_current_server_name() + term.normal + "\n")
+    # screen_buffer.append("-" * term.width + "\n")
+
+    with term.location(1, 0):
+        print(" " + "Server: " + get_color(SERVER_DISPLAY_COLOR) \
+            + client.get_current_server_name() + term.normal + "\n", end="")
+    
+    online_count = 0
+    for member in client.get_current_server().members:
+        if member is None: continue # happens if a member left the server
+        if member.status is discord.Status.online:
+            online_count +=1 
+    
+    topic = client.get_current_channel().topic
+    with term.location(term.width // 2 - len(topic) // 2, 0):
+        print(term.normal + topic, end="")
+
+    length = len("Users online: ") + len(str(online_count))
+    with term.location(term.width - 1 - length, 0):
+        print("Users online: " + term.green \
+                + str(online_count) + term.normal, end="")
+
+    print(term.move(1, 0) + "-" * term.width + "\n", end="")
+
+    
+def print_bottom_bar():
     screen_buffer.append("-" * term.width + "\n")
 
-    # print prompt + input_buffer
-    with term.location(1, term.height):
-        if client.get_prompt() == DEFAULT_PROMPT:
-            prompt = term.red("[") + " " + DEFAULT_PROMPT + " " + term.red("]: ")
-        else:
-            prompt = term.red("[") + "#" + client.get_prompt() + term.red("]: ")
-        
-        # if len(input_buffer) > 0: print(prompt + "".join(input_buffer))
-        # else: print(prompt)
-        
-        if len(input_buffer) > 0: screen_buffer.append(prompt + "".join(input_buffer))
-        else: screen_buffer.append(prompt)
+    if client.get_prompt() == DEFAULT_PROMPT:
+            prompt = get_color(PROMPT_BORDER_COLOR) + "[" + " " \
+                    + get_color(PROMPT_COLOR) + DEFAULT_PROMPT + " " \
+                    + get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
+    else:
+        prompt = get_color(PROMPT_BORDER_COLOR) + "["  + \
+                get_color(PROMPT_COLOR) + "#" + client.get_prompt() \
+                + get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
+
+    if len(input_buffer) > 0: screen_buffer.append(prompt + "".join(input_buffer))
+    else: screen_buffer.append(prompt)
 
 def clear_screen():
 
@@ -71,7 +110,7 @@ def clear_screen():
     # everything with white space. This mitigates the massive
     # screen flashing that goes on with "cls" and "clear"
     del screen_buffer[:]
-    wipe = (" " * (term.width - 1) + "\n") * term.height
+    wipe = (" " * (term.width) + "\n") * term.height
     print(term.move(0,0) + wipe, end="")
 
 def print_channel_log(left_bar_width):
@@ -179,7 +218,7 @@ def print_channel_log(left_bar_width):
                                 
                     # Once all lines have been formatted, we may now print them
                     # the max number of lines that can be shown on the screen
-                    MAX_LINES = term.height - MARGIN * 2
+                    MAX_LINES = get_max_lines()
                     # where we should start printing from
                     if INDEX < MAX_LINES: INDEX = MAX_LINES 
 
@@ -200,6 +239,9 @@ def print_channel_log(left_bar_width):
 
                     # return as not to loop through all channels unnecessarily
                     return
+
+def get_max_lines():
+    return term.height - MARGIN * 2 - 1
 
 def print_serverlist():
 

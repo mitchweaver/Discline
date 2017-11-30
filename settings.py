@@ -10,7 +10,7 @@ like MAX_MESSAGES=-1 will break the client. Duh.
 DEFAULT_SERVER="DisKvlt"
 
 # the default channel which will be joined upon startup - CASE SENSITIVE!
-DEFAULT_CHANNEL="terminal_discord"
+DEFAULT_CHANNEL="general"
 
 # the leading character used for commands
 prefix = '/'
@@ -31,8 +31,11 @@ MAX_MESSAGES=101
 # the max amount of entries in each channel log to be downloaded + kept
 MAX_LOG_ENTRIES=200
 
-# Colors - Available options:
+# ---------------- COLOR SETTINGS ------------------------------------ #
 # "white", "red", "blue", "green", "yellow", "cyan", "magenta", "black"
+SERVER_DISPLAY_COLOR = "cyan"
+PROMPT_COLOR = "white"
+PROMPT_BORDER_COLOR = "red"
 ADMIN_COLOR = "magenta"
 MOD_COLOR = "blue"
 BOT_COLOR = "yellow"

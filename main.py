@@ -12,8 +12,7 @@ from kbhit import KBHit
 import hidecursor
 import discord
 from help import print_help
-
-# await client.login('zemajujo@axsup.net', 'testpassword')
+from printutils import *
 
 message_to_send = ""
 user_input = ""
@@ -42,29 +41,20 @@ async def on_ready():
                                      status=None,afk=False)
 
 # --------------- INIT SERVERS --------------------------------------------- #
-    print("Loading channels... \n")
+    print("Welcome to " + term.cyan + "Terminal Discord" + term.normal + "!")
+    print_line_break()
+    print_user()
+    print_line_break()
+    print("Initializing... \n")
+    sys.stdin.flush()
 
     logs = []
-    # if the server has already been added,
-    # just refresh the log list
-    # for server_log in server_log_tree:
-    #     if server_log.get_name() == server.name:
-    #         server_log.clear_logs(
-        # setup default states and servers, if set)
-    #         for channel in server.channels:
-    #             channel_log = []
-    #             async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
-    #                 channel_log.insert(0, msg)
-    #             logs.append(channel_log)
-    #         return
- 
     count = 0
-    # if we're still here, the server must be new to us
     for server in client.servers:
-        print("loading " + server.name + " ...")
+        print("loading " + term.magenta + server.name + term.normal + " ...")
         for channel in server.channels:
             if channel.type == discord.ChannelType.text:
-                print("    loading " + channel.name)
+                print("    loading " + term.yellow + channel.name + term.normal)
                 channel_log = []
                 try:
                     async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
@@ -111,13 +101,12 @@ def key_input():
         sleep(0.01)
 
 async def is_typing_handler():
-
     # Wait until all servers/channels are loaded
-    while not init_complete: await asyncio.sleep(0.5)
+    while not init_complete: await asyncio.sleep(1)
     
     while True:
         if len(input_buffer) > 0:
-            if input_buffer[0] != "/":
+            if input_buffer[0] is not "/":
                 try: await client.send_typing(client.get_current_channel())
                 except: pass
         try: await asyncio.sleep(0.2)
@@ -245,6 +234,7 @@ async def on_message(message):
             for channel_log in server_log.get_logs():
                 if channel_log.get_name() == message.channel.name:
                     channel_log.append(message)
+                    break
 
     # redraw the screen
     ui.print_screen()
