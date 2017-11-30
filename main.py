@@ -48,6 +48,7 @@ async def on_ready():
     print("Initializing... \n")
     sys.stdin.flush()
 
+    # list to store our "ChannelLog" data type
     logs = []
     count = 0
     for server in client.servers:
@@ -66,7 +67,7 @@ async def on_ready():
                     # this channel!
                     continue
 
-        # add it to the tree
+        # add the channellog to the tree
         server_log_tree.append(ServerLog(server.name, logs)) 
 
     print("Channels loaded! Found " + str(count) + " messages.")
