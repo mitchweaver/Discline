@@ -81,9 +81,13 @@ def print_top_bar():
         if member.status is discord.Status.online:
             online_count +=1 
     
-    topic = client.get_current_channel().topic
-    with term.location(term.width // 2 - len(topic) // 2, 0):
-        print(term.normal + topic, end="")
+    topic = ""
+    try: client.get_current_channel().topic
+    # null exception if it has no topic
+    except: pass
+    if topic is not None:
+        with term.location(term.width // 2 - len(topic) // 2, 0):
+            print(term.normal + topic, end="")
 
     length = len("Users online: ") + len(str(online_count))
     with term.location(term.width - 1 - length, 0):

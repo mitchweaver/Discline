@@ -157,6 +157,7 @@ async def input_handler():
                             client.set_current_channel(arg)
                             client.set_prompt(arg)
                             break
+
                 elif command == "nick":
                     try: 
                         await client.change_nickname(client.get_current_server().me, arg)
