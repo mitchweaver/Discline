@@ -2,9 +2,9 @@ from os import system
 
 def print_help():
     system("clear")
-    system("echo 'Available Commands: \n" \
-        + "---------------------------------- \n" \
-        + "/channel  - switch to channel \n" \
+    system("echo " + term.green + 'Available Commands: \n" \
+        + term.red + "---------------------------------- \n" \
+        + term.normal + "/channel  - switch to channel \n" \
         + "/server   - switch server  \n" \
         + "\n" \
         + "/servers  - list available servers \n" \
@@ -15,5 +15,5 @@ def print_help():
         + "/game     - change your game status \n" \
         + "/quit     - exit cleanly \n" \
         + "\n \n" \
-        + "(press q to quit this dialog) \n" \
-        + "' | less")
+        + term.green + "(press q to quit this dialog) \n" \
+        + "' | less -R")
