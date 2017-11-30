@@ -2,7 +2,7 @@ from os import system
 
 def print_help():
     system("clear")
-    system("echo " + term.green + 'Available Commands: \n" \
+    system("echo " + term.green + "'Available Commands: \n" \
         + term.red + "---------------------------------- \n" \
         + term.normal + "/channel  - switch to channel \n" \
         + "/server   - switch server  \n" \
@@ -16,4 +16,4 @@ def print_help():
         + "/quit     - exit cleanly \n" \
         + "\n \n" \
         + term.green + "(press q to quit this dialog) \n" \
-        + "' | less -R")
+        + "' | less")
