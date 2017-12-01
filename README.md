@@ -113,6 +113,15 @@ interpret this as a malicious attack against your account and disable it.
 
 So, because *"Nobody reads the readme"*, I have disabled this.
 
+> How should I submit a GitHub issue?
+
+Try to include this format:
+
+OS: Linux/Debian
+Terminal: urxvt
+Python Version: 3.6
+How to reproduce: xxxxxx
+
 ### Known Bugs
 --------------------------
 
