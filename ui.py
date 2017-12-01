@@ -148,11 +148,11 @@ def print_channel_log(left_bar_width):
                         
                         try: 
                             r = msg.author.top_role
-                            if r.name == "admin" or r.name == "Admin":
+                            if r.name.lower() == "admin":
                                 color = get_color(ADMIN_COLOR)
-                            elif r.name == "mod" or r.name == "Mod": 
+                            elif r.name.lower() == "mod": 
                                 color = get_color(MOD_COLOR)
-                            elif r.name == "bot" or r.name == "Bot": 
+                            elif r.name.lower() == "bot": 
                                 color = get_color(BOT_COLOR)
                             elif CUSTOM_ROLE is not None and r.name == CUSTOM_ROLE:
                                 color = get_color(CUSTOM_ROLE_COLOR)
@@ -160,9 +160,14 @@ def print_channel_log(left_bar_width):
                                 color = get_color(CUSTOM_ROLE_2_COLOR)
                             elif CUSTOM_ROLE_3 is not None and r.name == CUSTOM_ROLE_3:
                                 color = get_color(CUSTOM_ROLE_3_COLOR)
-                            else: color = get_color(NORMAL_USER_COLOR)
+                            elif NORMAL_USER_COLOR is not None:
+                                color = get_color(NORMAL_USER_COLOR)
+                            else: color = term.green
                         # if this fails, the user either left or was banned
-                        except: color = get_color(NORMAL_USER_COLOR)
+                        except: 
+                            if NORMAL_USER_COLOR is not None:
+                                color = get_color(NORMAL_USER_COLOR)
+                            else: color = term.green
 
                         author_prefix = color + msg.author.display_name + ": "
 

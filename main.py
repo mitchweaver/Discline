@@ -147,14 +147,14 @@ async def input_handler():
                 if command == "server" or command == 's':
                     # check if arg is a valid server, then switch
                     for serv in client.servers:
-                        if serv.name == arg:
+                        if serv.name.lower() == arg.lower():
                             client.set_current_server(arg)
                             client.set_current_channel(client.get_server(arg).default_channel)
                             break
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
                     for channel in client.get_current_server().channels:
-                        if channel.name == arg:
+                        if channel.name.lower() == arg.lower():
                             client.set_current_channel(arg)
                             client.set_prompt(arg)
                             break
