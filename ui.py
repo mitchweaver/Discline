@@ -17,7 +17,7 @@ screen_buffer = []
 
 def print_screen():
     # Get ready to redraw the screen
-    left_bar_width = term.width // LEFT_BAR_DIVIDER
+    left_bar_width = get_left_bar_width()
     clear_screen()
 
     # top bar
@@ -50,14 +50,13 @@ def print_left_bar(left_bar_width):
     buffer = []
     count = 0
     for channel in client.get_current_server().channels:
-        if len(channel.name) < left_bar_width:
-            text = channel.name
-            if len(text) > left_bar_width:
-                text = text[0:left_bar_width - 3]
-                text = text + "..."
-            if channel == client.get_current_channel():
-                buffer.append(term.green + text + term.normal + "\n")
-            else: buffer.append(text + "\n")
+        text = channel.name
+        if len(text) > left_bar_width:
+            text = text[0:left_bar_width - 3]
+            text = text + "..."
+        if channel == client.get_current_channel():
+            buffer.append(term.green + text + term.normal + "\n")
+        else: buffer.append(text + "\n")
         count += 1
         # should the server have *too many channels!*, stop them
         # from spilling over the screen
@@ -259,6 +258,12 @@ def print_channel_log(left_bar_width):
 
 def get_max_lines():
     return term.height - MARGIN * 2
+
+def get_left_bar_width():
+    left_bar_width = term.width // LEFT_BAR_DIVIDER
+    if left_bar_width < 8:
+        return  8
+    else: return left_bar_width
 
 def print_serverlist():
 
