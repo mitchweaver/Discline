@@ -86,16 +86,20 @@ def print_top_bar():
     # null exception if it has no topic
     except: pass
 
-    if topic is not None:
-        with term.location(term.width // 2 - len(topic) // 2, 0):
-            print(term.normal + topic, end="")
+    # if there is no channel topic, just print the channel name
+    if topic is None: topic = client.get_current_channel().name
 
-    length = len("Users online: ") + len(str(online_count))
+    with term.location(term.width // 2 - len(topic) // 2, 0):
+        print(term.normal + topic, end="")
+
+    text = "Users online: "
+    online_count = str(online_count)
+    length = len(text) + len(online_count)
     with term.location(term.width - 1 - length, 0):
-        print("Users online: " + term.green \
-                + str(online_count) + term.normal, end="")
+        print(text + term.green + online_count + term.normal, end="")
 
-    print(term.move(1, 0) + "-" * term.width + "\n", end="")
+    # top bar separator
+    print(term.move(1, 0) + "-" * term.width, end="")
 
     
 def print_bottom_bar():
@@ -135,9 +139,9 @@ def print_channel_log(left_bar_width):
     formatted_lines = []
  
     for server_log in server_log_tree:
-        if server_log.get_name() == client.get_current_server_name():
+        if server_log.get_name().lower() == client.get_current_server_name().lower():
             for channel_log in server_log.get_logs():
-                if channel_log.get_name() == client.get_current_channel_name():
+                if channel_log.get_name().lower() == client.get_current_channel_name().lower():
 
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
