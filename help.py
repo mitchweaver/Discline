@@ -2,10 +2,11 @@ from os import system
 
 def print_help():
     system("clear")
-    system("echo " + term.green + "'Available Commands: \n" \
-        + term.red + "---------------------------------- \n" \
-        + term.normal + "/channel  - switch to channel \n" \
-        + "/server   - switch server  \n" \
+    system("echo " + term.green \
+        + "'Available Commands: \n" + term.red \
+        + "---------------------------------- \n" + term.normal \
+        + "/channel  - switch to channel - (alias: 'c') \n" \
+        + "/server   - switch server     - (alias: 's') \n" \
         + "\n" \
         + "/servers  - list available servers \n" \
         + "/channels - list available channels \n" \
