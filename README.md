@@ -75,6 +75,14 @@ To install dependencies:
 
     `pip3 install asyncio discord blessings`
 
+
+### Color Customization
+------------------------
+
+Almost all aspects of the client can be colored to
+the user's wishes. You can set these colors from within
+settings.py
+
 ### A Note On Emojis
 -------------------------
 
