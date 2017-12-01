@@ -117,10 +117,10 @@ So, because *"Nobody reads the readme"*, I have disabled this.
 
 Try to include this format:
 
-OS: Linux/Debian
-Terminal: urxvt
-Python Version: 3.6
-How to reproduce: xxxxxx
+`OS:` Linux/Debian
+`Terminal:` urxvt
+`Python Version:` 3.6
+`How to reproduce:` xxxxxx
 
 ### Known Bugs
 --------------------------
