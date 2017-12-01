@@ -51,11 +51,12 @@
 * /channels, /servers, /users to view information
 * /game to update the "Now playing: " status
 * use /help for more commands
+* unicode emoji displayal support
 
 ### Planned Features
 ---------------------------
 
-* emoji displaying and reaction
+* custom server emoji displaying and reaction
 * file/image uploading via path
 * /giphy support (submitting first result)
 * comment editing and deletion
@@ -74,6 +75,18 @@ To install dependencies:
 
     `pip3 install asyncio discord blessings`
 
+### A Note On Emojis
+-------------------------
+
+Currently *most* of the standard unicode emojis
+are displaying. Note your terminal must be able
+to render these symbols *and* you must be using a font
+set that contains them. Because some of the emojis
+that discord uses are non-standard, they may not
+display properly. Here is an example of a random
+few.
+
+![Image](https://images-ext-2.discordapp.net/external/iN52NdGOWqdWOxby88wiEGs8R81j33ndPjgKX8eKUNA/https/0x0.st/soIy.png?width=400&height=32)
 
 ### FAQ
 -------------------------

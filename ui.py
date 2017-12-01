@@ -99,7 +99,7 @@ def print_top_bar():
         print(text + term.green + online_count + term.normal, end="")
 
     # top bar separator
-    print(term.move(1, 0) + "-" * term.width, end="")
+    print(term.move(1, 0) + "-" * term.width + "\n")
 
     
 def print_bottom_bar():
@@ -146,7 +146,6 @@ def print_channel_log(left_bar_width):
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
                         msg_lines = []
-
 
                         color = ""
                         
@@ -259,7 +258,7 @@ def print_channel_log(left_bar_width):
                     return
 
 def get_max_lines():
-    return term.height - MARGIN * 2 - 1
+    return term.height - MARGIN * 2
 
 def print_serverlist():
 
