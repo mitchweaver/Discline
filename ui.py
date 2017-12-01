@@ -45,7 +45,8 @@ def print_screen():
 
 def print_left_bar(left_bar_width):
     for i in range(2, term.height - MARGIN):
-        print(term.move(i, left_bar_width) + "|")
+        print(term.move(i, left_bar_width) + get_color(SEPARATOR_COLOR) + "|" \
+              + term.normal)
 
     buffer = []
     count = 0
@@ -98,11 +99,13 @@ def print_top_bar():
         print(text + term.green + online_count + term.normal, end="")
 
     # top bar separator
-    print(term.move(1, 0) + "-" * term.width + "\n")
+    print(term.move(1, 0) + get_color(SEPARATOR_COLOR) + ("-" * term.width) + "\n" \
+          + term.normal)
 
     
 def print_bottom_bar():
-    screen_buffer.append("-" * term.width + "\n")
+    screen_buffer.append(get_color(SEPARATOR_COLOR) + ("-" * term.width) + "\n" \
+                         + term.normal)
 
     if client.get_prompt() == DEFAULT_PROMPT:
             prompt = get_color(PROMPT_BORDER_COLOR) + "[" + " " \

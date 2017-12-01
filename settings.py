@@ -1,10 +1,10 @@
 from client import Client
 from blessings import Terminal
 
-""" ----------------------------------------------------------
-You can edit these to your preferences. Note: anything silly
-like MAX_MESSAGES=-1 will break the client. Duh.
--------------------------------------------------------------- """
+""" -----------------------------------------------------------------------
+        You can edit these to your preferences. Note: anything silly
+        like MAX_MESSAGES=-1 will break the client. Duh.
+--------------------------------------------------------------------------- """
 
 # the default server which will be joined upon startup - CASE SENSITIVE!
 DEFAULT_SERVER="DisKvlt"
@@ -26,17 +26,22 @@ DEFAULT_GAME = ""
 MARGIN = 2
 
 # the max amount of messages to be downloaded + kept
-MAX_MESSAGES=101
+# NOTE: minimum = 100!
+MAX_MESSAGES=100
 
 # the max amount of entries in each channel log to be downloaded + kept
+# NOTE: minimum = 100!
 MAX_LOG_ENTRIES=200
 
 # the denominator used to calculate the width of the "left bar"
-# NOTE: larger number here, the smaller the bar will be
+# NOTE: larger number here, the smaller the bar will be,
+#       (although there is still a minimum of 8 chars...) 
 LEFT_BAR_DIVIDER = 9
 
 # ---------------- COLOR SETTINGS ------------------------------------ #
-# "white", "red", "blue", "green", "yellow", "cyan", "magenta", "black"
+# Available colors are: "white", "red", "blue", "black"
+#                       "green", "yellow", "cyan", "magenta"
+SEPARATOR_COLOR="white"
 SERVER_DISPLAY_COLOR = "cyan"
 PROMPT_COLOR = "white"
 PROMPT_BORDER_COLOR = "red"
@@ -46,6 +51,8 @@ BOT_COLOR = "yellow"
 NORMAL_USER_COLOR = "green"
 
 # here you can define your own custom roles - NOTE: text must match exactly!
+# These for example could be "helper" or "trusted", whatever roles
+# your servers use that aren't the default 'admin/mod/bot'
 CUSTOM_ROLE = ""
 CUSTOM_ROLE_COLOR = ""
 CUSTOM_ROLE_2 = ""
@@ -57,7 +64,7 @@ CUSTOM_ROLE_3_COLOR = ""
 
 # ----------- Internal-Use Variables Below ----------------- #
 """ ----------------------------------------------------------
-DO NOT EDIT THESE - SERIOUSLY, DON'T DO IT.
+        DO NOT EDIT THESE - SERIOUSLY, DON'T DO IT.
 -------------------------------------------------------------- """
 client = Client(max_messages=MAX_MESSAGES)
 term = Terminal()
