@@ -50,8 +50,8 @@ async def on_ready():
 
     # list to store our "ChannelLog" data type
     logs = []
-    count = 0
     for server in client.servers:
+        count = 0
         print("loading " + term.magenta + server.name + term.normal + " ...")
         for channel in server.channels:
             if channel.type == discord.ChannelType.text:
@@ -66,11 +66,11 @@ async def on_ready():
                     # https forbidden exception, you don't have priveleges for
                     # this channel!
                     continue
+        print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
         # add the channellog to the tree
         server_log_tree.append(ServerLog(server.name, logs)) 
 
-    print("Channels loaded! Found " + str(count) + " messages.")
  
     # Print initial screen
     ui.print_screen()

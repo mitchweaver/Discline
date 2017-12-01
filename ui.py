@@ -82,9 +82,10 @@ def print_top_bar():
             online_count +=1 
     
     topic = ""
-    try: client.get_current_channel().topic
+    try: topic = client.get_current_channel().topic
     # null exception if it has no topic
     except: pass
+
     if topic is not None:
         with term.location(term.width // 2 - len(topic) // 2, 0):
             print(term.normal + topic, end="")
