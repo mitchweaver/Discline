@@ -5,6 +5,7 @@ class ChannelLog():
     __name = ""
     __logs = ""
     __server_name = ""
+    unread = False
 
     def __init__(self, server_name, name, logs):
         self.__name = name

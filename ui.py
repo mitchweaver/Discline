@@ -15,37 +15,56 @@ INDEX = 0
 # buffer to allow for double buffering (stops screen flashing)
 screen_buffer = []
 
-def print_screen():
+async def print_screen():
     # Get ready to redraw the screen
-    left_bar_width = get_left_bar_width()
-    clear_screen()
+    left_bar_width = await get_left_bar_width()
+    await clear_screen()
 
-    # top bar
-    # print_top_bar()
-    # TEMP:
-    screen_buffer.append("\n \n")
+    await print_top_bar()
 
-# -------- Print Main Screen ------------------------- #
     if server_log_tree is not None:
-        print_channel_log(left_bar_width)
-# ---------------------------------------------------- #
+        await print_channel_log(left_bar_width)
 
-    # second line margin
-    screen_buffer.append("\n")
-    print_bottom_bar()
+    await print_bottom_bar()
 
     # Print the buffer. NOTE: the end="" is to prevent it
     # printing a new line character, which would add whitespace
     # to the bottom of the terminal
-    print(term.move(0,0) + "".join(screen_buffer), end="")
+    with term.location(0, 2):
+        print("".join(screen_buffer), end="")
 
-    print_left_bar(left_bar_width)
+    await print_left_bar(left_bar_width)
 
-    print_top_bar()
+async def print_top_bar():
+    topic = ""
+    try: topic = client.get_current_channel().topic
+    # if there is no channel topic, just print the channel name
+    except: 
+        topic = client.get_current_channel().name
 
-def print_left_bar(left_bar_width):
+
+    with term.location(1,1):
+        print("Server: " + await get_color(SERVER_DISPLAY_COLOR) \
+                         + client.get_current_server_name() + term.normal, end="")
+
+    with term.location(term.width // 2 - len(topic) // 2, 1):
+        print(topic, end="")
+
+    online_text = "Users online: "
+    online_count = str(client.get_online())
+    online_length = len(online_text) + len(online_count)
+
+    with term.location(term.width - online_length - 1, 1):
+        print(await get_color(SERVER_DISPLAY_COLOR) + online_text \
+              + term.normal + online_count, end="")
+
+    divider = await get_color(SEPARATOR_COLOR) \
+            + ("-" * term.width) + "\n" + term.normal
+    screen_buffer.append(divider)
+
+async def print_left_bar(left_bar_width):
     for i in range(2, term.height - MARGIN):
-        print(term.move(i, left_bar_width) + get_color(SEPARATOR_COLOR) + "|" \
+        print(term.move(i, left_bar_width) + await get_color(SEPARATOR_COLOR) + "|" \
               + term.normal)
 
     buffer = []
@@ -66,60 +85,24 @@ def print_left_bar(left_bar_width):
     with term.location(1, 2):
         print("".join(buffer))
 
-def print_top_bar():
-    # screen_buffer.append(" " + "Server: " + get_color(SERVER_DISPLAY_COLOR) \
-    #                      + client.get_current_server_name() + term.normal + "\n")
-    # screen_buffer.append("-" * term.width + "\n")
 
-    with term.location(1, 0):
-        print(" " + "Server: " + get_color(SERVER_DISPLAY_COLOR) \
-            + client.get_current_server_name() + term.normal + "\n", end="")
-    
-    online_count = 0
-    for member in client.get_current_server().members:
-        if member is None: continue # happens if a member left the server
-        if member.status is discord.Status.online:
-            online_count +=1 
-    
-    topic = ""
-    try: topic = client.get_current_channel().topic
-    # null exception if it has no topic
-    except: pass
-
-    # if there is no channel topic, just print the channel name
-    if topic is None: topic = client.get_current_channel().name
-
-    with term.location(term.width // 2 - len(topic) // 2, 0):
-        print(term.normal + topic, end="")
-
-    text = "Users online: "
-    online_count = str(online_count)
-    length = len(text) + len(online_count)
-    with term.location(term.width - 1 - length, 0):
-        print(text + term.green + online_count + term.normal, end="")
-
-    # top bar separator
-    print(term.move(1, 0) + get_color(SEPARATOR_COLOR) + ("-" * term.width) + "\n" \
-          + term.normal)
-
-    
-def print_bottom_bar():
-    screen_buffer.append(get_color(SEPARATOR_COLOR) + ("-" * term.width) + "\n" \
+async def print_bottom_bar():
+    screen_buffer.append(await get_color(SEPARATOR_COLOR) + ("-" * term.width) + "\n" \
                          + term.normal)
 
     if client.get_prompt() == DEFAULT_PROMPT:
-            prompt = get_color(PROMPT_BORDER_COLOR) + "[" + " " \
-                    + get_color(PROMPT_COLOR) + DEFAULT_PROMPT + " " \
-                    + get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
+            prompt = await get_color(PROMPT_BORDER_COLOR) + "[" + " " \
+                    + await get_color(PROMPT_COLOR) + DEFAULT_PROMPT + " " \
+                    + await get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
     else:
-        prompt = get_color(PROMPT_BORDER_COLOR) + "["  + \
-                get_color(PROMPT_COLOR) + "#" + client.get_prompt() \
-                + get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
+        prompt = await get_color(PROMPT_BORDER_COLOR) + "["  + \
+                await get_color(PROMPT_COLOR) + "#" + client.get_prompt() \
+                + await get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
 
     if len(input_buffer) > 0: screen_buffer.append(prompt + "".join(input_buffer))
     else: screen_buffer.append(prompt)
 
-def clear_screen():
+async def clear_screen():
 
     # instead of "clearing", we're actually just overwriting
     # everything with white space. This mitigates the massive
@@ -128,13 +111,13 @@ def clear_screen():
     wipe = (" " * (term.width) + "\n") * term.height
     print(term.move(0,0) + wipe, end="")
 
-def print_channel_log(left_bar_width):
+async def print_channel_log(left_bar_width):
     global INDEX
     
     # If the line would spill over the screen, we need to wrap it
     # NOTE: term.width is calculating every time this function is called.
     #       Meaning that this will automatically resize the screen.
-    MAX_LENGTH = term.width - (left_bar_width + MARGIN*2) - 1
+    MAX_LENGTH = term.width - (left_bar_width + MARGIN*2)
     # For wrapped lines, offset them to line up with the previous line
     offset = 0
     # List to put our *formatted* lines in, once we have OK'd them to print
@@ -154,26 +137,27 @@ def print_channel_log(left_bar_width):
                         try: 
                             r = msg.author.top_role
                             if r.name.lower() == "admin":
-                                color = get_color(ADMIN_COLOR)
+                                color = await get_color(ADMIN_COLOR)
                             elif r.name.lower() == "mod": 
-                                color = get_color(MOD_COLOR)
+                                color = await get_color(MOD_COLOR)
                             elif r.name.lower() == "bot": 
-                                color = get_color(BOT_COLOR)
+                                color = await get_color(BOT_COLOR)
                             elif CUSTOM_ROLE is not None and r.name == CUSTOM_ROLE:
-                                color = get_color(CUSTOM_ROLE_COLOR)
+                                color = await get_color(CUSTOM_ROLE_COLOR)
                             elif CUSTOM_ROLE_2 is not None and r.name == CUSTOM_ROLE_2:
-                                color = get_color(CUSTOM_ROLE_2_COLOR)
+                                color = await get_color(CUSTOM_ROLE_2_COLOR)
                             elif CUSTOM_ROLE_3 is not None and r.name == CUSTOM_ROLE_3:
-                                color = get_color(CUSTOM_ROLE_3_COLOR)
+                                color = await get_color(CUSTOM_ROLE_3_COLOR)
                             elif NORMAL_USER_COLOR is not None:
-                                color = get_color(NORMAL_USER_COLOR)
+                                color = await get_color(NORMAL_USER_COLOR)
                             else: color = term.green
                         # if this fails, the user either left or was banned
                         except: 
                             if NORMAL_USER_COLOR is not None:
-                                color = get_color(NORMAL_USER_COLOR)
+                                color = await get_color(NORMAL_USER_COLOR)
                             else: color = term.green
 
+                        prefix_length = len(msg.author.display_name)
                         author_prefix = color + msg.author.display_name + ": "
 
                         proposed_line = author_prefix + term.white(msg.clean_content.strip())
@@ -210,7 +194,8 @@ def print_channel_log(left_bar_width):
                                     # we should offset it to better distinguish it
                                     offset = 0
                                     if author_prefix not in sect:
-                                        offset = len(msg.author.display_name) + 2
+                                        if line != msg_lines[0]:
+                                            offset = prefix_length + 2
 
                                     # add in now formatted line!
                                     formatted_lines.append(Line(sect.strip(), offset))
@@ -231,13 +216,13 @@ def print_channel_log(left_bar_width):
                                 
                                 offset = 0
                                 if author_prefix not in line:
-                                    offset = len(msg.author.display_name) + 2
+                                    offset = prefix_length + 2
 
                                 formatted_lines.append(Line(line.strip(), offset))
                                 
                     # Once all lines have been formatted, we may now print them
                     # the max number of lines that can be shown on the screen
-                    MAX_LINES = get_max_lines()
+                    MAX_LINES = await get_max_lines()
                     # where we should start printing from
                     if INDEX < MAX_LINES: INDEX = MAX_LINES 
 
@@ -249,9 +234,6 @@ def print_channel_log(left_bar_width):
 
                     step = MARGIN // 2
                     for line in formatted_lines:
-                        # with term.location(left_bar_width + MARGIN + line.offset, step):
-                        #     print(line.text)
-   
                         screen_buffer.append(" " * (left_bar_width + MARGIN + line.offset) + line.text + "\n")
    
                         step += 1
@@ -259,16 +241,16 @@ def print_channel_log(left_bar_width):
                     # return as not to loop through all channels unnecessarily
                     return
 
-def get_max_lines():
+async def get_max_lines():
     return term.height - MARGIN * 2
 
-def get_left_bar_width():
+async def get_left_bar_width():
     left_bar_width = term.width // LEFT_BAR_DIVIDER
     if left_bar_width < 8:
         return  8
     else: return left_bar_width
 
-def print_serverlist():
+async def print_serverlist():
 
     if len(client.servers) == 0:
         print("Error: You are not in any servers.")
@@ -286,7 +268,7 @@ def print_serverlist():
         + "(press \'q\' to quit this dialog) \n" \
         + "' | less")
 
-def print_channellist():
+async def print_channellist():
     if len(client.servers) == 0:
         print("Error: You are not in any servers.")
         return
@@ -311,7 +293,7 @@ def print_channellist():
 
 
 # takes in a string, returns the appropriate term.color
-def get_color(string):
+async def get_color(string):
     if string == "white":   return term.white
     if string == "black":   return term.black
     if string == "red":     return term.red
@@ -322,5 +304,5 @@ def get_color(string):
     if string == "green":   return term.green
    
     # if we're here, someone has one of their settings.py
-    # colors defined wrong. We'll be nice and just return white.
+    # colors async defined wrong. We'll be nice and just return white.
     return term.white

@@ -27,3 +27,14 @@ class Client(discord.Client):
 
     def get_current_server(self): return self.get_server(self.__current_server)
     def get_current_channel(self): return self.get_channel(self.__current_channel)
+
+
+    # returns online members in current server
+    def get_online(self):
+        online_count = 0
+        for member in self.get_current_server().members:
+            if member is None: continue # happens if a member left the server
+            if member.status is discord.Status.online:
+                online_count +=1 
+        return online_count
+

@@ -4,7 +4,6 @@ from printutils import *
 from settings import *
 from client import Client
 import ui
-from threading import Thread
 import asyncio
 from serverlog import ServerLog
 from channellog import ChannelLog
@@ -23,7 +22,7 @@ async def on_ready():
     await client.wait_until_login()
 
     # completely hide the system's cursor
-    hidecursor.hide_cursor()
+    await hidecursor.hide_cursor()
 
     # these values are set in settings.py
     if DEFAULT_PROMPT is not None:
@@ -42,9 +41,9 @@ async def on_ready():
 
 # --------------- INIT SERVERS --------------------------------------------- #
     print("Welcome to " + term.cyan + "Terminal Discord" + term.normal + "!")
-    print_line_break()
-    print_user()
-    print_line_break()
+    await print_line_break()
+    await print_user()
+    await print_line_break()
     print("Initializing... \n")
     sys.stdin.flush()
 
@@ -54,6 +53,37 @@ async def on_ready():
         count = 0
         print("loading " + term.magenta + server.name + term.normal + " ...")
         for channel in server.channels:
+            
+            
+            
+            if channel.name == "black_metal": continue
+            if channel.name == "death_metal": continue
+            if channel.name == "punk_core_grind_slam": continue
+            if channel.name == "kvlt_memes": continue
+            if channel.name == "non_metal": continue
+            if channel.name == "new_releases": continue
+            if channel.name == "kvlt_pics": continue
+            if channel.name == "kvltness": continue
+            if channel.name == "music_pick_ups": continue
+            if channel.name == "admin_chat": continue
+            if channel.name == "bot_zone": continue
+            if channel.name == "other_pickups": continue
+            if channel.name == "kvlt_speak": continue
+            if channel.name == "dungeon_synth": continue
+            if channel.name == "heavy_power_speed_trad": continue
+            if channel.name == "musicians_talk": continue
+            if channel.name == "doom_drone_metal": continue
+            if channel.name == "merch_pick_ups": continue
+            if channel.name == "prog_avantgarde_djent": continue
+            if channel.name == "thrash_crossover": continue
+            if channel.name == "pin_board": continue
+
+
+            
+            
+            
+            
+            
             if channel.type == discord.ChannelType.text:
                 print("    loading " + term.yellow + channel.name + term.normal)
                 channel_log = []
@@ -66,6 +96,8 @@ async def on_ready():
                     # https forbidden exception, you don't have priveleges for
                     # this channel!
                     continue
+    
+
         print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
         # add the channellog to the tree
@@ -73,13 +105,15 @@ async def on_ready():
 
  
     # Print initial screen
-    ui.print_screen()
+    await ui.print_screen()
   
     global init_complete
     init_complete = True
 
-def key_input():
+async def key_input():
     global user_input, input_buffer
+
+    while not init_complete: await asyncio.sleep(0.25)
 
     kb = KBHit()
 
@@ -90,53 +124,36 @@ def key_input():
             if ordkey == 10 or ordkey == 13: # enter key
                 user_input = "".join(input_buffer)
                 del input_buffer[:]
-            elif ordkey == 27: kill() # escape
+            # elif ordkey == 27: kill() # escape # why are arrow keys doing this?
             elif ordkey == 127 or ordkey == 8: 
                 if len(input_buffer) > 0:
                     del input_buffer[-1] # backspace
-                else: 
-                    sleep(0.0075)
-                    continue
             else: input_buffer.append(key)
-            ui.print_screen()
-        sleep(0.01)
-
-async def is_typing_handler():
-    # Wait until all servers/channels are loaded
-    while not init_complete: await asyncio.sleep(1)
-    
-    while True:
-        if len(input_buffer) > 0:
-            if input_buffer[0] is not "/":
-                try: await client.send_typing(client.get_current_channel())
-                except: pass
-        try: await asyncio.sleep(0.2)
-        except: pass
+            await ui.print_screen()
+        await asyncio.sleep(0.01)
 
 async def input_handler():
-    global user_input
+    global user_input, input_buffer
     await client.wait_until_ready()
 
-    # Wait until all servers/channels are loaded
-    while not init_complete: await asyncio.sleep(0.5)
-   
-    # Start our input thread
-    t = Thread(target=key_input)
-    t.daemon = True # thread will die upon main thread exiting
-    t.start()
-
+    while not init_complete: await asyncio.sleep(0.25)
+    
     while True:
 
         # If input is blank, don't do anything
         if user_input == '': 
-            # while we wait for our input thread to get
-            # some input, let discord.py's coroutines listen
-            # for new events
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(0.05)
             continue
 
+        # if typing a message, display '... is typing'
+        if len(input_buffer) > 0:
+            if input_buffer[0] is not PREFIX:
+                try: await client.send_typing(client.get_current_channel())
+                except: pass
+
+
         # Check if input is a command
-        if user_input[0] == prefix:
+        if user_input[0] == PREFIX:
             # Strip the prefix
             user_input = user_input[1:]
 
@@ -172,14 +189,14 @@ async def input_handler():
             # Else we must have only a command, no argument
             else:
                 command = user_input
-                if command == "clear": ui.clear_screen()
+                if command == "clear": await ui.clear_screen()
                 elif command == "quit": kill()
                 elif command == "exit": kill()
-                elif command == "help": print_help()
-                elif command == "servers": ui.print_serverlist()
-                elif command == "channels": ui.print_channellist()
-                elif command == "users": ui.print_userlist()
-                elif command == "members": ui.print_userlist()
+                elif command == "help": await print_help()
+                elif command == "servers": await ui.print_serverlist()
+                elif command == "channels": await ui.print_channellist()
+                elif command == "users": await ui.print_userlist()
+                elif command == "members": await ui.print_userlist()
                 elif command == "welcome": pass
 
 
@@ -221,7 +238,7 @@ async def input_handler():
         user_input = ""
 
         # Update the screen
-        ui.print_screen()
+        await ui.print_screen()
 
         await asyncio.sleep(0.1)
 
@@ -239,7 +256,7 @@ async def on_message(message):
                     break
 
     # redraw the screen
-    ui.print_screen()
+    await ui.print_screen()
 
 @client.event
 async def on_message_edit(msg_old, msg_new):
@@ -247,7 +264,7 @@ async def on_message_edit(msg_old, msg_new):
     msg_new.content = msg_new.content + " *(edited)*"
 
     # redraw the screen
-    ui.print_screen()
+    await ui.print_screen()
 
 
 # --------------------------------------------------------------------------- #
@@ -255,10 +272,8 @@ async def on_message_edit(msg_old, msg_new):
 # start our own coroutines
 try: asyncio.get_event_loop().create_task(input_handler())
 except: pass
-# SystemExit: pass
-try: asyncio.get_event_loop().create_task(is_typing_handler())
+try: asyncio.get_event_loop().create_task(key_input())
 except: pass
-# SystemExit: pass
 
 # start the client coroutine
 try: client.run(sys.argv[1], bot=False)

@@ -99,18 +99,18 @@ class KBHit:
     
     
 # Test    
-if __name__ == "__main__":
+# if __name__ == "__main__":
     
-    kb = KBHit()
+#     kb = KBHit()
 
-    print('Hit any key, or ESC to exit')
+#     print('Hit any key, or ESC to exit')
 
-    while True:
+#     while True:
 
-        if kb.kbhit():
-            c = kb.getch()
-            if ord(c) == 27: # ESC
-                break
-            print(c)
+#         if kb.kbhit():
+#             c = kb.getch()
+#             if ord(c) == 27: # ESC
+#                 break
+#             print(c)
              
-    kb.set_normal_term() 
+#     kb.set_normal_term() 

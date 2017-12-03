@@ -13,7 +13,7 @@ DEFAULT_SERVER="DisKvlt"
 DEFAULT_CHANNEL="general"
 
 # the leading character used for commands
-prefix = '/'
+PREFIX = '/'
 
 # the default prompt when not in a channel
 DEFAULT_PROMPT = "~"
@@ -31,7 +31,7 @@ MAX_MESSAGES=100
 
 # the max amount of entries in each channel log to be downloaded + kept
 # NOTE: minimum = 100!
-MAX_LOG_ENTRIES=200
+MAX_LOG_ENTRIES=100
 
 # the denominator used to calculate the width of the "left bar"
 # NOTE: larger number here, the smaller the bar will be,
