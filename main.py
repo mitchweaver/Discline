@@ -13,6 +13,7 @@ from help import print_help
 from printutils import *
 from settings import *
 from globals import *
+from sendfile import send_file
 
 message_to_send = ""
 user_input = ""
@@ -178,6 +179,8 @@ async def input_handler():
                     try:
                         await client.change_presence(game=discord.Game(name=arg),status=None,afk=False)
                     except: pass
+                elif command == "file":
+                    await send_file(client, arg)
 
             # Else we must have only a command, no argument
             else:
