@@ -14,6 +14,7 @@ from printutils import *
 from settings import *
 from globals import *
 from sendfile import send_file
+from on_message import on_incoming_message
 
 message_to_send = ""
 user_input = ""
@@ -57,25 +58,25 @@ async def on_ready():
         for channel in server.channels:
             
             if channel.name == "black_metal": continue
-            if channel.name == "death_metal": continue
-            if channel.name == "punk_core_grind_slam": continue
-            if channel.name == "kvlt_memes": continue
-            if channel.name == "non_metal": continue
-            if channel.name == "new_releases": continue
-            if channel.name == "kvlt_pics": continue
-            if channel.name == "kvltness": continue
-            if channel.name == "music_pick_ups": continue
-            if channel.name == "admin_chat": continue
-            if channel.name == "other_pickups": continue
-            if channel.name == "kvlt_speak": continue
-            if channel.name == "dungeon_synth": continue
-            if channel.name == "heavy_power_speed_trad": continue
-            if channel.name == "musicians_talk": continue
-            if channel.name == "doom_drone_metal": continue
-            if channel.name == "merch_pick_ups": continue
-            if channel.name == "prog_avantgarde_djent": continue
-            if channel.name == "thrash_crossover": continue
-            if channel.name == "pin_board": continue
+            elif channel.name == "death_metal": continue
+            elif channel.name == "punk_core_grind_slam": continue
+            elif channel.name == "kvlt_memes": continue
+            elif channel.name == "non_metal": continue
+            elif channel.name == "new_releases": continue
+            elif channel.name == "kvlt_pics": continue
+            elif channel.name == "kvltness": continue
+            elif channel.name == "music_pick_ups": continue
+            elif channel.name == "admin_chat": continue
+            elif channel.name == "other_pickups": continue
+            elif channel.name == "kvlt_speak": continue
+            elif channel.name == "dungeon_synth": continue
+            elif channel.name == "heavy_power_speed_trad": continue
+            elif channel.name == "musicians_talk": continue
+            elif channel.name == "doom_drone_metal": continue
+            elif channel.name == "merch_pick_ups": continue
+            elif channel.name == "prog_avantgarde_djent": continue
+            elif channel.name == "thrash_crossover": continue
+            elif channel.name == "pin_board": continue
 
             if channel.type == discord.ChannelType.text:
                 print("    loading " + term.yellow + channel.name + term.normal)
@@ -242,17 +243,7 @@ async def input_handler():
 @client.event
 async def on_message(message):
     if not init_complete: return
-
-    # find the server/channel it belongs to and add it
-    for server_log in server_log_tree:
-        if server_log.get_name() == message.server.name:
-            for channel_log in server_log.get_logs():
-                if channel_log.get_name() == message.channel.name:
-                    channel_log.append(message)
-                    break
-
-    # redraw the screen
-    await ui.print_screen()
+    await on_incoming_message(message)
 
 @client.event
 async def on_message_edit(msg_old, msg_new):
@@ -272,12 +263,10 @@ async def on_message_delete(msg):
     for serverlog in server_log_tree:
         if serverlog.get_server() == msg.server:
             for channellog in serverlog.get_logs():
-                if channellog.get_channel().name == msg.channel.name:
+                if channellog.get_channel()== msg.channel:
                     channellog.get_logs().remove(msg)
                     await ui.print_screen()
                     return
-
-
 
 # --------------------------------------------------------------------------- #
 

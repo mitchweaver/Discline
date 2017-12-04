@@ -33,6 +33,9 @@ MAX_LOG_ENTRIES=100
 # Whether to send "... is typing" when the input buffer is not blank or '/'
 SEND_IS_TYPING = True
 
+# Whether to show in-line emojis in messages
+SHOW_EMOJIS = True
+
 # the denominator used to calculate the width of the "left bar"
 # NOTE: larger number here, the smaller the bar will be,
 #       (although there is still a minimum of 8 chars...) 

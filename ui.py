@@ -61,6 +61,7 @@ async def print_top_bar():
 
     divider = await get_color(SEPARATOR_COLOR) \
             + ("-" * term.width) + "\n" + term.normal
+
     screen_buffer.append(divider)
 
 async def print_left_bar(left_bar_width):
@@ -77,6 +78,8 @@ async def print_left_bar(left_bar_width):
     for c in client.get_current_server().channels:
         channels.append(c)
 
+
+    # sort channels to match the server's default chosen positions
     def quick_sort(channels):
         if len(channels) <= 1: return channels
         else:
@@ -90,6 +93,7 @@ async def print_left_bar(left_bar_width):
 
     for channel in channels:
         # don't print categories or voice chats
+        # TODO: this will break on private messages
         if channel.type != discord.ChannelType.text: continue
         text = channel.name
         if len(text) > left_bar_width:
@@ -149,9 +153,9 @@ async def print_channel_log(left_bar_width):
     formatted_lines = []
  
     for server_log in server_log_tree:
-        if server_log.get_name().lower() == client.get_current_server_name().lower():
+        if server_log.get_server() == client.get_current_server():
             for channel_log in server_log.get_logs():
-                if channel_log.get_name().lower() == client.get_current_channel_name().lower():
+                if channel_log.get_channel() == client.get_current_channel():
 
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
