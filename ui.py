@@ -31,7 +31,7 @@ async def print_screen():
     # Print the buffer. NOTE: the end="" is to prevent it
     # printing a new line character, which would add whitespace
     # to the bottom of the terminal
-    with term.location(0, 2):
+    with term.location(0, 1):
         print("".join(screen_buffer), end="")
 
     await print_left_bar(left_bar_width)
@@ -44,18 +44,18 @@ async def print_top_bar():
         topic = client.get_current_channel().name
 
 
-    with term.location(1,1):
+    with term.location(1,0):
         print("Server: " + await get_color(SERVER_DISPLAY_COLOR) \
                          + client.get_current_server_name() + term.normal, end="")
 
-    with term.location(term.width // 2 - len(topic) // 2, 1):
+    with term.location(term.width // 2 - len(topic) // 2, 0):
         print(topic, end="")
 
     online_text = "Users online: "
     online_count = str(client.get_online())
     online_length = len(online_text) + len(online_count)
 
-    with term.location(term.width - online_length - 1, 1):
+    with term.location(term.width - online_length - 1, 0):
         print(await get_color(SERVER_DISPLAY_COLOR) + online_text \
               + term.normal + online_count, end="")
 
@@ -271,7 +271,7 @@ async def print_channel_log(left_bar_width):
                     return
 
 async def get_max_lines():
-    return term.height - MARGIN * 2
+    return term.height - MARGIN * 2 + 1
 
 async def get_left_bar_width():
     left_bar_width = term.width // LEFT_BAR_DIVIDER

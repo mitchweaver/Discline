@@ -2,26 +2,17 @@ from ui import print_screen
 from globals import *
 from settings import *
 
-
 async def calc_mutations(msg):
     text = ""
 
     # if the message is a file, extract the discord url from it
-    # if len(msg.attachments) > 0:
-    #     url = msg.attachments[0]
-      
-    #     # if there is text with the attachment, add that too
-    #     if len(msg.clean_content) > 1: # not sure what this char is, its not \n
-    #         text = msg.clean_content + url
-    #     else: text = url
-
-    # # else it must just be a normal message
-    # else: 
-    # text = msg.clean_content
-   
-    msg.content = msg.clean_content + text
-
-    return msg
+    try:
+        json = str(msg.attachments[0]).split("'")
+        text = json[5]
+        msg.content = text
+        return msg
+    except:
+        return msg
 
 
 
