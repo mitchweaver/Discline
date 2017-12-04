@@ -129,7 +129,7 @@ How to reproduce: xxxxxx
 
 > Sometimes when I submit a message the client crashes
 
-No idea as of yet. Looking for a workaround.
+This should(?) be fixed, but if it keeps happening, do let me know.
 
 > \<some feature\> isn't working right on Windows!
 
