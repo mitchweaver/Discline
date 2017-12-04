@@ -1,6 +1,3 @@
-from client import Client
-from blessings import Terminal
-
 """ -----------------------------------------------------------------------
         You can edit these to your preferences. Note: anything silly
         like MAX_MESSAGES=-1 will break the client. Duh.
@@ -59,22 +56,3 @@ CUSTOM_ROLE_2 = ""
 CUSTOM_ROLE_2_COLOR = ""
 CUSTOM_ROLE_3 = ""
 CUSTOM_ROLE_3_COLOR = ""
-
-
-
-# ----------- Internal-Use Variables Below ----------------- #
-""" ----------------------------------------------------------
-        DO NOT EDIT THESE - SERIOUSLY, DON'T DO IT.
--------------------------------------------------------------- """
-client = Client(max_messages=MAX_MESSAGES)
-term = Terminal()
-server_log_tree = []
-input_buffer = []
-# kills the program and all its elements gracefully
-def kill():
-    import asyncio
-    try: client.close()
-    except: pass
-    try: asyncio.get_event_loop().close()
-    except: pass
-    quit()

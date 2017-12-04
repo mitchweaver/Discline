@@ -1,4 +1,4 @@
-from settings import term, client
+from globals import term, client
 from os import system
 import ui
 from discord import Status

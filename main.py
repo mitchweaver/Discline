@@ -1,7 +1,6 @@
 import sys
 from time import sleep
 from printutils import *
-from settings import *
 from client import Client
 import ui
 import asyncio
@@ -12,6 +11,8 @@ import hidecursor
 import discord
 from help import print_help
 from printutils import *
+from settings import *
+from globals import *
 
 message_to_send = ""
 user_input = ""
@@ -91,7 +92,7 @@ async def on_ready():
                     async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
                         count+=1
                         channel_log.insert(0, msg)
-                    logs.append(ChannelLog(server.name, channel.name, channel_log))
+                    logs.append(ChannelLog(server, channel, channel_log))
                 except:
                     # https forbidden exception, you don't have priveleges for
                     # this channel!
@@ -101,7 +102,7 @@ async def on_ready():
         print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
         # add the channellog to the tree
-        server_log_tree.append(ServerLog(server.name, logs)) 
+        server_log_tree.append(ServerLog(server, logs)) 
 
  
     # Print initial screen
@@ -265,6 +266,18 @@ async def on_message_edit(msg_old, msg_new):
 
     # redraw the screen
     await ui.print_screen()
+
+@client.event
+async def on_message_delete(msg):
+    if not init_complete: return
+    # note: PM's have 'None' as a server -- fix this later
+    if msg.server is None: return
+
+    for serverlog in server_log_tree:
+        if serverlog.get_server() == msg.server:
+            for channellog in serverlog:
+                if channellog.get_channel() == msg.channel:
+                    channellog.get_logs().remove(msg)
 
 
 # --------------------------------------------------------------------------- #

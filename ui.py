@@ -3,6 +3,7 @@ import sys
 from blessings import Terminal
 from line import Line
 from settings import *
+from globals import *
 from discord import ChannelType
 import discord
 from userlist import print_userlist
@@ -67,16 +68,37 @@ async def print_left_bar(left_bar_width):
         print(term.move(i, left_bar_width) + await get_color(SEPARATOR_COLOR) + "|" \
               + term.normal)
 
+    # Create a new list so we can preserve the server's channel order
+    channels = []
+    # buffe to print
     buffer = []
     count = 0
-    for channel in client.get_current_server().channels:
+
+    for c in client.get_current_server().channels:
+        channels.append(c)
+
+    def quick_sort(channels):
+        if len(channels) == 1: return channels
+        else:
+            return quick_sort([e for e in channels[1:] \
+                if e.position <= channels[0].position]) + \
+                [channels[0]] quick_sort([e for e in channels[1:] \
+                if e.position > channels[0].position])
+
+    channels = quick_sort(channels)
+
+
+    for channel in channels:
+        # don't print categories or voice chats
+        if channel.type != discord.ChannelType.text:
+            continue
         text = channel.name
         if len(text) > left_bar_width:
-            text = text[0:left_bar_width - 3]
+            text = text[0:left_bar_width - 4]
             text = text + "..."
         if channel == client.get_current_channel():
-            buffer.append(term.green + text + term.normal + "\n")
-        else: buffer.append(text + "\n")
+            buffer.append(" " + term.green + text + term.normal + "\n")
+        else: buffer.append(" " + text + "\n")
         count += 1
         # should the server have *too many channels!*, stop them
         # from spilling over the screen

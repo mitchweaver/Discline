@@ -2,15 +2,22 @@
 
 class ChannelLog():
 
+    __server = ""
+    __channel = ""
     __name = ""
     __logs = ""
     __server_name = ""
     unread = False
 
-    def __init__(self, server_name, name, logs):
-        self.__name = name
+    def __init__(self, server, channel, logs):
+        self.__server = server
+        self.__channel = channel
+        self.__name = channle.name
         self.__logs = logs
-        self.__server_name = server_name
+        self.__server_name = server.name
+
+    def get_server(self): return self.__server
+    def get_channel(self): return self.__channel
 
     def get_logs(self):
         return self.__logs

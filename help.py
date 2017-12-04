@@ -1,5 +1,5 @@
 from os import system
-from settings import term
+from globals import term
 
 async def print_help():
     system("clear")
