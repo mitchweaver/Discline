@@ -7,7 +7,7 @@
 DEFAULT_SERVER="DisKvlt"
 
 # the default channel which will be joined upon startup - CASE SENSITIVE!
-DEFAULT_CHANNEL="general"
+DEFAULT_CHANNEL="terminal_discord"
 
 # the leading character used for commands
 PREFIX = '/'

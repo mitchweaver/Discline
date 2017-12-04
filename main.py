@@ -261,15 +261,19 @@ async def on_message_edit(msg_old, msg_new):
 
 @client.event
 async def on_message_delete(msg):
+
     if not init_complete: return
     # note: PM's have 'None' as a server -- fix this later
     if msg.server is None: return
 
     for serverlog in server_log_tree:
         if serverlog.get_server() == msg.server:
-            for channellog in serverlog:
-                if channellog.get_channel() == msg.channel:
+            for channellog in serverlog.get_logs():
+                if channellog.get_channel().name == msg.channel.name:
                     channellog.get_logs().remove(msg)
+                    await ui.print_screen()
+                    return
+
 
 
 # --------------------------------------------------------------------------- #
