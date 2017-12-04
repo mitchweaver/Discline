@@ -23,12 +23,15 @@ DEFAULT_GAME = ""
 MARGIN = 2
 
 # the max amount of messages to be downloaded + kept
-# NOTE: minimum = 100!
+# NOTE: minimum = 100! This is normally safe to increase.
 MAX_MESSAGES=100
 
 # the max amount of entries in each channel log to be downloaded + kept
-# NOTE: minimum = 100!
+# NOTE: minimum = 100! The larger this is, the slower the client will start.
 MAX_LOG_ENTRIES=100
+
+# Whether to send "... is typing" when the input buffer is not blank or '/'
+SEND_IS_TYPING = True
 
 # the denominator used to calculate the width of the "left bar"
 # NOTE: larger number here, the smaller the bar will be,

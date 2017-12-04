@@ -65,7 +65,6 @@ async def on_ready():
             if channel.name == "kvltness": continue
             if channel.name == "music_pick_ups": continue
             if channel.name == "admin_chat": continue
-            if channel.name == "bot_zone": continue
             if channel.name == "other_pickups": continue
             if channel.name == "kvlt_speak": continue
             if channel.name == "dungeon_synth": continue
@@ -139,10 +138,11 @@ async def input_handler():
             continue
 
         # if typing a message, display '... is typing'
-        if len(input_buffer) > 0:
-            if input_buffer[0] is not PREFIX:
-                try: await client.send_typing(client.get_current_channel())
-                except: pass
+        if SEND_IS_TYPING:
+            if len(input_buffer) > 0:
+                if input_buffer[0] is not PREFIX:
+                    try: await client.send_typing(client.get_current_channel())
+                    except: pass
 
 
         # Check if input is a command

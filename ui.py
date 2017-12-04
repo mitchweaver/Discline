@@ -90,15 +90,18 @@ async def print_left_bar(left_bar_width):
 
     for channel in channels:
         # don't print categories or voice chats
-        if channel.type != discord.ChannelType.text:
-            continue
+        if channel.type != discord.ChannelType.text: continue
         text = channel.name
         if len(text) > left_bar_width:
             text = text[0:left_bar_width - 4]
             text = text + "..."
         if channel == client.get_current_channel():
             buffer.append(" " + term.green + text + term.normal + "\n")
-        else: buffer.append(" " + text + "\n")
+        else: 
+            if channel == channel.server.default_channel:
+                buffer.append(text + "\n")
+            else: 
+                buffer.append(" " + text + "\n")
         count += 1
         # should the server have *too many channels!*, stop them
         # from spilling over the screen
