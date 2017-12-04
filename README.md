@@ -4,7 +4,7 @@
 ![Image](https://0x0.st/soYP.png)
 
 
-### WARNING: Currently Mac/Linux only until I find a fix!
+### WARNING: Currently Mac/Linux only until I find a Windows fix!
 
 
 ## How to use:
@@ -52,16 +52,16 @@
 * /game to update the "Now playing: " status
 * use /help for more commands
 * unicode emoji displayal support
+* File uploading via path (ex: /file /path/to/file)
 
 ### Planned Features
 ---------------------------
 
 * custom server emoji displaying and reaction
-* file/image uploading via path
 * /giphy support (submitting first result)
 * comment editing and deletion
-* message searching
 * private messaging
+* message searching -- (working, but not at a useable speed)
 
 ## Dependencies
 ------------------------
