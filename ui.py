@@ -78,11 +78,11 @@ async def print_left_bar(left_bar_width):
         channels.append(c)
 
     def quick_sort(channels):
-        if len(channels) == 1: return channels
+        if len(channels) <= 1: return channels
         else:
             return quick_sort([e for e in channels[1:] \
                 if e.position <= channels[0].position]) + \
-                [channels[0]] quick_sort([e for e in channels[1:] \
+                [channels[0]] + quick_sort([e for e in channels[1:] \
                 if e.position > channels[0].position])
 
     channels = quick_sort(channels)

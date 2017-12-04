@@ -55,8 +55,6 @@ async def on_ready():
         print("loading " + term.magenta + server.name + term.normal + " ...")
         for channel in server.channels:
             
-            
-            
             if channel.name == "black_metal": continue
             if channel.name == "death_metal": continue
             if channel.name == "punk_core_grind_slam": continue
@@ -79,12 +77,6 @@ async def on_ready():
             if channel.name == "thrash_crossover": continue
             if channel.name == "pin_board": continue
 
-
-            
-            
-            
-            
-            
             if channel.type == discord.ChannelType.text:
                 print("    loading " + term.yellow + channel.name + term.normal)
                 channel_log = []

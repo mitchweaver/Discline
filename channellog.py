@@ -12,7 +12,7 @@ class ChannelLog():
     def __init__(self, server, channel, logs):
         self.__server = server
         self.__channel = channel
-        self.__name = channle.name
+        self.__name = channel.name
         self.__logs = logs
         self.__server_name = server.name
 
