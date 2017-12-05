@@ -35,8 +35,9 @@ async def convert_code(string):
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + term.white +  left + " " + term.on_black(target) + term.normal + \
-            term.white + " " + right
+    return term.normal + term.white +  left + " " + get_color(CODE_BLOCK_COLOR) \
+            + target  + term.normal \
+            + term.white + " " + right
 
 async def convert_code_block(string):
     sections = string.split("```")

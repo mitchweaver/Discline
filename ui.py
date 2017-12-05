@@ -320,18 +320,3 @@ async def print_channellist():
            + "(press \'q\' to quit this dialog) \n" \
            + "' | less")
 
-
-# takes in a string, returns the appropriate term.color
-async def get_color(string):
-    if string == "white":   return term.white
-    if string == "black":   return term.black
-    if string == "red":     return term.red
-    if string == "blue":    return term.blue
-    if string == "yellow":  return term.yellow
-    if string == "cyan":    return term.cyan
-    if string == "magenta": return term.magenta
-    if string == "green":   return term.green
-   
-    # if we're here, someone has one of their settings.py
-    # colors async defined wrong. We'll be nice and just return white.
-    return term.white

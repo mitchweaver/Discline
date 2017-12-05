@@ -44,6 +44,7 @@ LEFT_BAR_DIVIDER = 9
 # ---------------- COLOR SETTINGS ------------------------------------ #
 # Available colors are: "white", "red", "blue", "black"
 #                       "green", "yellow", "cyan", "magenta"
+# Or: you can say "on_<color" to make it the background (ex: 'on_red')
 SEPARATOR_COLOR="white"
 SERVER_DISPLAY_COLOR = "cyan"
 PROMPT_COLOR = "white"
@@ -52,6 +53,9 @@ ADMIN_COLOR = "magenta"
 MOD_COLOR = "blue"
 BOT_COLOR = "yellow"
 NORMAL_USER_COLOR = "green"
+
+CODE_BLOCK_COLOR="on_black"
+URL_COLOR="cyan"
 
 # here you can define your own custom roles - NOTE: text must match exactly!
 # These for example could be "helper" or "trusted", whatever roles
