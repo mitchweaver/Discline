@@ -70,42 +70,49 @@ async def print_left_bar(left_bar_width):
               + term.normal)
 
     # Create a new list so we can preserve the server's channel order
-    channels = []
+    channel_logs = []
     # buffe to print
     buffer = []
     count = 0
 
-    for c in client.get_current_server().channels:
-        channels.append(c)
-
+    for servlog in server_log_tree:
+        if servlog.get_server() is client.get_current_server():
+            for chanlog in servlog.get_logs():
+                channel_logs.append(chanlog)
 
     # sort channels to match the server's default chosen positions
-    def quick_sort(channels):
-        if len(channels) <= 1: return channels
+    def quick_sort(channel_logs):
+        if len(channel_logs) <= 1: return channel_logs
         else:
-            return quick_sort([e for e in channels[1:] \
-                if e.position <= channels[0].position]) + \
-                [channels[0]] + quick_sort([e for e in channels[1:] \
-                if e.position > channels[0].position])
+            return quick_sort([e for e in channel_logs[1:] \
+                if e.get_channel().position <= channel_logs[0].get_channel().position]) + \
+                [channel_logs[0]] + quick_sort([e for e in channel_logs[1:] \
+                if e.get_channel().position > channel_logs[0].get_channel().position])
 
-    channels = quick_sort(channels)
-
-
-    for channel in channels:
+    channel_logs = quick_sort(channel_logs)
+            
+            
+    for log in channel_logs:
         # don't print categories or voice chats
         # TODO: this will break on private messages
-        if channel.type != discord.ChannelType.text: continue
-        text = channel.name
+        if log.get_channel().type != discord.ChannelType.text: continue
+        text = log.get_name()
         if len(text) > left_bar_width:
             text = text[0:left_bar_width - 4]
             text = text + "..."
-        if channel == client.get_current_channel():
+        if log.get_channel() is client.get_current_channel():
             buffer.append(" " + term.green + text + term.normal + "\n")
         else: 
-            if channel == channel.server.default_channel:
-                buffer.append(text + "\n")
+            if log.get_channel() is log.get_server().default_channel:
+                text = text + "\n"
             else: 
-                buffer.append(" " + text + "\n")
+                text = " " + text + "\n"
+
+            if log.unread and log.get_channel() is not client.get_current_channel():
+                buffer.append(term.blink_red(text))
+            else: buffer.append(text)
+        
+
         count += 1
         # should the server have *too many channels!*, stop them
         # from spilling over the screen

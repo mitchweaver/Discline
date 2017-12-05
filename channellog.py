@@ -5,7 +5,7 @@ class ChannelLog():
     __server = ""
     __channel = ""
     __name = ""
-    __logs = ""
+    __logs = []
     __server_name = ""
     unread = False
 
@@ -13,8 +13,8 @@ class ChannelLog():
         self.__server = server
         self.__channel = channel
         self.__name = channel.name
-        self.__logs = logs
         self.__server_name = server.name
+        self.__logs = list(logs)
 
     def get_server(self): return self.__server
     def get_channel(self): return self.__channel

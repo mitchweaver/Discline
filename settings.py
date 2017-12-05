@@ -56,6 +56,12 @@ NORMAL_USER_COLOR = "green"
 
 CODE_BLOCK_COLOR="on_black"
 URL_COLOR="cyan"
+CHANNEL_LIST_COLOR="white"
+CURRENT_CHANNEL_COLOR="green"
+UNREAD_CHANNEL_COLOR="red"
+
+# whether channels should blink when they have unread messages
+BLINK_UNREAD=True
 
 # here you can define your own custom roles - NOTE: text must match exactly!
 # These for example could be "helper" or "trusted", whatever roles

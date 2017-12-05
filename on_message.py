@@ -35,7 +35,7 @@ async def convert_code(string):
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + term.white +  left + " " + get_color(CODE_BLOCK_COLOR) \
+    return term.normal + term.white +  left + " " + await get_color(CODE_BLOCK_COLOR) \
             + target  + term.normal \
             + term.white + " " + right
 
@@ -120,13 +120,19 @@ async def on_incoming_message(msg):
 
     # TODO: make sure it isn't a private message
 
-    # find the server/channel it belongs to and add it
-    for server_log in server_log_tree:
-        if server_log.get_server() == msg.server:
-            for channel_log in server_log.get_logs():
-                if channel_log.get_channel() == msg.channel:
-                    channel_log.append(await calc_mutations(msg))
-                    break
+    
+    # (note: the try/except here is to be able to break out of the double for loop)
 
-    # redraw the screen
-    await print_screen()
+    # find the server/channel it belongs to and add it
+    try:
+        for server_log in server_log_tree:
+            if server_log.get_server() == msg.server:
+                for channel_log in server_log.get_logs():
+                    if channel_log.get_channel() == msg.channel:
+                        channel_log.append(await calc_mutations(msg))
+                        if channel_log.get_channel() is not client.get_current_channel():
+                            channel_log.unread = True
+                        raise Found
+    except:
+        # redraw the screen
+        await print_screen()
