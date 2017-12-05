@@ -30,6 +30,22 @@ async def convert_underline(string):
     return term.normal + term.white + left + " " + term.underline(target) + term.normal + \
             term.white + " " + right
 
+async def convert_code(string):
+    sections = string.split("`")
+    left = sections[0]
+    target = sections[1]
+    right = "".join(sections[2])
+    return term.normal + term.white +  left + " " + term.on_black(target) + term.normal + \
+            term.white + " " + right
+
+async def convert_code_block(string):
+    sections = string.split("```")
+    left = sections[0]
+    target = sections[1]
+    right = "".join(sections[2])
+    return term.normal + term.white +  left + " " + term.on_black(target) + term.normal + \
+            term.white + " " + right
+
 async def calc_mutations(msg):
 
     # if the message is a file, extract the discord url from it
@@ -41,6 +57,26 @@ async def calc_mutations(msg):
     # # otherwise it must not have any attachments and its a regular message
     except:
         text = msg.content
+
+
+        # check for in-line code blocks
+        if text.count("```") > 1:
+            while("```") in text:
+                text = await convert_code_block(text)
+
+            msg.content = text
+            # return here as not to format anything else, as it is code
+            return msg
+
+
+        # check for in-line code marks
+        if text.count("`") > 1:
+            while("`") in text:
+                text = await convert_code(text)
+
+            msg.content = text
+            # return here as not to format anything else, as it is code
+            return msg
 
         # check to see if it has any custom-emojis
         # These will look like <:emojiname:39432432903201>
@@ -75,9 +111,8 @@ async def calc_mutations(msg):
 
             msg.content = text
 
-        
+        # else it must be a regular message, nothing else
         return msg
-
 
 
 async def on_incoming_message(msg):
