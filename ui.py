@@ -16,7 +16,11 @@ INDEX = 0
 # buffer to allow for double buffering (stops screen flashing)
 screen_buffer = []
 
+# text that can be set to be displayed for 1 frame
+display = ""
+
 async def print_screen():
+    global display
     # Get ready to redraw the screen
     left_bar_width = await get_left_bar_width()
     await clear_screen()
@@ -35,6 +39,11 @@ async def print_screen():
         print("".join(screen_buffer), end="")
 
     await print_left_bar(left_bar_width)
+
+    if display is not None:
+        print(display)
+
+    display = ""
 
 async def print_top_bar():
     topic = ""
@@ -65,6 +74,11 @@ async def print_top_bar():
             + ("-" * term.width) + "\n" + term.normal
 
     screen_buffer.append(divider)
+
+
+async def set_display(string):
+    global display
+    display = string
 
 async def print_left_bar(left_bar_width):
     for i in range(2, term.height - MARGIN):
