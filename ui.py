@@ -38,7 +38,9 @@ async def print_screen():
 
 async def print_top_bar():
     topic = ""
-    try: topic = client.get_current_channel().topic
+    try: 
+        if client.get_current_channel().topic is not None:
+            topic = client.get_current_channel().topic
     # if there is no channel topic, just print the channel name
     except: 
         topic = client.get_current_channel().name
@@ -52,7 +54,7 @@ async def print_top_bar():
         print(topic, end="")
 
     online_text = "Users online: "
-    online_count = str(client.get_online())
+    online_count = str(await client.get_online())
     online_length = len(online_text) + len(online_count)
 
     with term.location(term.width - online_length - 1, 0):
@@ -76,7 +78,7 @@ async def print_left_bar(left_bar_width):
     count = 0
 
     for servlog in server_log_tree:
-        if servlog.get_server() is client.get_current_server():
+        if servlog.get_name().lower() == client.get_current_server_name().lower():
             for chanlog in servlog.get_logs():
                 channel_logs.append(chanlog)
 
@@ -140,16 +142,12 @@ async def print_bottom_bar():
 
 async def clear_screen():
 
-    import os
-    os.system("clear")
-
     # instead of "clearing", we're actually just overwriting
     # everything with white space. This mitigates the massive
     # screen flashing that goes on with "cls" and "clear"
-
-    # del screen_buffer[:]
-    # wipe = (" " * (term.width) + "\n") * term.height
-    # print(term.move(0,0) + wipe, end="")
+    del screen_buffer[:]
+    wipe = (" " * (term.width) + "\n") * term.height
+    print(term.move(0,0) + wipe, end="")
 
 async def print_channel_log(left_bar_width):
     global INDEX
@@ -282,7 +280,7 @@ async def print_channel_log(left_bar_width):
                     return
 
 async def get_max_lines():
-    return term.height - MARGIN * 2 + 1
+    return term.height - MARGIN * 2
 
 async def get_left_bar_width():
     left_bar_width = term.width // LEFT_BAR_DIVIDER

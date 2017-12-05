@@ -15,6 +15,7 @@ from settings import *
 from globals import *
 from sendfile import send_file
 from on_message import on_incoming_message
+from text_emoticons import check_emoticons
 
 message_to_send = ""
 user_input = ""
@@ -82,6 +83,25 @@ async def on_ready():
         # add the channellog to the tree
         server_log_tree.append(ServerLog(server, logs)) 
 
+
+# ---------------- Print Tests ---------------------------------- #
+    # print(len(server_log_tree))
+
+    # count = 0
+    # temp = ""
+    # for servlog in server_log_tree:
+
+    #     for clog in servlog.get_logs():
+    #         count += 1
+
+    #     print("Count: " + str(count))
+
+    #     count = 0
+        # if temp is servlog:
+        #     print("WTF")
+        # temp = servlog 
+# --------------------------------------------------------------- #
+
  
     # Print initial screen
     await ui.print_screen()
@@ -90,12 +110,11 @@ async def on_ready():
     init_complete = True
 
 async def key_input():
-    global user_input, input_buffer
-
     while not init_complete: await asyncio.sleep(0.25)
 
     kb = KBHit()
 
+    global user_input, input_buffer
     while True:
         if kb.kbhit():
             key = kb.getch()
@@ -111,6 +130,25 @@ async def key_input():
             await ui.print_screen()
         await asyncio.sleep(0.01)
 
+async def is_typing_handler():
+    while not init_complete: await asyncio.sleep(2)
+
+    is_typing = False
+
+    while True:
+        # if typing a message, display '... is typing'
+        if SEND_IS_TYPING:
+            if not is_typing:
+                if len(input_buffer) > 0 and input_buffer[0] is not PREFIX:
+                    await client.send_typing(client.get_current_channel())
+                    is_typing = True
+                else: await asyncio.sleep(0.5)
+            elif len(input_buffer) == 0 or input_buffer[0] is PREFIX:
+                is_typing = False
+                await asyncio.sleep(0.5)
+            else: await asyncio.sleep(0.5)
+
+
 async def input_handler():
     global user_input, input_buffer
     await client.wait_until_ready()
@@ -118,19 +156,11 @@ async def input_handler():
     while not init_complete: await asyncio.sleep(0.25)
     
     while True:
-
+        
         # If input is blank, don't do anything
         if user_input == '': 
             await asyncio.sleep(0.05)
             continue
-
-        # if typing a message, display '... is typing'
-        if SEND_IS_TYPING:
-            if len(input_buffer) > 0:
-                if input_buffer[0] is not PREFIX:
-                    try: await client.send_typing(client.get_current_channel())
-                    except: pass
-
 
         # Check if input is a command
         if user_input[0] == PREFIX:
@@ -143,17 +173,25 @@ async def input_handler():
                 command,arg = user_input.split(" ", 1)
                 if command == "server" or command == 's':
                     # check if arg is a valid server, then switch
-                    for serv in client.servers:
-                        if serv.name.lower() == arg.lower():
+                    for servlog in server_log_tree:
+                        if servlog.get_name().lower() == arg.lower():
                             client.set_current_server(arg)
-                            client.set_current_channel(client.get_server(arg).default_channel)
-                            break
+                            # client.set_current_channel(servlog.get_server().default_channel)
+                            # And set the default channel as read
+                            for chanlog in servlog.get_logs():
+                                if chanlog.get_channel() is servlog.get_server().default_channel:
+                                    chanlog.unread = False
+                                    break
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
-                    for channel in client.get_current_server().channels:
-                        if channel.name.lower() == arg.lower():
-                            client.set_current_channel(arg)
-                            client.set_prompt(arg)
+                    for servlog in server_log_tree:
+                        if servlog.get_server() is client.get_current_server():
+                            for chanlog in servlog.get_logs():
+                                if chanlog.get_name().lower() == arg.lower():
+                                    client.set_current_channel(arg)
+                                    client.set_prompt(arg)
+                                    chanlog.unread = False
+                                    break
                             break
 
                 elif command == "nick":
@@ -179,36 +217,9 @@ async def input_handler():
                 elif command == "channels": await ui.print_channellist()
                 elif command == "users": await ui.print_userlist()
                 elif command == "members": await ui.print_userlist()
-                elif command == "welcome": pass
 
+                await check_emoticons(client, command)
 
-
-                elif command == "shrug": 
-                    try: await client.send_message(client.get_current_channel(), "¯\_(ツ)_/¯")
-                    except: pass
-                elif command == "tableflip": 
-                    try: await client.send_message(client.get_current_channel(), "(╯°□°）╯︵ ┻━┻")
-                    except: pass
-                elif command == "unflip":
-                    try: await client.send_message(client.get_current_channel(), "┬──┬ ノ( ゜-゜ノ)")
-                    except: pass
-                elif command == "zoidberg": 
-                    try: await client.send_message(client.get_current_channel(), "(/) (°,,°) (/)")
-                    except: pass
-                elif command == "lenny": 
-                    try: await client.send_message(client.get_current_channel(), "( ͡° ͜ʖ ͡°)")
-                    except: pass
-                elif command == "lennyx5": 
-                    try: await client.send_message(client.get_current_channel(), "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)")
-                    except: pass
-                elif command == "glasses": 
-                    try: await client.send_message(client.get_current_channel(), "(•_•) ( •_•)>⌐■-■ (⌐■_■)")
-                    except: pass
-                elif command == "walking_my_mods": 
-                    try: await client.send_message(client.get_current_channel(), "⌐( ͡° ͜ʖ ͡°) ╯╲___卐卐卐卐")
-                    except: pass
-
-        
         # This must not be a command...
         else: 
             # If all options have been exhausted, it must be character
@@ -259,6 +270,8 @@ async def on_message_delete(msg):
 try: asyncio.get_event_loop().create_task(input_handler())
 except: pass
 try: asyncio.get_event_loop().create_task(key_input())
+except: pass
+try: asyncio.get_event_loop().create_task(is_typing_handler())
 except: pass
 
 # start the client coroutine

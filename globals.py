@@ -15,6 +15,22 @@ def kill():
     except: pass
     quit()
 
+# returns a "Channel" object from the given strings
+async def get_channel(server, channel):
+    for srv in client.servers:
+        if srv.name == server.name:
+            for chan in srv.channels:
+                if chan.name == channel.name:
+                    return chan
+
+# returns a "Channellog" object from the given strings
+async def get_channel_log(server, channel):
+    for srvlog in server_log_tree:
+        if srvlog.get_name() == server.name:
+            for chanlog in srvlog.get_logs():
+                if chanlog.get_name() == channel.name:
+                    return chanlog
+
 
 # takes in a string, returns the appropriate term.color
 async def get_color(string):
@@ -36,7 +52,6 @@ async def get_color(string):
     if string == "on_magenta": return term.on_magenta
     if string == "on_green":   return term.on_green
 
-
     # if we're here, someone has one of their settings.py
-    # colors async defined wrong. We'll be nice and just return white.
-    return term.white
+    # colors defined wrong. We'll be nice and just return white.
+    return term.normal + term.white

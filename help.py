@@ -15,6 +15,7 @@ async def print_help():
         + "\n" \
         + get_line("/nick", "      - ", "change server nick name") \
         + get_line("/game", "      - ", "change your game status") \
+        + get_line("/file", "      - ", "upload a file via path") \
         + "\n" \
         + get_line("clear", "      - ", "force clearing of screen") \
         + get_line("/quit", "      - ", "exit cleanly") \

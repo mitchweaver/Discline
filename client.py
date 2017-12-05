@@ -30,7 +30,7 @@ class Client(discord.Client):
 
 
     # returns online members in current server
-    def get_online(self):
+    async def get_online(self):
         online_count = 0
         for member in self.get_current_server().members:
             if member is None: continue # happens if a member left the server
