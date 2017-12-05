@@ -140,12 +140,16 @@ async def print_bottom_bar():
 
 async def clear_screen():
 
+    import os
+    os.system("clear")
+
     # instead of "clearing", we're actually just overwriting
     # everything with white space. This mitigates the massive
     # screen flashing that goes on with "cls" and "clear"
-    del screen_buffer[:]
-    wipe = (" " * (term.width) + "\n") * term.height
-    print(term.move(0,0) + wipe, end="")
+
+    # del screen_buffer[:]
+    # wipe = (" " * (term.width) + "\n") * term.height
+    # print(term.move(0,0) + wipe, end="")
 
 async def print_channel_log(left_bar_width):
     global INDEX

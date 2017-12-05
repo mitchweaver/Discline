@@ -81,7 +81,8 @@ CUSTOM_ROLE_3_COLOR = ""
 CHANNEL_IGNORE_LIST = {
 
     "server_name": ('some_channel', 'some_other_channel'), 
-    "another_server_name": ('foo', 'bar', 'i_think_you_get_it_now'),
+    "another_server_name": ('foo', 'bar', 'they_can_be_separated_nicely', \
+                            'using_the_\_operator', 'i_think_you_get_it_now'),
 
     "DisKvlt": ("black_metal", "death_metal", "punk_core_grind_slam", \
                 "kvlt_memes", "non_metal", "new_releases", "kvlt_pics", \
