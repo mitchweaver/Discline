@@ -120,6 +120,7 @@ Try to include this format:
 ```
 OS: Linux/Debian
 Terminal: urxvt
+Font: source code pro
 Python Version: 3.6
 How to reproduce: xxxxxx
 ```
