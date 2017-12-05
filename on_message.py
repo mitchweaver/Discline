@@ -11,14 +11,24 @@ async def convert_bold(string):
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + left + " " + term.bold(target) + term.normal + " " + right
+    return term.normal + term.white + left + " " + term.bold(target) + term.normal + \
+            term.white + " " + right
 
 async def convert_italic(string):
     sections = string.split("*")
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + left + " " + term.italic(target) + term.normal + " " + right
+    return term.normal + term.white +  left + " " + term.italic(target) + term.normal + \
+            term.white + " " + right
+
+async def convert_underline(string):
+    sections = string.split("__")
+    left = sections[0]
+    target = sections[1]
+    right = "".join(sections[2])
+    return term.normal + term.white + left + " " + term.underline(target) + term.normal + \
+            term.white + " " + right
 
 async def calc_mutations(msg):
 
@@ -58,14 +68,15 @@ async def calc_mutations(msg):
 
             msg.content = text
 
+        # check for underlined font 
+        if text.count("__") > 1:
+            while("__") in text:
+                text = await convert_underline(text)            
+
+            msg.content = text
 
         
-        # check for italicized font
-        
-
-
         return msg
-
 
 
 
