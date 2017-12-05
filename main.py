@@ -56,41 +56,26 @@ async def on_ready():
         count = 0
         print("loading " + term.magenta + server.name + term.normal + " ...")
         for channel in server.channels:
-            
-            if channel.name == "black_metal": continue
-            elif channel.name == "death_metal": continue
-            elif channel.name == "punk_core_grind_slam": continue
-            elif channel.name == "kvlt_memes": continue
-            elif channel.name == "non_metal": continue
-            elif channel.name == "new_releases": continue
-            elif channel.name == "kvlt_pics": continue
-            elif channel.name == "kvltness": continue
-            elif channel.name == "music_pick_ups": continue
-            elif channel.name == "admin_chat": continue
-            elif channel.name == "other_pickups": continue
-            elif channel.name == "kvlt_speak": continue
-            elif channel.name == "dungeon_synth": continue
-            elif channel.name == "heavy_power_speed_trad": continue
-            elif channel.name == "musicians_talk": continue
-            elif channel.name == "doom_drone_metal": continue
-            elif channel.name == "merch_pick_ups": continue
-            elif channel.name == "prog_avantgarde_djent": continue
-            elif channel.name == "thrash_crossover": continue
-            elif channel.name == "pin_board": continue
-
             if channel.type == discord.ChannelType.text:
-                print("    loading " + term.yellow + channel.name + term.normal)
-                channel_log = []
-                try:
-                    async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
-                        count+=1
-                        channel_log.insert(0, msg)
-                    logs.append(ChannelLog(server, channel, channel_log))
-                except:
-                    # https forbidden exception, you don't have priveleges for
-                    # this channel!
-                    continue
-    
+                try: # try/except in order to 'continue' out of multiple for loops
+                    for serv_key in CHANNEL_IGNORE_LIST:
+                        if serv_key.lower() == server.name.lower():
+                            for name in CHANNEL_IGNORE_LIST[serv_key]:
+                                if channel.name.lower() == name.lower():
+                                    raise Found
+
+                    print("    loading " + term.yellow + channel.name + term.normal)
+                    channel_log = []
+                    try:
+                        async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
+                            count+=1
+                            channel_log.insert(0, msg)
+                        logs.append(ChannelLog(server, channel, channel_log))
+                    except:
+                        # https forbidden exception, you don't have priveleges for
+                        # this channel!
+                        continue
+                except: continue
 
         print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 

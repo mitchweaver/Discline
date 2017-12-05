@@ -72,3 +72,22 @@ CUSTOM_ROLE_2 = ""
 CUSTOM_ROLE_2_COLOR = ""
 CUSTOM_ROLE_3 = ""
 CUSTOM_ROLE_3_COLOR = ""
+
+# Channel ignore list - This stops the channel from being loaded.
+# Effectively like the "mute" + "hide" feature on the official client,
+# However with the added benefit that this means these channels won't
+# be stored in RAM.    
+# Follow the format as below. 
+CHANNEL_IGNORE_LIST = {
+
+    "server_name": ('some_channel', 'some_other_channel'), 
+    "another_server_name": ('foo', 'bar', 'i_think_you_get_it_now'),
+
+    "DisKvlt": ("black_metal", "death_metal", "punk_core_grind_slam", \
+                "kvlt_memes", "non_metal", "new_releases", "kvlt_pics", \
+                "kvltness", "music_pick_ups", "admin_chat", "other_pickups", \
+                "kvlt_speak", "dungeon_synth", "heavy_power_speed_trad", \
+                "musicians_talk", "doom_drone_metal", "merch_pick_ups", \
+                "prog_avantgarde_djent", "thrash_crossover", "pin_board")
+
+}
