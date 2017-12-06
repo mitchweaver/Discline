@@ -51,6 +51,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * italic, bold, and underline font support
 * inline-code and \`code\` block support
 * sending of __default__ unicode emojis in messages
+* URL detection, highlighting in blue + italics
 
 ### Planned Features
 ---------------------------
