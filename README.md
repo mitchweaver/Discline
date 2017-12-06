@@ -34,32 +34,29 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 --------------------------
 
 * login via token
-* connect to default server/channel
-* upon init, download all logs from what the client can see
 * /channel to switch channel
 * /server to switch server
 * /nick to change nickname (per server)
-* /help to display help, (note: may not be current)
-* /clear to clear screen, (in case of graphical glitches)
 * typing without a leading prefix will submit to current chat
 * User customization via editing settings.py
 * "<USER> is typing..." support
 * private channels
 * colored output, with user definable colors and custom roles
-* Log updates when users edit messages
+* Channel logs update when users edit messages
 * /channels, /servers, /users to view information
 * /game to update the "Now playing: " status
 * use /help for more commands
 * unicode emoji displayal support
 * File uploading via path (ex: /file /path/to/file)
-* italic, bold, and underline font support
-* inline-code and code block support
+* *italic*, **bold**, and __underline__ font support
+* inline-code and \`code\` block support
+* sending of __default__ unicode emojis in messages
 
 ### Planned Features
 ---------------------------
 
-* custom server emoji displaying and reaction
-* /giphy support (submitting first result)
+* custom server emojis in messages
+* emojis reactions
 * comment editing and deletion
 * private messaging
 * message searching -- (working, but not at a useable speed)
