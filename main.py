@@ -181,7 +181,7 @@ async def input_handler():
                             client.set_prompt(def_chan.name.lower())
                             # And set the default channel as read
                             for chanlog in servlog.get_logs():
-                                if chanlog.get_channel() is servlog.get_server().default_channel:
+                                if chanlog.get_channel() is def_chan:
                                     chanlog.unread = False
                                     break
                             break
