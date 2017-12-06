@@ -163,6 +163,16 @@ Python Version: 3.6
 How to reproduce: xxxxxx
 ```
 
+### Misc Screenshots
+--------------------------
+
+![Image](https://0x0.st/sHjR.png)
+
+![Image](https://0x0.st/sHer.png)
+
+![Image](https://0x0.st/sHez.png)
+
+
 ### Known Bugs
 --------------------------
 
