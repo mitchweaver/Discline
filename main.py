@@ -26,8 +26,12 @@ init_complete = False
 from subprocess import Popen,PIPE
 print("Checking for updates...")
 process = Popen(["git", "pull"], stdout=PIPE)
-output = process.communicate()[0]
-print(output.decode('utf-8'))
+output = process.communicate()[0].decode('utf-8').strip()
+
+if output != "Already up to date.":
+    print("Updates downloaded! Please restart.")
+    quit()
+
 print("Starting...")
 
 @client.event

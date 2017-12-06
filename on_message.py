@@ -1,7 +1,9 @@
+import re
+from discord import MessageType
 from ui import print_screen
 from globals import *
 from settings import *
-import re
+
 
 async def trim_emoji(full_name, short_name, string):
     return string.replace(full_name, ":" + short_name + ":")
@@ -135,16 +137,16 @@ async def on_incoming_message(msg):
 
     # TODO: make sure it isn't a private message
 
-    
-    # (note: the try/except here is to be able to break out of the double for loop)
-
+       
     # find the server/channel it belongs to and add it
-    try:
+    try: # (note: the try/except here is to be able to break out of the double for loop)
         for server_log in server_log_tree:
             if server_log.get_server() == msg.server:
                 for channel_log in server_log.get_logs():
                     if channel_log.get_channel() == msg.channel:
-                        channel_log.append(await calc_mutations(msg))
+                        # check if the message is a "user has pinned..." message
+                        if msg.type != MessageType.pins_add:
+                            channel_log.append(await calc_mutations(msg))
                         if channel_log.get_channel() is not client.get_current_channel():
                             channel_log.unread = True
                         raise Found
