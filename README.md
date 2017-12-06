@@ -62,6 +62,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * comment editing and deletion
 * private messaging
 * message searching -- (working, but not at a useable speed)
+* externalize settings.py to JSON/YAML/etc
 
 ## Dependencies
 ------------------------
