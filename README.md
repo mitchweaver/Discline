@@ -53,6 +53,8 @@
 * use /help for more commands
 * unicode emoji displayal support
 * File uploading via path (ex: /file /path/to/file)
+* italic, bold, and underline font support
+* inline-code and code block support
 
 ### Planned Features
 ---------------------------
@@ -95,6 +97,18 @@ display properly. Here is an example of a random
 few.
 
 ![Image](https://images-ext-2.discordapp.net/external/iN52NdGOWqdWOxby88wiEGs8R81j33ndPjgKX8eKUNA/https/0x0.st/soIy.png?width=400&height=32)
+
+### Note On Font Support
+-------------------------
+
+Like emojis, not all terminals and fonts support
+italic/bold/underline and 'background' colors, (which are used for `code`).
+If these features aren't working for you, odds are you are not using a 
+support terminal/font. Experiment with different setups to see what works.
+
+*Letting me know what setups __DON'T__ work helps a lot!*
+
+![Image](https://0x0.st/sHQ0.png)
 
 ### FAQ
 -------------------------

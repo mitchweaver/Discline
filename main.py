@@ -123,12 +123,12 @@ async def key_input():
                 user_input = "".join(input_buffer)
                 del input_buffer[:]
             # elif ordkey == 27: kill() # escape # why are arrow keys doing this?
-            elif ordkey == 127 or ordkey == 8: 
+            elif ordkey == 127 or ordkey == 8: # backspace
                 if len(input_buffer) > 0:
-                    del input_buffer[-1] # backspace
+                    del input_buffer[-1]             
             else: input_buffer.append(key)
             await ui.print_screen()
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.015)
 
 async def is_typing_handler():
     while not init_complete: await asyncio.sleep(2)
@@ -142,11 +142,10 @@ async def is_typing_handler():
                 if len(input_buffer) > 0 and input_buffer[0] is not PREFIX:
                     await client.send_typing(client.get_current_channel())
                     is_typing = True
-                else: await asyncio.sleep(0.5)
             elif len(input_buffer) == 0 or input_buffer[0] is PREFIX:
                 is_typing = False
-                await asyncio.sleep(0.5)
-            else: await asyncio.sleep(0.5)
+            
+            await asyncio.sleep(1)
 
 
 async def input_handler():
