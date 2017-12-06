@@ -47,6 +47,17 @@ async def convert_code_block(string):
     return term.normal + term.white +  left + " " + term.on_black(target) + term.normal + \
             term.white + " " + right
 
+async def convert_url(string):
+    formatted_line = []
+    entities = string.split(" ")
+    for entity in entities:
+        if "http://" in entity or "https://" in entity or "www." in entity \
+           or "ftp://" in entity or ".com" in entity:
+            entity = term.cyan + term.italic + entity + term.normal
+        formatted_line.append(entity)
+    return " ".join(formatted_line)
+
+
 async def calc_mutations(msg):
 
     # if the message is a file, extract the discord url from it
@@ -110,6 +121,11 @@ async def calc_mutations(msg):
                 text = await convert_underline(text)            
 
             msg.content = text
+
+        # check for urls
+        if "http://" in text or "https://" in text or "www." in text \
+           or "ftp://" in text or ".com" in text:
+            msg.content = await convert_url(text)
 
         # else it must be a regular message, nothing else
         return msg
