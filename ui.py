@@ -27,7 +27,7 @@ async def print_screen():
 
     await print_top_bar()
 
-    if server_log_tree is not None and client.get_current_channel() is not None:
+    if server_log_tree is not None:
         await print_channel_log(left_bar_width)
 
     await print_bottom_bar()

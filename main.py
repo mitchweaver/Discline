@@ -173,9 +173,10 @@ async def input_handler():
                             # we can just get it ourselves.
                             def_chan = ""
                             for chan in servlog.get_server().channels:
-                                if chan.position == 0:
-                                    def_chan = chan
-                                    break
+                                if chan.type == discord.ChannelType.text:
+                                    if chan.position == 0:
+                                        def_chan = chan
+                                        break
 
                             client.set_current_channel(def_chan.name.lower())
                             client.set_prompt(def_chan.name.lower())
