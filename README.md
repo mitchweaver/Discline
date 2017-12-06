@@ -4,8 +4,7 @@
 ![Image](https://0x0.st/soYP.png)
 
 
-### WARNING: Currently Mac/Linux only until I find a Windows fix!
-
+__**Warning**__: Currently Linux/Mac only, it may be a while before support for Windows comes back
 
 ## How to use:
 -------------------------
@@ -128,7 +127,7 @@ python3.6 /path/to/term_disc/main.py $TOKEN
 ### Dude this is awesome! How can I support the project?
 --------------------------------------------------------
 
-Star it! It helps it get higher in GitHub's search results as well as
+Star it! It helps to get it higher in GitHub's search results as well as
 making me feel good inside. ;)
 
 If you'd like to contribute, pull requests are __*always*__ welcome!
@@ -147,7 +146,7 @@ no longer functioning at all.
 
 > Why use a token and not email/password?
 
-Discord's API does allow for email/pass login, but if you were to have
+Discord's API __does__ allow for email/pass login, but if you were to have
 2FA, (2 factor authentication), enabled on your account, Discord would
 interpret this as a malicious attack against your account and disable it.
 
