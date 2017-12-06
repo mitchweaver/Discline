@@ -6,19 +6,17 @@ from channellog import ChannelLog
 class ServerLog():
 
     __server = ""
-    __name = ""
     __channel_logs = []
 
     def __init__(self, server, channel_log_list):
         self.__server = server
-        self.__name = server.name
         self.__channel_logs = list(channel_log_list)
 
     def get_server(self):
         return self.__server
 
     def get_name(self):
-        return self.__name
+        return self.__server.name
 
     def get_logs(self):
         return self.__channel_logs

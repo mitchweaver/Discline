@@ -8,14 +8,6 @@ class Client(discord.Client):
     __current_channel = ""
     __prompt = ""
     
-    def get_channel(self, string):
-        return discord.utils.find(lambda c: c.name == string, \
-                                  self.get_all_channels())
-
-    def get_server(self, string):
-        return discord.utils.find(lambda s: s.name == string, self.servers)
-
-
     # Note: setting only allows for string types
     def set_prompt(self, string): self.__prompt = string
     def set_current_server(self, string): self.__current_server = string
@@ -25,9 +17,23 @@ class Client(discord.Client):
     def get_current_server_name(self): return self.__current_server
     def get_current_channel_name(self): return self.__current_channel
 
-    def get_current_server(self): return self.get_server(self.__current_server)
-    def get_current_channel(self): return self.get_channel(self.__current_channel)
+    def get_current_server(self):
+        if self.__current_server is None:
+            print("Current server is None!")
+            return
+        for server in self.servers:
+            if server.name.lower() == self.__current_server.lower():
+                return server
 
+    def get_current_channel(self): 
+        if self.__current_channel is None:
+            print("Current channel is None!")
+            return
+        for server in self.servers:
+            if server.name.lower() == self.__current_server.lower():
+                for channel in server.channels:
+                    if channel.name.lower() == self.__current_channel.lower():
+                        return channel
 
     # returns online members in current server
     async def get_online(self):

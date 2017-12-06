@@ -53,7 +53,7 @@ async def convert_url(string):
     for entity in entities:
         if "http://" in entity or "https://" in entity or "www." in entity \
            or "ftp://" in entity or ".com" in entity:
-            entity = term.cyan + term.italic + entity + term.normal
+            entity = get_color(URL_COLOR) + term.italic + term.underline + entity + term.normal
         formatted_line.append(entity)
     return " ".join(formatted_line)
 

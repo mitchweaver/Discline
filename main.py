@@ -1,4 +1,5 @@
 import sys
+from os import system
 from time import sleep
 from printutils import *
 from client import Client
@@ -25,19 +26,22 @@ init_complete = False
 async def on_ready():
     await client.wait_until_login()
 
+    # clear screen while the client loads
+    system("clear")
+
     # completely hide the system's cursor
     await hidecursor.hide_cursor()
 
     # these values are set in settings.py
     if DEFAULT_PROMPT is not None:
-        client.set_prompt(DEFAULT_PROMPT)
+        client.set_prompt(DEFAULT_PROMPT.lower())
     else: client.set_prompt('~')
 
     if DEFAULT_SERVER is not None:
         client.set_current_server(DEFAULT_SERVER)
         if DEFAULT_CHANNEL is not None:
-            client.set_current_channel(DEFAULT_CHANNEL)
-            client.set_prompt(DEFAULT_CHANNEL)
+            client.set_current_channel(DEFAULT_CHANNEL.lower())
+            client.set_prompt(DEFAULT_CHANNEL.lower())
 
     if DEFAULT_GAME is not None:
         await client.change_presence(game=discord.Game(name=DEFAULT_GAME), \
@@ -52,8 +56,8 @@ async def on_ready():
     sys.stdin.flush()
 
     # list to store our "ChannelLog" data type
-    logs = []
     for server in client.servers:
+        serv_logs = []
         count = 0
         print("loading " + term.magenta + server.name + term.normal + " ...")
         for channel in server.channels:
@@ -71,38 +75,25 @@ async def on_ready():
                         async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
                             count+=1
                             channel_log.insert(0, msg)
-                        logs.append(ChannelLog(server, channel, channel_log))
+                        serv_logs.append(ChannelLog(channel, channel_log))
                     except:
                         # https forbidden exception, you don't have priveleges for
                         # this channel!
+                        print("Error loading logs from channel: " + \
+                              channel.name + " in server: " + server.name)
                         continue
                 except: continue
 
         print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
         # add the channellog to the tree
-        server_log_tree.append(ServerLog(server, logs)) 
+        server_log_tree.append(ServerLog(server, serv_logs)) 
+        
+    if DEBUG:
+        for slog in server_log_tree:
+            for clog in slog.get_logs():
+                print(slog.get_name() + " ---- " + clog.get_name())
 
-
-# ---------------- Print Tests ---------------------------------- #
-    # print(len(server_log_tree))
-
-    # count = 0
-    # temp = ""
-    # for servlog in server_log_tree:
-
-    #     for clog in servlog.get_logs():
-    #         count += 1
-
-    #     print("Count: " + str(count))
-
-    #     count = 0
-        # if temp is servlog:
-        #     print("WTF")
-        # temp = servlog 
-# --------------------------------------------------------------- #
-
- 
     # Print initial screen
     await ui.print_screen()
   
@@ -128,7 +119,7 @@ async def key_input():
                     del input_buffer[-1]             
             else: input_buffer.append(key)
             await ui.print_screen()
-        await asyncio.sleep(0.015)
+        await asyncio.sleep(0.0125)
 
 async def is_typing_handler():
     while not init_complete: await asyncio.sleep(2)
@@ -145,7 +136,7 @@ async def is_typing_handler():
             elif len(input_buffer) == 0 or input_buffer[0] is PREFIX:
                 is_typing = False
             
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
 
 
 async def input_handler():
@@ -158,7 +149,7 @@ async def input_handler():
         
         # If input is blank, don't do anything
         if user_input == '': 
-            await asyncio.sleep(0.05)
+            await asyncio.sleep(0.025)
             continue
 
         # Check if input is a command
@@ -174,23 +165,38 @@ async def input_handler():
                     # check if arg is a valid server, then switch
                     for servlog in server_log_tree:
                         if servlog.get_name().lower() == arg.lower():
-                            client.set_current_server(arg)
-                            # client.set_current_channel(servlog.get_server().default_channel)
+                            client.set_current_server(arg.lower())
+                            
+                            # discord.py's "server.default_channel" is buggy.
+                            # Often times it will return 'None' even when
+                            # there IS a default channel. To combat this,
+                            # we can just get it ourselves.
+                            def_chan = ""
+                            for chan in servlog.get_server().channels:
+                                if chan.position == 0:
+                                    def_chan = chan
+                                    break
+
+                            client.set_current_channel(def_chan.name.lower())
+                            client.set_prompt(def_chan.name.lower())
                             # And set the default channel as read
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_channel() is servlog.get_server().default_channel:
                                     chanlog.unread = False
                                     break
+                            break
+
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
                     for servlog in server_log_tree:
                         if servlog.get_server() is client.get_current_server():
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_name().lower() == arg.lower():
-                                    client.set_current_channel(arg)
-                                    client.set_prompt(arg)
-                                    chanlog.unread = False
-                                    break
+                                    if chanlog.get_channel().type == discord.ChannelType.text:
+                                        client.set_current_channel(arg.lower())
+                                        client.set_prompt(arg.lower())
+                                        chanlog.unread = False
+                                        break
                             break
 
                 elif command == "nick":

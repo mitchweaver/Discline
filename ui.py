@@ -27,7 +27,7 @@ async def print_screen():
 
     await print_top_bar()
 
-    if server_log_tree is not None:
+    if server_log_tree is not None and client.get_current_channel() is not None:
         await print_channel_log(left_bar_width)
 
     await print_bottom_bar()
@@ -52,7 +52,9 @@ async def print_top_bar():
             topic = client.get_current_channel().topic
     # if there is no channel topic, just print the channel name
     except: 
-        topic = client.get_current_channel().name
+        try:
+            topic = client.get_current_channel().name
+        except: pass
 
 
     with term.location(1,0):

@@ -92,3 +92,7 @@ CHANNEL_IGNORE_LIST = {
                 "prog_avantgarde_djent", "thrash_crossover", "pin_board")
 
 }
+
+
+# ignore this unless you know what you're doing
+DEBUG = False
