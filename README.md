@@ -48,7 +48,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * use /help for more commands
 * unicode emoji displayal support
 * File uploading via path (ex: /file /path/to/file)
-* *italic*, **bold**, and __underline__ font support
+* italic, bold, and underline font support
 * inline-code and \`code\` block support
 * sending of __default__ unicode emojis in messages
 
