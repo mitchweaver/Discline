@@ -119,7 +119,7 @@ async def print_left_bar(left_bar_width):
             text = text[0:left_bar_width - 4]
             text = text + "..."
         if log.get_channel() is client.get_current_channel():
-            buffer.append(" " + term.green + text + term.normal + "\n")
+            buffer.append(term.green + text + term.normal + "\n")
         else: 
             if log.get_channel() is log.get_server().default_channel:
                 text = text + "\n"
