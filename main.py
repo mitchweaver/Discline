@@ -31,6 +31,8 @@ output = process.communicate()[0].decode('utf-8').strip()
 if output != "Already up to date.":
     print("Updates downloaded! Please restart.")
     quit()
+else:
+    print("Already up to date!" + "\n")
 
 print("Starting...")
 

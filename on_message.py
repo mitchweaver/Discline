@@ -147,6 +147,15 @@ async def on_incoming_message(msg):
                         # check if the message is a "user has pinned..." message
                         if msg.type != MessageType.pins_add:
                             channel_log.append(await calc_mutations(msg))
+                        else: 
+                            name = ""
+                            if msg.author.nick is not None and \
+                               msg.author.nick != "":
+                                name = msg.author.nick
+                            else: name = msg.author.name
+                            msg.content = "📌 " + name + " has pinned a message to this channel."
+                            channel_log.append(msg)
+
                         if channel_log.get_channel() is not client.get_current_channel():
                             channel_log.unread = True
                         raise Found
