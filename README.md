@@ -166,9 +166,9 @@ How to reproduce: xxxxxx
 ### Misc Screenshots
 --------------------------
 
-![Image](https://0x0.st/sHjR.png)
+![Image](https://0x0.st/sHjn.png)
 
-![Image](https://0x0.st/sHer.png)
+![Image](https://0x0.st/sHe8.png)
 
 ![Image](https://0x0.st/sHez.png)
 
