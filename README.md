@@ -106,9 +106,9 @@ italic/bold/underline and 'background' colors, (which are used for `code`).
 If these features aren't working for you, odds are you are not using a 
 support terminal/font. Experiment with different setups to see what works.
 
-*Letting me know what setups __DON'T__ work helps a lot!*
-
 ![Image](https://0x0.st/sHQ0.png)
+
+*Letting me know what setups __don't__ work helps a lot!*
 
 ### FAQ
 -------------------------
