@@ -102,7 +102,7 @@ few.
 -------------------------
 
 Like emojis, not all terminals and fonts support
-italic/bold/underline and 'background' colors, (which are used for `code`).
+italic/bold/underline and 'background' colors, (which are used for \`code\`).
 If these features aren't working for you, odds are you are not using a 
 support terminal/font. Experiment with different setups to see what works.
 
