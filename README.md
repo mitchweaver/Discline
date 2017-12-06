@@ -52,6 +52,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * inline-code and \`code\` block support
 * sending of __default__ unicode emojis in messages
 * URL detection, highlighting in blue + italics
+* automatic updating, fetching the latest master branch's commit
 
 ### Planned Features
 ---------------------------

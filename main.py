@@ -22,6 +22,14 @@ message_to_send = ""
 user_input = ""
 init_complete = False
 
+# git pull at start as to automatically update to master repo
+from subprocess import Popen,PIPE
+print("Checking for updates...")
+process = Popen(["git", "pull"], stdout=PIPE)
+output = process.communicate()[0]
+print(output.decode('utf-8'))
+print("Starting...")
+
 @client.event
 async def on_ready():
     await client.wait_until_login()
