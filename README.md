@@ -66,6 +66,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 ## Dependencies
 ------------------------
 
+* git (if you want automatic updates)
 * [Python 3.5+](https://www.python.org/downloads/)
 * [discord.py](https://github.com/Rapptz/discord.py)
 * [blessings.py](https://pypi.python.org/pypi/blessings/)

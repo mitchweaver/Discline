@@ -22,17 +22,21 @@ message_to_send = ""
 user_input = ""
 init_complete = False
 
+try: 
 # git pull at start as to automatically update to master repo
-from subprocess import Popen,PIPE
-print("Checking for updates...")
-process = Popen(["git", "pull"], stdout=PIPE)
-output = process.communicate()[0].decode('utf-8').strip()
+    from subprocess import Popen,PIPE
+    print("Checking for updates...")
+    process = Popen(["git", "pull"], stdout=PIPE)
+    output = process.communicate()[0].decode('utf-8').strip()
 
-if output != "Already up to date.":
-    print("Updates downloaded! Please restart.")
-    quit()
-else:
-    print("Already up to date!" + "\n")
+    if output != "Already up to date.":
+        print("Updates downloaded! Please restart.")
+        quit()
+    else:
+        print("Already up to date!" + "\n")
+except:
+    # They must not have git installed, no automatic updates for them!
+    pass
 
 print("Starting...")
 
