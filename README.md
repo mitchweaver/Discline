@@ -110,6 +110,32 @@ support terminal/font. Experiment with different setups to see what works.
 
 *Letting me know what setups __don't__ work helps a lot!*
 
+### Starting this with my token as an argument is such a pain!
+--------------------------------------------------------
+
+To make it easier, you can create a bash script to launch it for you.
+
+Example:
+
+```bash
+#!/bin/bash
+
+TOKEN="put your token here"
+
+python3.6 /path/to/term_disc/main.py $TOKEN
+```
+
+### Dude this is awesome! How can I support the project?
+--------------------------------------------------------
+
+Star it! It helps it get higher in GitHub's search results as well as
+making me feel good inside. ;)
+
+If you'd like to contribute, pull requests are __*always*__ welcome!
+
+If you would like to get more info on what could be done or to discuss the
+project in general, come join the discord server at: https://discord.gg/rBGQMTk
+
 ### FAQ
 -------------------------
 
@@ -146,11 +172,15 @@ How to reproduce: xxxxxx
 
 This should(?) be fixed, but if it keeps happening, do let me know.
 
-> \<some feature\> isn't working right on Windows!
+> Line wrapping sometimes doesn't work
 
-The fact the client works at all cross-platform is surprising
-enough, but I'm working on it. If something breaks in windows,
-post a github issue and I will try and work it out.
+This happens if there is too much formatting / coloring being done to the
+message that contains that line. I'm looking for a work around.
+
+> When I type many lines before hitting send, the UI sometimes bugs out
+and/or the separators encroach upon different sections
+
+Known. Looking for a work around.
 
 > My bug isn't listed here, how can I voice my problem?
 
@@ -163,7 +193,6 @@ try to get it fixed.
 
 Licensed under GNU-GPLv3
 
-
 ### Legal Disclaimer
 --------------------------------
 
@@ -174,6 +203,6 @@ my understanding they mean automating non-bot accounts as bots.
 My code has no automated functions, or any on_events that provide features
 not included in the official client. 
 
-Nobody has been banned for using things like this before, but Discord
-might one day change their mind. With this said, I take **no** responsibility
-if this gets you banned.
+As far as I know, nobody has been banned for using things like this before, 
+but Discord might one day change their mind. With this said, I take **no** 
+responsibility if this gets you banned.
