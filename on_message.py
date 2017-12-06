@@ -66,8 +66,9 @@ async def calc_mutations(msg):
                 text = await convert_code_block(text)
 
             msg.content = text
-            # return here as not to format anything else, as it is code
-            return msg
+
+            # TODO: if there are asterics or __'s in the code, then
+            # this will not stop them from being formatted
 
 
         # check for in-line code marks
@@ -76,8 +77,6 @@ async def calc_mutations(msg):
                 text = await convert_code(text)
 
             msg.content = text
-            # return here as not to format anything else, as it is code
-            return msg
 
         # check to see if it has any custom-emojis
         # These will look like <:emojiname:39432432903201>

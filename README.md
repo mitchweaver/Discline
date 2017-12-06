@@ -4,8 +4,7 @@
 ![Image](https://0x0.st/soYP.png)
 
 
-### WARNING: Currently Mac/Linux only until I find a Windows fix!
-
+__**Warning**__: Currently Linux/Mac only, it may be a while before support for Windows comes back
 
 ## How to use:
 -------------------------
@@ -35,30 +34,29 @@
 --------------------------
 
 * login via token
-* connect to default server/channel
-* upon init, download all logs from what the client can see
 * /channel to switch channel
 * /server to switch server
 * /nick to change nickname (per server)
-* /help to display help, (note: may not be current)
-* /clear to clear screen, (in case of graphical glitches)
 * typing without a leading prefix will submit to current chat
 * User customization via editing settings.py
 * "<USER> is typing..." support
 * private channels
 * colored output, with user definable colors and custom roles
-* Log updates when users edit messages
+* Channel logs update when users edit messages
 * /channels, /servers, /users to view information
 * /game to update the "Now playing: " status
 * use /help for more commands
 * unicode emoji displayal support
 * File uploading via path (ex: /file /path/to/file)
+* italic, bold, and underline font support
+* inline-code and \`code\` block support
+* sending of __default__ unicode emojis in messages
 
 ### Planned Features
 ---------------------------
 
-* custom server emoji displaying and reaction
-* /giphy support (submitting first result)
+* custom server emojis in messages
+* emojis reactions
 * comment editing and deletion
 * private messaging
 * message searching -- (working, but not at a useable speed)
@@ -96,6 +94,44 @@ few.
 
 ![Image](https://images-ext-2.discordapp.net/external/iN52NdGOWqdWOxby88wiEGs8R81j33ndPjgKX8eKUNA/https/0x0.st/soIy.png?width=400&height=32)
 
+### Note On Font Support
+-------------------------
+
+Like emojis, not all terminals and fonts support
+italic/bold/underline and 'background' colors, (which are used for \`code\`).
+If these features aren't working for you, odds are you are not using a 
+support terminal/font. Experiment with different setups to see what works.
+
+![Image](https://0x0.st/sHQ0.png)
+
+*Letting me know what setups __don't__ work helps a lot!*
+
+### Starting this with my token as an argument is such a pain!
+--------------------------------------------------------
+
+To make it easier, you can create a bash script to launch it for you.
+
+Example:
+
+```bash
+#!/bin/bash
+
+TOKEN="put your token here"
+
+python3.6 /path/to/term_disc/main.py $TOKEN
+```
+
+### Dude this is awesome! How can I support the project?
+--------------------------------------------------------
+
+Star it! It helps to get it higher in GitHub's search results as well as
+making me feel good inside. ;)
+
+If you'd like to contribute, pull requests are __*always*__ welcome!
+
+If you would like to get more info on what could be done or to discuss the
+project in general, come join the discord server at: https://discord.gg/rBGQMTk
+
 ### FAQ
 -------------------------
 
@@ -107,7 +143,7 @@ no longer functioning at all.
 
 > Why use a token and not email/password?
 
-Discord's API does allow for email/pass login, but if you were to have
+Discord's API __does__ allow for email/pass login, but if you were to have
 2FA, (2 factor authentication), enabled on your account, Discord would
 interpret this as a malicious attack against your account and disable it.
 
@@ -132,11 +168,15 @@ How to reproduce: xxxxxx
 
 This should(?) be fixed, but if it keeps happening, do let me know.
 
-> \<some feature\> isn't working right on Windows!
+> Line wrapping sometimes doesn't work
 
-The fact the client works at all cross-platform is surprising
-enough, but I'm working on it. If something breaks in windows,
-post a github issue and I will try and work it out.
+This happens if there is too much formatting / coloring being done to the
+message that contains that line. I'm looking for a work around.
+
+> When I type many lines before hitting send, the UI sometimes bugs out
+and/or the separators encroach upon different sections
+
+Known. Looking for a work around.
 
 > My bug isn't listed here, how can I voice my problem?
 
@@ -149,7 +189,6 @@ try to get it fixed.
 
 Licensed under GNU-GPLv3
 
-
 ### Legal Disclaimer
 --------------------------------
 
@@ -160,6 +199,6 @@ my understanding they mean automating non-bot accounts as bots.
 My code has no automated functions, or any on_events that provide features
 not included in the official client. 
 
-Nobody has been banned for using things like this before, but Discord
-might one day change their mind. With this said, I take **no** responsibility
-if this gets you banned.
+As far as I know, nobody has been banned for using things like this before, 
+but Discord might one day change their mind. With this said, I take **no** 
+responsibility if this gets you banned.
