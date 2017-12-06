@@ -266,18 +266,24 @@ async def on_message_delete(msg):
 
 # --------------------------------------------------------------------------- #
 
-# start our own coroutines
-try: asyncio.get_event_loop().create_task(input_handler())
-except: pass
-try: asyncio.get_event_loop().create_task(key_input())
-except: pass
-try: asyncio.get_event_loop().create_task(is_typing_handler())
-except: pass
+try:
+    # start our own coroutines
+    try: asyncio.get_event_loop().create_task(input_handler())
+    except: pass
+    try: asyncio.get_event_loop().create_task(key_input())
+    except: pass
+    try: asyncio.get_event_loop().create_task(is_typing_handler())
+    except: pass
 
-# start the client coroutine
-try: client.run(sys.argv[1], bot=False)
-except SystemExit: pass
+    # start the client coroutine
+    try: client.run(sys.argv[1], bot=False)
+    except SystemExit: pass
+except KeyboardInterrupt:
+    pass # pass as not to print out traceback garbage
 
-# if we are here, the client's loop was cancelled or errored
+# if we are here, the client's loop was cancelled or errored, or user exited
 try: kill()
-except: quit()
+except: 
+    # if our cleanly-exit kill function failed for whatever reason,
+    # make sure we at least exit uncleanly
+    quit()

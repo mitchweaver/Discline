@@ -1,6 +1,7 @@
 from client import Client
 from blessings import Terminal
 from settings import *
+from sys import exit
 
 client = Client(max_messages=MAX_MESSAGES)
 term = Terminal()
@@ -13,7 +14,12 @@ def kill():
     except: pass
     try: asyncio.get_event_loop().close()
     except: pass
-    quit()
+    try:
+        # since we're exiting, we can be nice and clear the screen
+        from os import system
+        system("clear")
+    except: pass
+    exit()
 
 # returns a "Channel" object from the given strings
 async def get_channel(server, channel):
