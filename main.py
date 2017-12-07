@@ -244,14 +244,10 @@ async def input_handler():
 
                 await check_emoticons(client, command)
 
-        
-        
-        
-        
-        # async def trim_emoji(full_name, short_name, string):
-        #     return string.replace(full_name, ":" + short_name + ":")
-       
-        
+
+
+
+
         # This must not be a command...
         else: 
             # check to see if it has any custom-emojis, written as :emoji:
@@ -262,10 +258,9 @@ async def input_handler():
                 if client.get_current_server().emojis is not None \
                 and len(client.get_current_server().emojis) > 0:
             
-                    # find the "full" name of the emoji from the API
                     for emoji in client.get_current_server().emojis:
                         if ":" + emoji.name + ":" in user_input:
-                            # get the "full" name the API would want
+                            # find the "full" name of the emoji from the API
                             full_name = "<:" + emoji.name + ":" + emoji.id + ">"
                             
                             buffer = []
@@ -286,16 +281,31 @@ async def input_handler():
 
                             user_input = "".join(buffer)
                             
-            try: await client.send_message(client.get_current_channel(), user_input)
+            # If we're here, we've determined its not a command,
+            # and we've processed all mutations to the input we want
+            # Now we will try to send the message.
+            try: 
+                # sometimes this fails --- this could be due to occasional
+                # bugs in the API, or there was a connection problem
+                await client.send_message(client.get_current_channel(), user_input)
             except:
-                try: await client.send_message(client.get_current_channel(), user_input)
-                except: print("Error: could not send message!")
+                try:
+                    # we'll try to sleep 3s and resend, 2 more times
+                    for i in range(0,1):
+                        await asyncio.sleep(3)
+                        await client.send_message(client.get_current_channel(), user_input)
+                except:
+                    # if the message failed to send 3x in a row, there's
+                    # something wrong. Notify the user.
+                    ui.set_display(term.blink_red + "Error: could not send message!")
 
+        # clear our input as we've just sent it
         user_input = ""
 
         # Update the screen
         await ui.print_screen()
 
+        # sleep while we wait for the screen to print and/or network
         await asyncio.sleep(0.1)
 
 # called whenever the client receives a message (from anywhere)
@@ -316,33 +326,41 @@ async def on_message_edit(msg_old, msg_new):
 async def on_message_delete(msg):
 
     if not init_complete: return
-    # note: PM's have 'None' as a server -- fix this later
+    # TODO: PM's have 'None' as a server -- fix this later
     if msg.server is None: return
 
-    for serverlog in server_log_tree:
-        if serverlog.get_server() == msg.server:
-            for channellog in serverlog.get_logs():
-                if channellog.get_channel()== msg.channel:
-                    channellog.get_logs().remove(msg)
-                    await ui.print_screen()
-                    return
+    try:
+        for serverlog in server_log_tree:
+            if serverlog.get_server() == msg.server:
+                for channellog in serverlog.get_logs():
+                    if channellog.get_channel()== msg.channel:
+                        channellog.get_logs().remove(msg)
+                        await ui.print_screen()
+                        return
+    except:
+        # if the message cannot be found, an exception will be raised
+        # this could be #1: if the message was already deleted,
+        # (happens when multiple calls get excecuted within the same time)
+        # or the user was banned, (in which case all their msgs disappear)
+        pass
 
 # --------------------------------------------------------------------------- #
 
-try:
-    # start our own coroutines
-    try: asyncio.get_event_loop().create_task(input_handler())
-    except: pass
-    try: asyncio.get_event_loop().create_task(key_input())
-    except: pass
-    try: asyncio.get_event_loop().create_task(is_typing_handler())
-    except: pass
+# start our own coroutines
+try: asyncio.get_event_loop().create_task(input_handler())
+except SystemExit: pass
+except KeyboardInterrupt: pass
+try: asyncio.get_event_loop().create_task(key_input())
+except SystemExit: pass
+except KeyboardInterrupt: pass
+try: asyncio.get_event_loop().create_task(is_typing_handler())
+except SystemExit: pass
+except KeyboardInterrupt: pass
 
-    # start the client coroutine
-    try: client.run(sys.argv[1], bot=False)
-    except SystemExit: pass
-except KeyboardInterrupt:
-    pass # pass as not to print out traceback garbage
+# start the client coroutine
+try: client.run(sys.argv[1], bot=False)
+except SystemExit: pass
+except KeyboardInterrupt: pass
 
 # if we are here, the client's loop was cancelled or errored, or user exited
 try: kill()
