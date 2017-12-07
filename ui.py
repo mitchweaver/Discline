@@ -96,7 +96,10 @@ async def print_left_bar(left_bar_width):
     for servlog in server_log_tree:
         if servlog.get_name().lower() == client.get_current_server_name().lower():
             for chanlog in servlog.get_logs():
-                channel_logs.append(chanlog)
+                # NOTE: we use "client.get_current_server().me" here instead
+                # of client.user because we need a `member` object, NOT a `user`
+                if chanlog.get_channel().permissions_for(client.get_current_server().me).read_messages:
+                    channel_logs.append(chanlog)
 
     # sort channels to match the server's default chosen positions
     def quick_sort(channel_logs):
