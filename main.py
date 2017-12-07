@@ -71,7 +71,7 @@ async def on_ready():
     await print_user()
     await print_line_break()
     print("Initializing... \n")
-    sys.stdin.flush()
+    sys.stdout.flush()
 
     # list to store our "ChannelLog" data type
     for server in client.servers:
