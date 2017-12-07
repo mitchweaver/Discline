@@ -12,6 +12,9 @@ DEFAULT_CHANNEL="test_bed"
 # the leading character used for commands
 PREFIX = '/'
 
+# whether you have discord "Nitro" -- this enables external emojis
+HAS_NITRO = False
+
 # the default prompt when not in a channel
 DEFAULT_PROMPT = "~"
 

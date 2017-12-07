@@ -262,80 +262,34 @@ async def input_handler():
             # These will look like <:emojiname:39432432903201>
             # check if there might be an emoji
             if user_input.count(":") >= 2:
-                if client.get_current_server().emojis is not None \
-                and len(client.get_current_server().emojis) > 0:
+                
 
 
-                    buffer = []
-                    for emoji in client.get_current_server().emojis:
-                        if ":" + emoji.name + ":" in user_input:
+                for emoji in client.get_all_emojis():
+                    test = emoji.name + "   ---   " + emoji.server.name
+                    await client.send_message(client.get_current_channel(), test)
+
+
+
+                # if user has nitro, loop through *ALL* emojis
+                if HAS_NITRO:
+                    for emoji in client.get_all_emojis():
+                        short_name = ':' + emoji.name + ':'
+                        if short_name in user_input:
                             # find the "full" name of the emoji from the API
                             full_name = "<:" + emoji.name + ":" + emoji.id + ">"
-                        
-                            # split the input into sections
-                            # ".split()" will swallow the :emojiname:
-                            # we will then replace each instance with full_name
-                            sections = user_input.split(':' + emoji.name + ':')
+                            user_input = user_input.replace(short_name, full_name)
 
-                            # check to see if the message wasn't just 1 emoji
-                            if len(sections) > 1:
-                                buffer.append(sections[0] + full_name) 
-                            # if it wasn't there must not be more than 1 section
-                            else:
-                                buffer.append(full_name)
-                                break
-                            
-                            # this creates a list of all sections except the first
-                            # and last. We will append 'full_name' between each.
-                            # Note: if their are only two sections, there will be
-                            # no middle -- so we will simply append the second.
-                            if len(sections) >= 3:
-                                middle = sections[1:-1]
-                                for sect in middle:
-                                    buffer.append(sect + full_name) 
-                            else:
-                                # else this must be the second section, of
-                                # which the emoji was inbetween
-                                buffer.append(sections[1])
-                                break
-                        
-                            
-                            # Finally we will append the rightmost section
-                            # Note: This should be safe as the two cases
-                            # that would give us out-of-bound exceptions
-                            # have been 'break'ed, (broke?), above
-                            buffer.append(right)
+                # else the user can only send from this server
+                elif client.get_current_server().emojis is not None \
+                and len(client.get_current_server().emojis) > 0:
+                    for emoji in client.get_current_server().emojis:
+                        short_name = ':' + emoji.name + ':'
+                        if short_name in user_input:
+                            # find the "full" name of the emoji from the API
+                            full_name = "<:" + emoji.name + ":" + emoji.id + ">"
+                            user_input = user_input.replace(short_name, full_name)
 
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                        # buffer = []
-                            # target = []
-                            # for c in list(user_input):
-                            #     if c == ':':
-                            #         if ':' in target: 
-                            #             buffer = "".join(buffer) + full_name
-                            #             buffer = list(buffer)
-                            #             del target[:]
-                            #         else:
-                            #             target.append(c)
-                            #     elif ':' not in target:
-                            #         buffer.append(c)
-
-                            #     else:
-                            #         target.append(c)
-
-                    # after formatting, assign it to our user_input
-                    user_input = "".join(buffer)
             # If we're here, we've determined its not a command,
             # and we've processed all mutations to the input we want
             # Now we will try to send the message.
