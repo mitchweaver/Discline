@@ -80,27 +80,28 @@ async def on_ready():
         print("loading " + term.magenta + server.name + term.normal + " ...")
         for channel in server.channels:
             if channel.type == discord.ChannelType.text:
-                try: # try/except in order to 'continue' out of multiple for loops
-                    for serv_key in CHANNEL_IGNORE_LIST:
-                        if serv_key.lower() == server.name.lower():
-                            for name in CHANNEL_IGNORE_LIST[serv_key]:
-                                if channel.name.lower() == name.lower():
-                                    raise Found
+                if channel.permissions_for(server.me).read_messages:
+                    try: # try/except in order to 'continue' out of multiple for loops
+                        for serv_key in CHANNEL_IGNORE_LIST:
+                            if serv_key.lower() == server.name.lower():
+                                for name in CHANNEL_IGNORE_LIST[serv_key]:
+                                    if channel.name.lower() == name.lower():
+                                        raise Found
 
-                    print("    loading " + term.yellow + channel.name + term.normal)
-                    channel_log = []
-                    try:
-                        async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
-                            count+=1
-                            channel_log.insert(0, msg)
-                        serv_logs.append(ChannelLog(channel, channel_log))
-                    except:
-                        # https forbidden exception, you don't have priveleges for
-                        # this channel!
-                        print("Error loading logs from channel: " + \
-                              channel.name + " in server: " + server.name)
-                        continue
-                except: continue
+                        print("    loading " + term.yellow + channel.name + term.normal)
+                        channel_log = []
+                        try:
+                            async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
+                                count+=1
+                                channel_log.insert(0, msg)
+                            serv_logs.append(ChannelLog(channel, channel_log))
+                        except:
+                            # https forbidden exception, you don't have priveleges for
+                            # this channel!
+                            print("Error loading logs from channel: " + \
+                                channel.name + " in server: " + server.name)
+                            continue
+                    except: continue
 
         print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
@@ -261,30 +262,78 @@ async def input_handler():
             if user_input.count(":") >= 2:
                 if client.get_current_server().emojis is not None \
                 and len(client.get_current_server().emojis) > 0:
-            
+
+
+                    buffer = []
                     for emoji in client.get_current_server().emojis:
                         if ":" + emoji.name + ":" in user_input:
                             # find the "full" name of the emoji from the API
                             full_name = "<:" + emoji.name + ":" + emoji.id + ">"
-                            
-                            buffer = []
-                            target = []
-                            for c in list(user_input):
-                                if c == ':':
-                                    if ':' in target: 
-                                        buffer = "".join(buffer) + full_name
-                                        buffer = list(buffer)
-                                        del target[:]
-                                    else:
-                                        target.append(c)
-                                elif ':' not in target:
-                                    buffer.append(c)
+                        
+                            # split the input into sections
+                            # ".split()" will swallow the :emojiname:
+                            # we will then replace each instance with full_name
+                            sections = user_input.split(':' + emoji.name + ':')
 
-                                else:
-                                    target.append(c)
-
-                            user_input = "".join(buffer)
+                            # check to see if the message wasn't just 1 emoji
+                            if len(sections) > 1:
+                                buffer.append(sections[0] + full_name) 
+                            # if it wasn't there must not be more than 1 section
+                            else:
+                                buffer.append(full_name)
+                                break
                             
+                            # this creates a list of all sections except the first
+                            # and last. We will append 'full_name' between each.
+                            # Note: if their are only two sections, there will be
+                            # no middle -- so we will simply append the second.
+                            if len(sections) >= 3:
+                                middle = sections[1:-1]
+                                for sect in middle:
+                                    buffer.append(sect + full_name) 
+                            else:
+                                # else this must be the second section, of
+                                # which the emoji was inbetween
+                                buffer.append(sections[1])
+                                break
+                        
+                            
+                            # Finally we will append the rightmost section
+                            # Note: This should be safe as the two cases
+                            # that would give us out-of-bound exceptions
+                            # have been 'break'ed, (broke?), above
+                            buffer.append(right)
+
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                        # buffer = []
+                            # target = []
+                            # for c in list(user_input):
+                            #     if c == ':':
+                            #         if ':' in target: 
+                            #             buffer = "".join(buffer) + full_name
+                            #             buffer = list(buffer)
+                            #             del target[:]
+                            #         else:
+                            #             target.append(c)
+                            #     elif ':' not in target:
+                            #         buffer.append(c)
+
+                            #     else:
+                            #         target.append(c)
+
+                    # after formatting, assign it to our user_input
+                    user_input = "".join(buffer)
             # If we're here, we've determined its not a command,
             # and we've processed all mutations to the input we want
             # Now we will try to send the message.
