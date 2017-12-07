@@ -55,6 +55,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * automatic updating, fetching the latest master branch's commit
 * channel logs blink red upon unread messages
 * custom server emojis in messages
+* discord "Nitro" emojis
 
 ### Planned Features
 ---------------------------
