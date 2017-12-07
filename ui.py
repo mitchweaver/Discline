@@ -50,10 +50,9 @@ async def print_top_bar():
     try: 
         if client.get_current_channel().topic is not None:
             topic = client.get_current_channel().topic
-    # if there is no channel topic, just print the channel name
     except: 
-        try:
-            topic = client.get_current_channel().name
+        # if there is no channel topic, just print the channel name
+        try: topic = client.get_current_channel().name
         except: pass
 
 

@@ -4,10 +4,10 @@
 --------------------------------------------------------------------------- """
 
 # the default server which will be joined upon startup - CASE SENSITIVE!
-DEFAULT_SERVER="DisKvlt"
+DEFAULT_SERVER="term_disc"
 
 # the default channel which will be joined upon startup - CASE SENSITIVE!
-DEFAULT_CHANNEL="terminal_discord"
+DEFAULT_CHANNEL="test_bed"
 
 # the leading character used for commands
 PREFIX = '/'

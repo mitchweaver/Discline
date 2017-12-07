@@ -244,9 +244,48 @@ async def input_handler():
 
                 await check_emoticons(client, command)
 
+        
+        
+        
+        
+        # async def trim_emoji(full_name, short_name, string):
+        #     return string.replace(full_name, ":" + short_name + ":")
+       
+        
         # This must not be a command...
         else: 
-            # If all options have been exhausted, it must be character
+            # check to see if it has any custom-emojis, written as :emoji:
+            # We will need to expand them.
+            # These will look like <:emojiname:39432432903201>
+            # check if there might be an emoji
+            if user_input.count(":") >= 2:
+                if client.get_current_server().emojis is not None \
+                and len(client.get_current_server().emojis) > 0:
+            
+                    # find the "full" name of the emoji from the API
+                    for emoji in client.get_current_server().emojis:
+                        if ":" + emoji.name + ":" in user_input:
+                            # get the "full" name the API would want
+                            full_name = "<:" + emoji.name + ":" + emoji.id + ">"
+                            
+                            buffer = []
+                            target = []
+                            for c in list(user_input):
+                                if c == ':':
+                                    if ':' in target: 
+                                        buffer = "".join(buffer) + full_name
+                                        buffer = list(buffer)
+                                        del target[:]
+                                    else:
+                                        target.append(c)
+                                elif ':' not in target:
+                                    buffer.append(c)
+
+                                else:
+                                    target.append(c)
+
+                            user_input = "".join(buffer)
+                            
             try: await client.send_message(client.get_current_channel(), user_input)
             except:
                 try: await client.send_message(client.get_current_channel(), user_input)

@@ -9,13 +9,13 @@ server_log_tree = []
 input_buffer = []
 # kills the program and all its elements gracefully
 def kill():
+    # attempt to cleanly close our loops
     import asyncio
     try: client.close()
     except: pass
     try: asyncio.get_event_loop().close()
     except: pass
-    try:
-        # since we're exiting, we can be nice and clear the screen
+    try:# since we're exiting, we can be nice and try to clear the screen
         from os import system
         system("clear")
     except: pass
