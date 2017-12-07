@@ -35,6 +35,7 @@ try:
     else:
         print("Already up to date!" + "\n")
 except:
+    print("Error fetching automatic updates! Do you have git installed?")
     # They must not have git installed, no automatic updates for them!
     pass
 
@@ -71,7 +72,8 @@ async def on_ready():
     await print_user()
     await print_line_break()
     print("Initializing... \n")
-    sys.stdout.flush()
+    try: sys.stdout.flush()
+    except: pass
 
     # list to store our "ChannelLog" data type
     for server in client.servers:
@@ -96,8 +98,6 @@ async def on_ready():
                                 channel_log.insert(0, msg)
                             serv_logs.append(ChannelLog(channel, channel_log))
                         except:
-                            # https forbidden exception, you don't have priveleges for
-                            # this channel!
                             print("Error loading logs from channel: " + \
                                 channel.name + " in server: " + server.name)
                             continue
@@ -197,9 +197,10 @@ async def input_handler():
                             def_chan = ""
                             for chan in servlog.get_server().channels:
                                 if chan.type == discord.ChannelType.text:
-                                    if chan.position == 0:
-                                        def_chan = chan
-                                        break
+                                    if channel.permissions_for(server.me).read_messages:
+                                        if chan.position == 0:
+                                            def_chan = chan
+                                            break
 
                             client.set_current_channel(def_chan.name.lower())
                             client.set_prompt(def_chan.name.lower())
@@ -217,10 +218,11 @@ async def input_handler():
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_name().lower() == arg.lower():
                                     if chanlog.get_channel().type == discord.ChannelType.text:
-                                        client.set_current_channel(arg.lower())
-                                        client.set_prompt(arg.lower())
-                                        chanlog.unread = False
-                                        break
+                                        if channel.permissions_for(server.me).read_messages:
+                                            client.set_current_channel(arg.lower())
+                                            client.set_prompt(arg.lower())
+                                            chanlog.unread = False
+                                            break
                             break
 
                 elif command == "nick":
