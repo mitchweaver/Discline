@@ -197,7 +197,7 @@ async def input_handler():
                             def_chan = ""
                             for chan in servlog.get_server().channels:
                                 if chan.type == discord.ChannelType.text:
-                                    if channel.permissions_for(server.me).read_messages:
+                                    if chan.permissions_for(servlog.get_server().me).read_messages:
                                         if chan.position == 0:
                                             def_chan = chan
                                             break
@@ -218,7 +218,7 @@ async def input_handler():
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_name().lower() == arg.lower():
                                     if chanlog.get_channel().type == discord.ChannelType.text:
-                                        if channel.permissions_for(server.me).read_messages:
+                                        if chanlog.get_channel().permissions_for(servlog.get_server().me).read_messages:
                                             client.set_current_channel(arg.lower())
                                             client.set_prompt(arg.lower())
                                             chanlog.unread = False

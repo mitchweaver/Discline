@@ -5,7 +5,6 @@ from line import Line
 from settings import *
 from globals import *
 from discord import ChannelType
-import discord
 from userlist import print_userlist
 
 # maximum number of lines that can be on the screen
@@ -115,7 +114,7 @@ async def print_left_bar(left_bar_width):
     for log in channel_logs:
         # don't print categories or voice chats
         # TODO: this will break on private messages
-        if log.get_channel().type != discord.ChannelType.text: continue
+        if log.get_channel().type != ChannelType.text: continue
         text = log.get_name()
         if len(text) > left_bar_width:
             text = text[0:left_bar_width - 4]
@@ -185,9 +184,9 @@ async def print_channel_log(left_bar_width):
                 if channel_log.get_name().lower() == client.get_current_channel_name().lower():
                     # if the server has a "category" channel named the same
                     # as a text channel, confusion will occur
-                    if channel.type != discord.ChannelType.text: continue
+                    if channel_log.get_channel().type != ChannelType.text: continue
                     # check to make sure the user can read the logs
-                    if not chanlog.get_channel().permissions_for(client.get_current_server().me).read_messages: continue
+                    if not channel_log.get_channel().permissions_for(client.get_current_server().me).read_messages: continue
 
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
