@@ -182,7 +182,12 @@ async def print_channel_log(left_bar_width):
     for server_log in server_log_tree:
         if server_log.get_server() == client.get_current_server():
             for channel_log in server_log.get_logs():
-                if channel_log.get_channel() == client.get_current_channel():
+                if channel_log.get_name().lower() == client.get_current_channel_name().lower():
+                    # if the server has a "category" channel named the same
+                    # as a text channel, confusion will occur
+                    if channel.type != discord.ChannelType.text: continue
+                    # check to make sure the user can read the logs
+                    if not chanlog.get_channel().permissions_for(client.get_current_server().me).read_messages: continue
 
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
