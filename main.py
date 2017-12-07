@@ -263,14 +263,6 @@ async def input_handler():
             # check if there might be an emoji
             if user_input.count(":") >= 2:
                 
-
-
-                for emoji in client.get_all_emojis():
-                    test = emoji.name + "   ---   " + emoji.server.name
-                    await client.send_message(client.get_current_channel(), test)
-
-
-
                 # if user has nitro, loop through *ALL* emojis
                 if HAS_NITRO:
                     for emoji in client.get_all_emojis():
