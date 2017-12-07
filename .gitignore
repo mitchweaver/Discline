@@ -3,6 +3,19 @@ notes.md
 token_login.txt
 start.sh
 
+# more token things just incase someone tries to push
+# their branch with their token in here... (smh)
+token
+login
+login.sh
+login.txt
+discord-token
+token.sh
+run.sh
+start
+note.txt
+notes.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
