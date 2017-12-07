@@ -23,7 +23,7 @@ user_input = ""
 init_complete = False
 
 try: 
-# git pull at start as to automatically update to master repo
+    # git pull at start as to automatically update to master repo
     from subprocess import Popen,PIPE
     print("Checking for updates...")
     process = Popen(["git", "pull"], stdout=PIPE)
@@ -122,7 +122,6 @@ async def key_input():
     while not init_complete: await asyncio.sleep(0.25)
 
     kb = KBHit()
-
     global user_input, input_buffer
     while True:
         if kb.kbhit():
@@ -137,24 +136,28 @@ async def key_input():
                     del input_buffer[-1]             
             else: input_buffer.append(key)
             await ui.print_screen()
+        # This number could be adjusted, but it feels alright as is.
+        # Too much higher lags the typing, but set it too low
+        # and it will thrash the CPU
         await asyncio.sleep(0.0125)
 
 async def is_typing_handler():
     while not init_complete: await asyncio.sleep(2)
 
+    # user specified setting in settings.py
+    if not SEND_IS_TYPING: return
+    
     is_typing = False
-
     while True:
         # if typing a message, display '... is typing'
-        if SEND_IS_TYPING:
-            if not is_typing:
-                if len(input_buffer) > 0 and input_buffer[0] is not PREFIX:
-                    await client.send_typing(client.get_current_channel())
-                    is_typing = True
-            elif len(input_buffer) == 0 or input_buffer[0] is PREFIX:
-                is_typing = False
-            
-            await asyncio.sleep(0.5)
+        if not is_typing:
+            if len(input_buffer) > 0 and input_buffer[0] is not PREFIX:
+                await client.send_typing(client.get_current_channel())
+                is_typing = True
+        elif len(input_buffer) == 0 or input_buffer[0] is PREFIX:
+            is_typing = False
+        
+        await asyncio.sleep(0.5)
 
 
 async def input_handler():
