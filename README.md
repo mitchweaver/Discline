@@ -45,23 +45,26 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * Channel logs update when users edit messages
 * /channels, /servers, /users to view information
 * /game to update the "Now playing: " status
-* use /help for more commands
+* use /help to see more commands
 * unicode emoji displayal support
 * File uploading via path (ex: /file /path/to/file)
 * italic, bold, and underline font support
-* inline-code and \`code\` block support
+* inline \`code\` and \`\`\`code\`\`\` block support
 * sending of __default__ unicode emojis in messages
 * URL detection, highlighting in blue + italics
 * automatic updating, fetching the latest master branch's commit
+* channel logs blink red upon unread messages
+* custom server emojis in messages
 
 ### Planned Features
 ---------------------------
 
-* custom server emojis in messages
-* emojis reactions
+* emoji reactions
 * comment editing and deletion
 * private messaging
-* message searching -- (working, but not at a useable speed)
+* message searching
+* line scrolling
+* @member expansion
 * externalize settings.py to JSON/YAML/etc
 
 ## Dependencies
@@ -196,7 +199,7 @@ Known. Looking for a work around.
 
 If you have a specific issue that isn't listed here or in the
 wiki, post a github issue with a detailed explanation and I can
-try to get it fixed.
+try to get it fixed. Join the discord if you want live help.
 
 ### License
 -------------------------------
