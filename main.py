@@ -121,11 +121,12 @@ async def on_ready():
 async def key_input():
     while not init_complete: await asyncio.sleep(0.25)
 
+
     kb = KBHit()
     global user_input, input_buffer
     while True:
-        if kb.kbhit():
-            key = kb.getch()
+        if await kb.kbhit():
+            key = await kb.getch()
             ordkey = ord(key)
             if ordkey == 10 or ordkey == 13: # enter key
                 user_input = "".join(input_buffer)
