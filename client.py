@@ -32,8 +32,10 @@ class Client(discord.Client):
         for server in self.servers:
             if server.name.lower() == self.__current_server.lower():
                 for channel in server.channels:
-                    if channel.name.lower() == self.__current_channel.lower():
-                        return channel
+                    if channel.type is discord.ChannelType.text:
+                        if channel.name.lower() == self.__current_channel.lower():
+                            if channel.permissions_for(server.me).read_messages:
+                                return channel
 
     # returns online members in current server
     async def get_online(self):
