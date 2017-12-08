@@ -25,5 +25,5 @@ async def print_channellist():
            + term.green + "~ \n" \
            + term.green + "~ \n" \
            + term.green + "(press \'q\' to quit this dialog) \n" \
-           + "' | less")
+           + "' | less -R")
 
