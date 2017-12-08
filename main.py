@@ -10,11 +10,9 @@ from utils.print_utils.print_utils import *
 from utils.globals import *
 from utils.updates import check_for_updates
 from utils import hidecursor
-from commands.sendfile import send_file
-from commands.text_emoticons import check_emoticons
-from input.input_handler import input_handler, key_input
+from input.input_handler import input_handler
+from input.input_handler import key_input
 from input.typing_handler import is_typing_handler
-from input.kbhit import KBHit
 from client.serverlog import ServerLog
 from client.channellog import ChannelLog
 from client.on_message import on_incoming_message
@@ -93,15 +91,23 @@ async def on_ready():
                 for clog in slog.get_logs():
                     print(slog.get_name() + " ---- " + clog.get_name())
 
-        try:# start our own coroutines
-            asyncio.get_event_loop().create_task(input_handler())
-            asyncio.get_event_loop().create_task(key_input())
-            asyncio.get_event_loop().create_task(is_typing_handler())
-        except SystemExit: pass
-        except KeyboardInterrupt: pass
 
         # Print initial screen
         await print_screen()
+
+        # start our own coroutines
+
+        try: asyncio.get_event_loop().create_task(key_input())
+        except SystemExit: pass
+        except KeyboardInterrupt: pass
+        try: asyncio.get_event_loop().create_task(input_handler())
+        except SystemExit: pass
+        except KeyboardInterrupt: pass
+        try: asyncio.get_event_loop().create_task(is_typing_handler())
+        except SystemExit: pass
+        except KeyboardInterrupt: pass
+
+
 
 # called whenever the client receives a message (from anywhere)
 @client.event
