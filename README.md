@@ -129,6 +129,10 @@ TOKEN="put your token here"
 python3.6 /path/to/term_disc/main.py $TOKEN
 ```
 
+`chmod +x` it when you're done. 
+
+You could also edit the .desktop file in the /res folder for a 1-click option.
+
 ### Dude this is awesome! How can I support the project?
 --------------------------------------------------------
 
