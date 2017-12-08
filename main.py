@@ -92,21 +92,19 @@ async def on_ready():
                 for clog in slog.get_logs():
                     print(slog.get_name() + " ---- " + clog.get_name())
 
+    # start our own coroutines
+    try: asyncio.get_event_loop().create_task(key_input())
+    except SystemExit: pass
+    except KeyboardInterrupt: pass
+    try: asyncio.get_event_loop().create_task(input_handler())
+    except SystemExit: pass
+    except KeyboardInterrupt: pass
+    try: asyncio.get_event_loop().create_task(is_typing_handler())
+    except SystemExit: pass
+    except KeyboardInterrupt: pass
 
-        # Print initial screen
-        await print_screen()
-
-        # start our own coroutines
-
-        try: asyncio.get_event_loop().create_task(key_input())
-        except SystemExit: pass
-        except KeyboardInterrupt: pass
-        try: asyncio.get_event_loop().create_task(input_handler())
-        except SystemExit: pass
-        except KeyboardInterrupt: pass
-        try: asyncio.get_event_loop().create_task(is_typing_handler())
-        except SystemExit: pass
-        except KeyboardInterrupt: pass
+    # Print initial screen
+    await print_screen()
 
 
 
