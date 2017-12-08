@@ -1,17 +1,20 @@
 import asyncio
 from discord import ChannelType
 
-import ui.ui as ui
 from input.kbhit import KBHit
+import ui.ui as ui 
 from utils.globals import *
 from settings import *
+from commands.text_emoticons import check_emoticons
+from commands.sendfile import send_file
+from commands.channel_jump import channel_jump
 
 async def key_input():
-    global user_input, input_buffer, init_complete
     await client.wait_until_ready()
 
     kb = KBHit()
 
+    global user_input
     while True:
         if await kb.kbhit():
             key = await kb.getch()
@@ -29,6 +32,7 @@ async def key_input():
         # Too much higher lags the typing, but set it too low
         # and it will thrash the CPU
         await asyncio.sleep(0.0125)
+
 
 
 async def input_handler():
@@ -55,7 +59,7 @@ async def input_handler():
                     # check if arg is a valid server, then switch
                     for servlog in server_log_tree:
                         if servlog.get_name().lower() == arg.lower():
-                            client.set_current_server(arg.lower())
+                            client.set_current_server(arg)
                             
                             # discord.py's "server.default_channel" is buggy.
                             # often times it will return 'none' even when
@@ -69,8 +73,7 @@ async def input_handler():
                                             def_chan = chan
                                             break
 
-                            client.set_current_channel(def_chan.name.lower())
-                            client.set_prompt(def_chan.name.lower())
+                            client.set_current_channel(def_chan.name)
                             # and set the default channel as read
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_channel() is def_chan:
@@ -86,8 +89,7 @@ async def input_handler():
                                 if chanlog.get_name().lower() == arg.lower():
                                     if chanlog.get_channel().type == ChannelType.text:
                                         if chanlog.get_channel().permissions_for(servlog.get_server().me).read_messages:
-                                            client.set_current_channel(arg.lower())
-                                            client.set_prompt(arg.lower())
+                                            client.set_current_channel(arg)
                                             chanlog.unread = False
                                             break
                             break
@@ -115,6 +117,11 @@ async def input_handler():
                 elif command == "channels": await ui.print_channellist()
                 elif command == "users": await ui.print_userlist()
                 elif command == "members": await ui.print_userlist()
+                elif command[0] == 'c':
+                    try: 
+                        if command[1].isdigit():
+                            await channel_jump(command)
+                    except IndexError: pass
 
                 await check_emoticons(client, command)
 
@@ -173,4 +180,3 @@ async def input_handler():
         
         # sleep while we wait for the screen to print and/or network
         await asyncio.sleep(0.1)
-
