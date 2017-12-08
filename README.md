@@ -136,7 +136,9 @@ You could also edit the .desktop file in the /res folder for a 1-click option.
 ### Dude this is awesome! How can I support the project?
 --------------------------------------------------------
 
-Star it! It helps to get it higher in GitHub's search results as well as
+Star it! 🌟 
+
+It helps to get it higher in GitHub's search results as well as
 making me feel good inside. ;)
 
 If you'd like to contribute, pull requests are __*always*__ welcome!
