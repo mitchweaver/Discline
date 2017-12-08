@@ -21,6 +21,9 @@ DEFAULT_PROMPT = "~"
 # the default 'playing ' status in discord
 DEFAULT_GAME = ""
 
+# used for various things, your preference
+ARRAYS_START_AT_ZERO = False
+
 # Margins for inside the terminal and between elements. NOTE: must be >= 2
 # NOTE: some ratios have weird glitches. Just experiment.
 MARGIN = 2
