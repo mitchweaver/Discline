@@ -138,7 +138,7 @@ async def input_handler():
             if user_input.count(":") >= 2:
                 
                 # if user has nitro, loop through *all* emojis
-                if has_nitro:
+                if HAS_NITRO:
                     for emoji in client.get_all_emojis():
                         short_name = ':' + emoji.name + ':'
                         if short_name in user_input:
@@ -159,10 +159,10 @@ async def input_handler():
             # if we're here, we've determined its not a command,
             # and we've processed all mutations to the input we want
             # now we will try to send the message.
-            try: 
+            # try: 
                 # sometimes this fails --- this could be due to occasional
                 # bugs in the api, or there was a connection problem
-                await client.send_message(client.get_current_channel(), user_input)
+            await client.send_message(client.get_current_channel(), user_input)
             except:
                 try:
                     # we'll try to sleep 3s and resend, 2 more times
