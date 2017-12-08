@@ -24,11 +24,12 @@ async def print_help():
         + get_line("clear", "      - ", "force clearing of screen") \
         + get_line("/quit", "      - ", "exit cleanly") \
         + "\n \n" \
-        + "You can send emojis by using :emojiname: \n" \
-        + "Nitro emojis do work! Make sure you have \n" \
-        + "nitro enabled in your settings. \n" \
-        + "\n"
-        + "\n \n" \
+        + term.magenta + "Note: You can send emojis by using :emojiname: \n" \
+        + term.cyan + "Nitro emojis do work! Make sure you have \n" \
+        + term.cyan + "nitro enabled in your settings. \n" \
+        + term.green + "~ \n" \
+        + term.green + "~ \n" \
+        + term.green + "~ \n" \
         + term.green + "(press q to quit this dialog)" \
         + "' | less -R")
 

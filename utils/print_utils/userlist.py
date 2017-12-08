@@ -96,21 +96,22 @@ async def print_userlist():
     if admins is not None: buffer.append(admins.sort())
     if mods is not None: buffer.append(mods.sort())
 
-    buffer.append("\n---------------------------- \n\n")
+    buffer.append("\n" + term.magenta + "---------------------------- \n\n")
 
     if bots is not None: buffer.append(bots.sort())
     if everything_else is not None: buffer.append(everything_else.sort())
 
-    buffer.append("\n---------------------------- \n\n")
+    buffer.append("\n" + term.magenta + "---------------------------- \n\n")
 
     if nonroles is not None: buffer.append(nonroles.sort())
 
-    system("echo '" + "Members in " \
+    system("echo '" + term.yellow + "Members in " \
            + client.get_current_server_name() + ": \n" \
-           + "---------------------------- \n \n" \
+           + term.magenta + "---------------------------- \n \n" \
            + "".join(buffer) \
-           + "\n \n" \
-           + "(press \'q\' to quit this dialog) \n" \
+           + term.green + "~ \n" \
+           + term.green + "~ \n" \
+           + term.green + "(press \'q\' to quit this dialog) \n" \
            # NOTE: the -R flag here enables color escape codes
            + "' | less -R")
 

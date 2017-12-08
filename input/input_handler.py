@@ -6,6 +6,8 @@ import ui.ui as ui
 from utils.globals import *
 from utils.print_utils.help import print_help
 from utils.print_utils.userlist import print_userlist
+from utils.print_utils.serverlist import print_serverlist
+from utils.print_utils.channellist import print_channellist
 from settings import *
 from commands.text_emoticons import check_emoticons
 from commands.sendfile import send_file
@@ -34,8 +36,6 @@ async def key_input():
         # Too much higher lags the typing, but set it too low
         # and it will thrash the CPU
         await asyncio.sleep(0.0125)
-
-
 
 async def input_handler():
     await client.wait_until_ready()
@@ -115,8 +115,8 @@ async def input_handler():
                 elif command == "quit": kill()
                 elif command == "exit": kill()
                 elif command == "help": await print_help()
-                elif command == "servers": await ui.print_serverlist()
-                elif command == "channels": await ui.print_channellist()
+                elif command == "servers": await print_serverlist()
+                elif command == "channels": await print_channellist()
                 elif command == "users" or command == "members": 
                     await ui.clear_screen()
                     await print_userlist()
