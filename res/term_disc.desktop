@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=term_disc
 Comment="A terminal discord client you can actually use"
-Exec=gnome-terminal -c ~/Documents/term_disc/main.py $TOKEN
+Exec=gnome-terminal -c python3.6 ~/Documents/term_disc/main.py $TOKEN
 Terminal=true
 Type=Application
 Icon=~/Documents/term_disc/res/term_disc_icon.png
