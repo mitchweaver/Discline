@@ -1,5 +1,5 @@
 import discord
-from globals import term, client
+from utils.globals import term, client
 
 async def print_servers():
     print("Available servers: ")

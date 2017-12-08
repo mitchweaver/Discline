@@ -1,4 +1,4 @@
-from client import Client
+from client.client import Client
 from blessings import Terminal
 from settings import *
 from sys import exit
@@ -7,6 +7,8 @@ client = Client(max_messages=MAX_MESSAGES)
 term = Terminal()
 server_log_tree = []
 input_buffer = []
+user_input = ""
+
 # kills the program and all its elements gracefully
 def kill():
     # attempt to cleanly close our loops
@@ -36,7 +38,6 @@ async def get_channel_log(server, channel):
             for chanlog in srvlog.get_logs():
                 if chanlog.get_name() == channel.name:
                     return chanlog
-
 
 # takes in a string, returns the appropriate term.color
 async def get_color(string):

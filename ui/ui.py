@@ -1,11 +1,13 @@
-from os import system
 import sys
-from blessings import Terminal
-from line import Line
-from settings import *
-from globals import *
+from os import system
+
 from discord import ChannelType
-from userlist import print_userlist
+from blessings import Terminal
+
+from ui.line import Line
+from utils.globals import *
+from settings import *
+from utils.print_utils.userlist import print_userlist
 
 # maximum number of lines that can be on the screen
 # is updated every cycle as to allow automatic resizing

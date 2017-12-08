@@ -1,7 +1,8 @@
 import re
 from discord import MessageType
-from ui import print_screen
-from globals import *
+
+from ui.ui import print_screen
+from utils.globals import *
 from settings import *
 
 

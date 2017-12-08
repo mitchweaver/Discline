@@ -1,6 +1,7 @@
 from getpass import getuser
-from globals import term
-from ui import set_display
+
+from utils.globals import term
+from ui.ui import set_display
 
 async def send_file(client, filepath):
 

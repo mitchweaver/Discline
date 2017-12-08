@@ -1,8 +1,7 @@
 from discord import Server, Channel
-from channellog import ChannelLog
+from client.channellog import ChannelLog
 
 # Simple wrapper class to hold a list of ChannelLogs
-
 class ServerLog():
 
     __server = ""

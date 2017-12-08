@@ -1,7 +1,7 @@
-from globals import term, client
 from os import system
-import ui
 from discord import Status
+from utils.globals import term, client
+import ui.ui
 
 # On call of the /users command, this will print
 # out a nicely sorted, colored list of all users
