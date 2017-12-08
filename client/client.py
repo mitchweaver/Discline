@@ -9,9 +9,13 @@ class Client(discord.Client):
     __prompt = ""
     
     # Note: setting only allows for string types
-    def set_prompt(self, string): self.__prompt = string
-    def set_current_server(self, string): self.__current_server = string
-    def set_current_channel(self, string): self.__current_channel = string
+    def set_prompt(self, string): 
+        self.__prompt = string.lower()
+    def set_current_server(self, string): 
+        self.__current_server = string.lower()
+    def set_current_channel(self, string): 
+        self.__current_channel = string.lower()
+        self.set_prompt(string)
 
     def get_prompt(self): return self.__prompt
     def get_current_server_name(self): return self.__current_server
