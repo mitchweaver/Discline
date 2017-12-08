@@ -18,7 +18,7 @@ async def print_help():
         + get_line("/file", "      - ", "upload a file via path") \
         + "\n" \
         + get_line("/cX", "        - ", "shorthand to change channel (Ex: /c1)") \
-        + "This can be configured to start at 0 in settings.py" \
+        + term.cyan + "This can be configured to start at 0 in settings.py" \
         + "\n" \
         + "\n" \
         + get_line("clear", "      - ", "force clearing of screen") \
