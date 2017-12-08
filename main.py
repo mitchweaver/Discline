@@ -1,3 +1,4 @@
+#!/usr/bin/python3.6
 import sys
 import asyncio
 from os import system

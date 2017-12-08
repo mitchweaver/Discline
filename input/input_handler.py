@@ -4,6 +4,8 @@ from discord import ChannelType
 from input.kbhit import KBHit
 import ui.ui as ui 
 from utils.globals import *
+from utils.print_utils.help import print_help
+from utils.print_utils.userlist import print_userlist
 from settings import *
 from commands.text_emoticons import check_emoticons
 from commands.sendfile import send_file
@@ -115,8 +117,9 @@ async def input_handler():
                 elif command == "help": await print_help()
                 elif command == "servers": await ui.print_serverlist()
                 elif command == "channels": await ui.print_channellist()
-                elif command == "users": await ui.print_userlist()
-                elif command == "members": await ui.print_userlist()
+                elif command == "users" or command == "members": 
+                    await ui.clear_screen()
+                    await print_userlist()
                 elif command[0] == 'c':
                     try: 
                         if command[1].isdigit():

@@ -1,7 +1,7 @@
 from os import system
 from discord import Status
+
 from utils.globals import term, client
-import ui.ui
 
 # On call of the /users command, this will print
 # out a nicely sorted, colored list of all users
@@ -61,7 +61,7 @@ class UserList:
         return "".join(self.online) + "".join(self.offline) \
                 + "".join(self.idle) + "".join(self.dnd)
 
-def print_userlist():
+async def print_userlist():
     if len(client.servers) == 0:
         print("Error: You are not in any servers.")
         return
@@ -105,7 +105,6 @@ def print_userlist():
 
     if nonroles is not None: buffer.append(nonroles.sort())
 
-    ui.clear_screen()
     system("echo '" + "Members in " \
            + client.get_current_server_name() + ": \n" \
            + "---------------------------- \n \n" \
