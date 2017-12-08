@@ -315,7 +315,7 @@ async def print_serverlist():
     for server in client.servers:
         buffer.append(server.name + "\n")
             
-    clear_screen()
+    await clear_screen()
     system("echo '" + "Available Servers: \n" \
         + "---------------------------- \n \n" \
         + "".join(buffer) \
@@ -337,7 +337,7 @@ async def print_channellist():
         if channel.type == ChannelType.text:
             buffer.append(channel.name + "\n")
 
-    clear_screen()
+    await clear_screen()
     system("echo '" + "Available Channels in " \
            + client.get_current_server_name() + ": \n" \
            + "---------------------------- \n \n" \
