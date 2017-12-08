@@ -6,6 +6,7 @@ from blessings import Terminal
 
 from ui.line import Line
 from utils.globals import *
+from utils.quicksort import quick_sort_channel_logs
 from settings import *
 from utils.print_utils.userlist import print_userlist
 
@@ -101,16 +102,8 @@ async def print_left_bar(left_bar_width):
                 if chanlog.get_channel().permissions_for(client.get_current_server().me).read_messages:
                     channel_logs.append(chanlog)
 
-    # sort channels to match the server's default chosen positions
-    def quick_sort(channel_logs):
-        if len(channel_logs) <= 1: return channel_logs
-        else:
-            return quick_sort([e for e in channel_logs[1:] \
-                if e.get_channel().position <= channel_logs[0].get_channel().position]) + \
-                [channel_logs[0]] + quick_sort([e for e in channel_logs[1:] \
-                if e.get_channel().position > channel_logs[0].get_channel().position])
-
-    channel_logs = quick_sort(channel_logs)
+    
+    channel_logs = quick_sort_channel_logs(channel_logs)
             
             
     for log in channel_logs:
