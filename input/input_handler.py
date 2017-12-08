@@ -38,9 +38,9 @@ async def key_input():
 
 
 async def input_handler():
-    global user_input, input_buffer, client, server_log_tree
     await client.wait_until_ready()
    
+    global user_input
     while True:
 
         # If input is blank, don't do anything
@@ -159,10 +159,10 @@ async def input_handler():
             # if we're here, we've determined its not a command,
             # and we've processed all mutations to the input we want
             # now we will try to send the message.
-            # try: 
+            try: 
                 # sometimes this fails --- this could be due to occasional
                 # bugs in the api, or there was a connection problem
-            await client.send_message(client.get_current_channel(), user_input)
+                await client.send_message(client.get_current_channel(), user_input)
             except:
                 try:
                     # we'll try to sleep 3s and resend, 2 more times
@@ -179,7 +179,6 @@ async def input_handler():
 
         # update the screen
         await ui.print_screen()
-        
         
         # sleep while we wait for the screen to print and/or network
         await asyncio.sleep(0.1)
