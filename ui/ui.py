@@ -5,6 +5,7 @@ from discord import ChannelType
 from blessings import Terminal
 
 from ui.line import Line
+from ui.ui_utils import *
 from utils.globals import *
 from utils.quicksort import quick_sort_channel_logs
 from settings import *
@@ -42,10 +43,9 @@ async def print_screen():
 
     await print_left_bar(left_bar_width)
 
-    if display is not None:
+    if display is not None: 
         print(display)
-
-    display = ""
+        display = ""
 
 async def print_top_bar():
     topic = ""
@@ -77,7 +77,6 @@ async def print_top_bar():
             + ("-" * term.width) + "\n" + term.normal
 
     screen_buffer.append(divider)
-
 
 async def set_display(string):
     global display
@@ -141,9 +140,9 @@ async def print_bottom_bar():
                          + term.normal)
 
     if client.get_prompt() == DEFAULT_PROMPT:
-            prompt = await get_color(PROMPT_BORDER_COLOR) + "[" + " " \
-                    + await get_color(PROMPT_COLOR) + DEFAULT_PROMPT + " " \
-                    + await get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
+        prompt = await get_color(PROMPT_BORDER_COLOR) + "[" + " " \
+                + await get_color(PROMPT_COLOR) + DEFAULT_PROMPT + " " \
+                + await get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
     else:
         prompt = await get_color(PROMPT_BORDER_COLOR) + "["  + \
                 await get_color(PROMPT_COLOR) + "#" + client.get_prompt() \
@@ -179,6 +178,7 @@ async def print_channel_log(left_bar_width):
                 if channel_log.get_name().lower() == client.get_current_channel_name().lower():
                     # if the server has a "category" channel named the same
                     # as a text channel, confusion will occur
+                    # TODO: private messages are not "text" channeltypes
                     if channel_log.get_channel().type != ChannelType.text: continue
                     # check to make sure the user can read the logs
                     if not channel_log.get_channel().permissions_for(client.get_current_server().me).read_messages: continue
@@ -186,34 +186,10 @@ async def print_channel_log(left_bar_width):
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
                         msg_lines = []
-
-                        color = ""
-                        
-                        try: 
-                            r = msg.author.top_role
-                            if r.name.lower() == "admin":
-                                color = await get_color(ADMIN_COLOR)
-                            elif r.name.lower() == "mod": 
-                                color = await get_color(MOD_COLOR)
-                            elif r.name.lower() == "bot": 
-                                color = await get_color(BOT_COLOR)
-                            elif CUSTOM_ROLE is not None and r.name == CUSTOM_ROLE:
-                                color = await get_color(CUSTOM_ROLE_COLOR)
-                            elif CUSTOM_ROLE_2 is not None and r.name == CUSTOM_ROLE_2:
-                                color = await get_color(CUSTOM_ROLE_2_COLOR)
-                            elif CUSTOM_ROLE_3 is not None and r.name == CUSTOM_ROLE_3:
-                                color = await get_color(CUSTOM_ROLE_3_COLOR)
-                            elif NORMAL_USER_COLOR is not None:
-                                color = await get_color(NORMAL_USER_COLOR)
-                            else: color = term.green
-                        # if this fails, the user either left or was banned
-                        except: 
-                            if NORMAL_USER_COLOR is not None:
-                                color = await get_color(NORMAL_USER_COLOR)
-                            else: color = term.green
-
+            
                         prefix_length = len(msg.author.display_name)
-                        author_prefix = color + msg.author.display_name + ": "
+                        author_prefix = await get_role_color(msg) \
+                                + msg.author.display_name + ": "
 
                         proposed_line = author_prefix + term.white(msg.clean_content.strip())
 
@@ -295,12 +271,3 @@ async def print_channel_log(left_bar_width):
 
                     # return as not to loop through all channels unnecessarily
                     return
-
-async def get_max_lines():
-    return term.height - MARGIN * 2
-
-async def get_left_bar_width():
-    left_bar_width = term.width // LEFT_BAR_DIVIDER
-    if left_bar_width < 8:
-        return  8
-    else: return left_bar_width
