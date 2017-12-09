@@ -51,6 +51,10 @@ async def convert_code_block(string):
             term.white + " " + right
 
 async def convert_url(string):
+
+    await client.send_message(client.get_current_channel(), \
+        "STRING: " + string)
+
     formatted_line = []
     entities = string.split(" ")
     for entity in entities:
@@ -59,7 +63,6 @@ async def convert_url(string):
             entity = get_color(URL_COLOR) + term.italic + term.underline + entity + term.normal
         formatted_line.append(entity)
     return " ".join(formatted_line)
-
 
 async def calc_mutations(msg):
 

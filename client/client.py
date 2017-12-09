@@ -50,3 +50,6 @@ class Client(discord.Client):
                 online_count +=1 
         return online_count
 
+    # because the built-in .say is really buggy, just overriding it with my own
+    async def say(self, string):
+        await send_message(get_current_channel(), string)
