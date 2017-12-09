@@ -1,11 +1,9 @@
-#!/usr/bin/python3.6
+#!/usr/bin/python3
 import sys
 import asyncio
 from os import system
-
 import discord
-
-from input.input_handler import input_handler, key_input
+from input.input_handler import input_handler, key_input, init_input
 from input.typing_handler import is_typing_handler
 from ui.ui import print_screen
 from ui.text_manipulation import calc_mutations
@@ -114,7 +112,6 @@ async def on_ready():
     await print_screen()
 
 
-
 # called whenever the client receives a message (from anywhere)
 @client.event
 async def on_message(message):
@@ -149,8 +146,6 @@ async def on_message_delete(msg):
 
 
 def main():
-    check_for_updates()
-   
     # start the client coroutine
     TOKEN=""
     try: TOKEN=sys.argv[1]
@@ -158,7 +153,10 @@ def main():
         print(term.red + "Error: You did not specify a token! Please see the README.md")
         quit()
 
+    check_for_updates()
+    
     print("Starting...")
+    init_input()
 
     # start the client
     try: client.run(TOKEN, bot=False)
