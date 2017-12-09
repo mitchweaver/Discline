@@ -6,7 +6,7 @@ async def channel_jump(arg):
     logs = []
 
     num = int(arg[1:]) - 1
- 
+
     # sub one to allow for "/c0" being the top channel
     if ARRAYS_START_AT_ZERO:
         num -= 1
@@ -22,6 +22,11 @@ async def channel_jump(arg):
 
     logs = quick_sort_channel_logs(logs)
 
+
+    if num > len(logs):
+        if ARRAYS_START_AT_ZERO:
+            num = len(logs) - 1
+        else: num = len(logs)
 
     client.set_current_channel(logs[num].get_name()) 
     logs[num].unread = False
