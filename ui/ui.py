@@ -22,6 +22,12 @@ screen_buffer = []
 # text that can be set to be displayed for 1 frame
 display = ""
 
+# async def init():
+#     # Print the bottom bar. This shouldn't need to be reprinted.
+#     with term.location(0, term.height - 2):
+#         print(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
+            # + "\n" + term.normal, end="")
+
 async def print_screen():
     global display
     # Get ready to redraw the screen
@@ -136,12 +142,28 @@ async def print_left_bar(left_bar_width):
 
 
 async def print_bottom_bar():
-    screen_buffer.append(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
-                         + "\n" + term.normal)
-   
-    screen_buffer.append(await get_prompt())
-    if len(input_buffer) > 0:
-       screen_buffer.append("".join(input_buffer))
+  
+    # TODO: ideally this bottom bar should never need reprinted -- fix later 
+    # We should init() these separators at startup, and then instead
+    # of clearing the entire screen, only clear the channel log
+    # and then element by element of other entities
+    with term.location(0, term.height - 2):
+        print(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
+            + "\n" + term.normal, end="")
+
+    bottom = await get_prompt()
+    if len(input_buffer) > 0: bottom = bottom + "".join(input_buffer)
+    with term.location(0, term.height - 1):
+        print(bottom, end="")
+
+
+    # Saving for future reference --- used to be included in the channel buffer
+    # ------------------------------------------------------------------------
+    # screen_buffer.append(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
+    #                      + "\n" + term.normal)
+    # screen_buffer.append(await get_prompt())
+    # if len(input_buffer) > 0:
+    #    screen_buffer.append("".join(input_buffer))
 
 async def clear_screen():
 
