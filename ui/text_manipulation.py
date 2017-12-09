@@ -73,9 +73,20 @@ async def calc_mutations(msg):
 
             msg.content = await convert_url(text)
 
+        # check if the message is a "user has pinned..." message
+        if msg.type == MessageType.pins_add:
+            msg.content = convert_pin(msg)
+
         # else it must be a regular message, nothing else
         return msg
 
+
+async def convert_pin(msg):
+    name = ""
+    if msg.author.nick is not None and msg.author.nick != "":
+        name = msg.author.nick
+    else: name = msg.author.name
+    return "📌 " + name + " has pinned a message to this channel."
 
 
 async def trim_emoji(full_name, short_name, string):
