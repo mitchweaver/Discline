@@ -52,4 +52,4 @@ class Client(discord.Client):
 
     # because the built-in .say is really buggy, just overriding it with my own
     async def say(self, string):
-        await send_message(get_current_channel(), string)
+        await send_message(await get_current_channel(), string)

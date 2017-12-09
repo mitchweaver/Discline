@@ -52,16 +52,21 @@ async def convert_code_block(string):
 
 async def convert_url(string):
 
-    await client.send_message(client.get_current_channel(), \
-        "STRING: " + string)
+    await client.say("STRING: " + string)
 
     formatted_line = []
     entities = string.split(" ")
+
+    await client.say("ENTITIES LENGTH: " + len(entities))
+
     for entity in entities:
         if "http://" in entity or "https://" in entity or "www." in entity \
            or "ftp://" in entity or ".com" in entity:
             entity = get_color(URL_COLOR) + term.italic + term.underline + entity + term.normal
         formatted_line.append(entity)
+
+    await client.say("FORMAT LINES LENGTH: " + len(formatted_line))
+
     return " ".join(formatted_line)
 
 async def calc_mutations(msg):
@@ -131,6 +136,8 @@ async def calc_mutations(msg):
         # check for urls
         if "http://" in text or "https://" in text or "www." in text \
            or "ftp://" in text or ".com" in text:
+
+            await client.say("Preparing to check url")
             msg.content = await convert_url(text)
 
         # else it must be a regular message, nothing else
