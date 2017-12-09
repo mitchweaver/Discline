@@ -6,10 +6,10 @@ from utils.globals import *
 async def calc_mutations(msg):
 
     # if the message is a file, extract the discord url from it
-    # try:
-    #     json = str(msg.attachments[0]).split("'")
-    #     msg.content = json[5]
-    # except IndexError: pass
+    try:
+        json = str(msg.attachments[0]).split("'")
+        msg.content = json[5]
+    except IndexError: pass
     
     # otherwise it must not have any attachments and its a regular message
     text = msg.content
@@ -22,9 +22,8 @@ async def calc_mutations(msg):
 
         msg.content = text
 
-        # TODO: if there are asterics or __'s in the code, then
-        # this will not stop them from being formatted
-
+    # TODO: if there are asterics or __'s in the code, then
+    # this will not stop them from being formatted
     # check for in-line code marks
     if text.count("`") > 1:
         while("`") in text:
