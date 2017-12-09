@@ -140,8 +140,6 @@ async def on_message_delete(msg):
         # or the user was banned, (in which case all their msgs disappear)
         pass
 
-# --------------------------------------------------------------------------- #
-
 
 def main():
     check_for_updates()
@@ -159,6 +157,4 @@ def main():
         # make sure we at least exit uncleanly
         quit()
 
-
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": main()
