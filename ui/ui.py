@@ -136,20 +136,12 @@ async def print_left_bar(left_bar_width):
 
 
 async def print_bottom_bar():
-    screen_buffer.append(await get_color(SEPARATOR_COLOR) + ("-" * term.width) + "\n" \
-                         + term.normal)
-
-    if client.get_prompt() == DEFAULT_PROMPT:
-        prompt = await get_color(PROMPT_BORDER_COLOR) + "[" + " " \
-                + await get_color(PROMPT_COLOR) + DEFAULT_PROMPT + " " \
-                + await get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
-    else:
-        prompt = await get_color(PROMPT_BORDER_COLOR) + "["  + \
-                await get_color(PROMPT_COLOR) + "#" + client.get_prompt() \
-                + await get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
-
-    if len(input_buffer) > 0: screen_buffer.append(prompt + "".join(input_buffer))
-    else: screen_buffer.append(prompt)
+    screen_buffer.append(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
+                         + "\n" + term.normal)
+   
+    screen_buffer.append(await get_prompt())
+    if len(input_buffer) > 0:
+       screen_buffer.append("".join(input_buffer))
 
 async def clear_screen():
 
