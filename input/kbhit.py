@@ -4,18 +4,23 @@ import sys
 import termios
 import atexit
 from select import select
+from utils.globals import term, kill
 
 class KBHit:
     
     def __init__(self):
-        # Save the terminal settings
         fd = ""
         try:
             self.fd = sys.stdin.fileno()
             if self.fd is not None:
                 self.fd = os.fdopen(os.dup(self.fd))
-        except ValueError:
-            self.fd = os.fdopen(os.dup(sys.stdin.fileno()))
+        # except ValueError:
+            # TODO: find out why this occurs for some people, rarely
+            # self.fd = os.fdopen(os.dup(sys.stdin.fileno()))
+        except:
+            print(term.red + "Unknown error attempting to grab input.")
+            kill()
+            
         self.new_term = termios.tcgetattr(self.fd)
         self.old_term = termios.tcgetattr(self.fd)
 
@@ -33,7 +38,7 @@ class KBHit:
 
 
     async def getch(self):
-        return sys.stdin.read(1)
+        return self.fd.read(1)
                         
 
     # async def getarrow(self):
@@ -44,7 +49,7 @@ class KBHit:
     #     3 : left
     #     Should not be called in the same program as getch(). '''
         
-    #     c = sys.stdin.read(3)[2]
+    #     c = self.fd.read(3)[2]
     #     vals = [65, 67, 66, 68]
         
     #     return vals.index(ord(c.decode('utf-8')))
@@ -52,5 +57,5 @@ class KBHit:
 
     async def kbhit(self):
         ''' Returns if keyboard character was hit '''
-        dr,dw,de = select([sys.stdin], [], [], 0)
+        dr,dw,de = select([self.fd], [], [], 0)
         return dr != []

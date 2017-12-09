@@ -20,6 +20,13 @@ from client.on_message import on_incoming_message
 from client.client import Client
 from settings import *
 
+# check if using python 3.5+
+# TODO: this still fails if they're using python2
+if sys.version_info >= (3, 5): pass
+else:
+    print(term.red + "Sorry, but this requires python 3.5+")
+    quit()
+
 @client.event
 async def on_ready():
     await client.wait_until_login()

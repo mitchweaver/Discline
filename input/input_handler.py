@@ -13,11 +13,10 @@ from commands.text_emoticons import check_emoticons
 from commands.sendfile import send_file
 from commands.channel_jump import channel_jump
 
-kb = KBHit()
-
 async def key_input():
     await client.wait_until_ready()
     
+    kb = KBHit()
     global user_input
     while True:
         if await kb.kbhit():
