@@ -151,9 +151,6 @@ def main():
     except IndexError:
         print(term.red + "Error: You did not specify a token! Please see the README.md")
         quit()
-    except: 
-        print(term.red + "Unknown error while trying to parse token from argument")
-        quit()
 
     print("Starting...")
     try: client.run(TOKEN, bot=False)
