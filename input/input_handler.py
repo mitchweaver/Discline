@@ -147,7 +147,7 @@ async def input_handler():
                             user_input = user_input.replace(short_name, full_name)
 
                 # else the user can only send from this server
-                elif client.get_current_server().emojis is not none \
+                elif client.get_current_server().emojis is not None \
                 and len(client.get_current_server().emojis) > 0:
                     for emoji in client.get_current_server().emojis:
                         short_name = ':' + emoji.name + ':'
