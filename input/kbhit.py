@@ -14,11 +14,8 @@ class KBHit:
             self.fd = sys.stdin.fileno()
             if self.fd is not None:
                 self.fd = os.fdopen(os.dup(self.fd))
-        # except ValueError:
-            # TODO: find out why this occurs for some people, rarely
-            # self.fd = os.fdopen(os.dup(sys.stdin.fileno()))
         except:
-            print(term.red + "Unknown error attempting to grab input.")
+            print(term.red + "Unknown error attempting to grab input." + term.normal)
             kill()
             
         self.new_term = termios.tcgetattr(self.fd)
