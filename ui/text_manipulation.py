@@ -6,13 +6,11 @@ from utils.globals import *
 async def calc_mutations(msg):
 
     # if the message is a file, extract the discord url from it
-    try:
-        json = str(msg.attachments[0]).split("'")
-        msg.content = json[5]
-    except IndexError: pass
-
-    return msg
-
+    # try:
+    #     json = str(msg.attachments[0]).split("'")
+    #     msg.content = json[5]
+    # except IndexError: pass
+    
     # otherwise it must not have any attachments and its a regular message
     text = msg.content
 
@@ -26,7 +24,6 @@ async def calc_mutations(msg):
 
         # TODO: if there are asterics or __'s in the code, then
         # this will not stop them from being formatted
-
 
     # check for in-line code marks
     if text.count("`") > 1:
@@ -76,7 +73,7 @@ async def calc_mutations(msg):
 
     # check if the message is a "user has pinned..." message
     if msg.type == MessageType.pins_add:
-        msg.content = convert_pin(msg)
+        msg.content = await convert_pin(msg)
 
     # else it must be a regular message, nothing else
     return msg
@@ -87,7 +84,7 @@ async def convert_pin(msg):
     if msg.author.nick is not None and msg.author.nick != "":
         name = msg.author.nick
     else: name = msg.author.name
-    return "📌 " + name + " has pinned a message to this channel."
+    return "📌 " + str(name) + " has pinned a message to this channel."
 
 
 async def trim_emoji(full_name, short_name, string):
