@@ -1,4 +1,5 @@
 import discord
+import utils.globals
 
 # inherits from discord.py's Client
 class Client(discord.Client):
@@ -23,7 +24,7 @@ class Client(discord.Client):
 
     def get_current_server(self):
         if self.__current_server is None:
-            print("Current server is None!")
+            print(globals.term.red + "Current server is None!" + globals.term.normal)
             return
         for server in self.servers:
             if server.name.lower() == self.__current_server.lower():
@@ -31,7 +32,7 @@ class Client(discord.Client):
 
     def get_current_channel(self): 
         if self.__current_channel is None:
-            print("Current channel is None!")
+            print(globals.term.red + "Current channel is None!" + globals.term.normal)
             return
         for server in self.servers:
             if server.name.lower() == self.__current_server.lower():
