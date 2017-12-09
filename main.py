@@ -6,6 +6,7 @@ from os import system
 import discord
 
 from ui.ui import print_screen
+from ui.text_manipulation import calc_mutations
 from utils.print_utils.help import print_help
 from utils.print_utils.print_utils import *
 from utils.globals import *
@@ -74,7 +75,7 @@ async def on_ready():
                             try:
                                 async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
                                     count+=1
-                                    channel_log.insert(0, msg)
+                                    channel_log.insert(0, await calc_mutations(msg))
                                 serv_logs.append(ChannelLog(channel, channel_log))
                             except:
                                 print("Error loading logs from channel: " + \
