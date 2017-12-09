@@ -47,6 +47,10 @@ SHOW_EMOJIS = True
 #       (although there is still a minimum of 8 chars...) 
 LEFT_BAR_DIVIDER = 9
 
+# Determines whether the left bar 'truncates' the channels or 
+# appends "..." to the end when the screen is too small to display them
+TRUNCATE_CHANNELS = False
+
 # ---------------- COLOR SETTINGS ------------------------------------ #
 # Available colors are: "white", "red", "blue", "black"
 #                       "green", "yellow", "cyan", "magenta"

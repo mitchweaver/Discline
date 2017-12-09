@@ -41,9 +41,7 @@ async def print_screen():
 
     await print_bottom_bar()
 
-    # Print the buffer. NOTE: the end="" is to prevent it
-    # printing a new line character, which would add whitespace
-    # to the bottom of the terminal
+    # Print the buffer containing our message logs
     with term.location(0, 2):
         print("".join(screen_buffer), end="")
 
@@ -92,27 +90,25 @@ async def set_display(string):
     display = string
 
 async def print_left_bar(left_bar_width):
+    sep_color = await get_color(SEPARATOR_COLOR)
     for i in range(2, term.height - MARGIN):
-        print(term.move(i, left_bar_width) + await get_color(SEPARATOR_COLOR) + "|" \
-              + term.normal)
+        print(term.move(i, left_bar_width) + sep_color + "|" \
+              + term.normal, end="")
 
     # Create a new list so we can preserve the server's channel order
     channel_logs = []
-    # buffe to print
-    buffer = []
-    count = 0
 
     for servlog in server_log_tree:
-        if servlog.get_name().lower() == client.get_current_server_name().lower():
+        if servlog.get_server() is client.get_current_server():
             for chanlog in servlog.get_logs():
-                # NOTE: we use "client.get_current_server().me" here instead
-                # of client.user because we need a `member` object, NOT a `user`
-                if chanlog.get_channel().permissions_for(client.get_current_server().me).read_messages:
-                    channel_logs.append(chanlog)
+                channel_logs.append(chanlog)
+            break
 
-    
     channel_logs = quick_sort_channel_logs(channel_logs)
-            
+   
+    # buffer to print
+    buffer = []
+    count = 0
             
     for log in channel_logs:
         # don't print categories or voice chats
@@ -120,36 +116,32 @@ async def print_left_bar(left_bar_width):
         if log.get_channel().type != ChannelType.text: continue
         text = log.get_name()
         if len(text) > left_bar_width:
-            text = text[0:left_bar_width - 4]
-            text = text + "..."
+            if TRUNCATE_CHANNELS:
+                text = text[0:left_bar_width - 1]
+            else:
+                text = text[0:left_bar_width - 4] + "..."
         if log.get_channel() is client.get_current_channel():
             buffer.append(term.green + text + term.normal + "\n")
         else: 
-            if log.get_channel() is log.get_server().default_channel:
-                text = text + "\n"
-            else: 
-                text = " " + text + "\n"
+            if log.get_channel() is not channel_logs[0]:
+                pass
 
             if log.unread and log.get_channel() is not client.get_current_channel():
-                buffer.append(term.blink_red(text))
-            else: buffer.append(text)
+                text = term.blink_red + text + term.normal
+            
+            buffer.append(text + "\n")
         
-
         count += 1
         # should the server have *too many channels!*, stop them
         # from spilling over the screen
-        if count == term.height - 5: break
+        if count == term.height - 2 - MARGIN: break
 
-    with term.location(1, 2):
+    with term.location(0, 2):
         print("".join(buffer))
 
 
 async def print_bottom_bar():
   
-    # TODO: ideally this bottom bar should never need reprinted -- fix later 
-    # We should init() these separators at startup, and then instead
-    # of clearing the entire screen, only clear the channel log
-    # and then element by element of other entities
     with term.location(0, term.height - 2):
         print(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
             + "\n" + term.normal, end="")
@@ -158,15 +150,6 @@ async def print_bottom_bar():
     if len(input_buffer) > 0: bottom = bottom + "".join(input_buffer)
     with term.location(0, term.height - 1):
         print(bottom, end="")
-
-
-    # Saving for future reference --- used to be included in the channel buffer
-    # ------------------------------------------------------------------------
-    # screen_buffer.append(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
-    #                      + "\n" + term.normal)
-    # screen_buffer.append(await get_prompt())
-    # if len(input_buffer) > 0:
-    #    screen_buffer.append("".join(input_buffer))
 
 async def clear_screen():
 
@@ -190,23 +173,27 @@ async def print_channel_log(left_bar_width):
     formatted_lines = []
  
     for server_log in server_log_tree:
-        if server_log.get_server() == client.get_current_server():
+        if server_log.get_server() is client.get_current_server():
             for channel_log in server_log.get_logs():
-                if channel_log.get_name().lower() == client.get_current_channel_name().lower():
+                if channel_log.get_channel() is client.get_current_channel():
                     # if the server has a "category" channel named the same
                     # as a text channel, confusion will occur
                     # TODO: private messages are not "text" channeltypes
                     if channel_log.get_channel().type != ChannelType.text: continue
                     # check to make sure the user can read the logs
-                    if not channel_log.get_channel().permissions_for(client.get_current_server().me).read_messages: continue
 
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
                         msg_lines = []
-            
-                        prefix_length = len(msg.author.display_name)
-                        author_prefix = await get_role_color(msg) \
-                                + msg.author.display_name + ": "
+           
+                        author_name = ""
+                        try: author_name = msg.author.display_name
+                        except:
+                            try: author_name = msg.author.name
+                            except: continue
+                        
+                        prefix_length = len(author_name)
+                        author_prefix = await get_role_color(msg) + author_name + ": "
 
                         proposed_line = author_prefix + term.white(msg.clean_content.strip())
 
@@ -243,13 +230,13 @@ async def print_channel_log(left_bar_width):
                                     offset = 0
                                     if author_prefix not in sect:
                                         if line != msg_lines[0]:
-                                            offset = prefix_length + 2
+                                            offset = prefix_length + MARGIN
 
                                     # add in now formatted line!
                                     formatted_lines.append(Line(sect.strip(), offset))
                                 
-                                    # since we just wrapped a line, we need to make sure
-                                    # we don't overwrite it next time
+                                    # since we just wrapped a line, we need to 
+                                    # make sure we don't overwrite it next time
 
                                     # Split the line between what has been formatted, and
                                     # what still remains needing to be formatted
@@ -283,7 +270,6 @@ async def print_channel_log(left_bar_width):
                     step = MARGIN // 2
                     for line in formatted_lines:
                         screen_buffer.append(" " * (left_bar_width + MARGIN + line.offset) + line.text + "\n")
-   
                         step += 1
 
                     # return as not to loop through all channels unnecessarily

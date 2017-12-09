@@ -27,7 +27,7 @@ class Client(discord.Client):
             print(globals.term.red + "Current server is None!" + globals.term.normal)
             return
         for server in self.servers:
-            if server.name.lower() == self.__current_server.lower():
+            if server.name.lower() == self.__current_server:
                 return server
 
     def get_current_channel(self): 
