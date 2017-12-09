@@ -44,7 +44,7 @@ async def print_screen():
     # Print the buffer. NOTE: the end="" is to prevent it
     # printing a new line character, which would add whitespace
     # to the bottom of the terminal
-    with term.location(0, 1):
+    with term.location(0, 2):
         print("".join(screen_buffer), end="")
 
     await print_left_bar(left_bar_width)
@@ -62,7 +62,6 @@ async def print_top_bar():
         # if there is no channel topic, just print the channel name
         try: topic = client.get_current_channel().name
         except: pass
-
 
     with term.location(1,0):
         print("Server: " + await get_color(SERVER_DISPLAY_COLOR) \
@@ -82,7 +81,11 @@ async def print_top_bar():
     divider = await get_color(SEPARATOR_COLOR) \
             + ("-" * term.width) + "\n" + term.normal
 
-    screen_buffer.append(divider)
+    with term.location(0, 1):
+        print(divider, end="")
+   
+    # ---- keeping for historical purposes ------ #
+    # screen_buffer.append(divider)
 
 async def set_display(string):
     global display

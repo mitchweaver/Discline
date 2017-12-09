@@ -1,7 +1,6 @@
 from utils.globals import term, client, get_color
 from settings import *
 
-
 async def get_prompt():
     left = await get_color(PROMPT_BORDER_COLOR) + "["
     right = await get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
