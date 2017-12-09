@@ -1,5 +1,19 @@
-from utils.globals import term, get_color
+from utils.globals import term, client, get_color
 from settings import *
+
+
+async def get_prompt():
+    left = await get_color(PROMPT_BORDER_COLOR) + "["
+    right = await get_color(PROMPT_BORDER_COLOR) + "]: " + term.normal
+    middle = ""
+    if client.get_prompt() == DEFAULT_PROMPT:
+        middle = " " + await get_color(PROMPT_COLOR) + DEFAULT_PROMPT + " "
+    else:
+        middle = await get_color(PROMPT_HASH_COLOR) + "#" \
+                + await get_color(PROMPT_COLOR) + client.get_prompt()
+
+    return left + middle + right
+
 
 async def get_max_lines():
     return term.height - MARGIN * 2
