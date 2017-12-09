@@ -47,14 +47,13 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * /game to update the "Now playing: " status
 * use /help to see more commands
 * unicode emoji displayal support
+* sending emojis in messages (unicode *and* custom)
 * File uploading via path (ex: /file /path/to/file)
 * italic, bold, and underline font support
 * inline \`code\` and \`\`\`code\`\`\` block support
-* sending of __default__ unicode emojis in messages
 * URL detection, highlighting in blue + italics
 * automatic updating, fetching the latest master branch's commit
 * channel logs blink red upon unread messages
-* custom server emojis in messages
 * discord "Nitro" emojis
 
 ### Planned Features
@@ -66,7 +65,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * message searching
 * line scrolling
 * @member expansion
-* externalize settings.py to JSON/YAML/etc
+* externalize settings.py to a ~/.config file
 
 ## Dependencies
 ------------------------
@@ -106,6 +105,8 @@ few.
 
 ![Image](https://images-ext-2.discordapp.net/external/iN52NdGOWqdWOxby88wiEGs8R81j33ndPjgKX8eKUNA/https/0x0.st/soIy.png?width=400&height=32)
 
+Custom emojis however, are displayed as :emoji_name:
+
 ### Note On Font Support
 -------------------------
 
@@ -129,8 +130,10 @@ Example:
 #!/bin/bash
 
 TOKEN="put your token here"
+FOLDER=/path/to/term_disc
 
-python3.6 /path/to/term_disc/main.py $TOKEN
+cd $FOLDER
+python3.6 $FOLDER/main.py "$TOKEN"
 ```
 
 `chmod +x` it when you're done. 
