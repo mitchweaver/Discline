@@ -5,6 +5,8 @@ from os import system
 
 import discord
 
+from input.input_handler import input_handler, key_input
+from input.typing_handler import is_typing_handler
 from ui.ui import print_screen
 from ui.text_manipulation import calc_mutations
 from utils.print_utils.help import print_help
@@ -12,9 +14,6 @@ from utils.print_utils.print_utils import *
 from utils.globals import *
 from utils.updates import check_for_updates
 from utils import hidecursor
-from input.input_handler import input_handler
-from input.input_handler import key_input
-from input.typing_handler import is_typing_handler
 from client.serverlog import ServerLog
 from client.channellog import ChannelLog
 from client.on_message import on_incoming_message
@@ -153,10 +152,11 @@ def main():
         quit()
 
     print("Starting...")
+
+    # start the client
     try: client.run(TOKEN, bot=False)
     except SystemExit: pass
     except KeyboardInterrupt: pass
-
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()
