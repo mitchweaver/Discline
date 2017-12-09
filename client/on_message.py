@@ -51,7 +51,6 @@ async def convert_code_block(string):
             term.white + " " + right
 
 async def convert_url(string):
-
     await client.say("STRING: " + string)
 
     formatted_line = []
