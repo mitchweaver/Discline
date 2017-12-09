@@ -1,9 +1,7 @@
 import sys
 from os import system
-
 from discord import ChannelType
 from blessings import Terminal
-
 from ui.line import Line
 from ui.ui_utils import *
 from utils.globals import *
@@ -18,15 +16,8 @@ MAX_LINES = 0
 INDEX = 0
 # buffer to allow for double buffering (stops screen flashing)
 screen_buffer = []
-
 # text that can be set to be displayed for 1 frame
 display = ""
-
-# async def init():
-#     # Print the bottom bar. This shouldn't need to be reprinted.
-#     with term.location(0, term.height - 2):
-#         print(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
-            # + "\n" + term.normal, end="")
 
 async def print_screen():
     global display
@@ -81,9 +72,6 @@ async def print_top_bar():
 
     with term.location(0, 1):
         print(divider, end="")
-   
-    # ---- keeping for historical purposes ------ #
-    # screen_buffer.append(divider)
 
 async def set_display(string):
     global display
@@ -152,7 +140,6 @@ async def print_bottom_bar():
         print(bottom, end="")
 
 async def clear_screen():
-
     # instead of "clearing", we're actually just overwriting
     # everything with white space. This mitigates the massive
     # screen flashing that goes on with "cls" and "clear"
@@ -166,7 +153,8 @@ async def print_channel_log(left_bar_width):
     # If the line would spill over the screen, we need to wrap it
     # NOTE: term.width is calculating every time this function is called.
     #       Meaning that this will automatically resize the screen.
-    MAX_LENGTH = term.width - (left_bar_width + MARGIN*2)
+    # note: the "1" is the space at the start
+    MAX_LENGTH = term.width - (left_bar_width + MARGIN) - 1
     # For wrapped lines, offset them to line up with the previous line
     offset = 0
     # List to put our *formatted* lines in, once we have OK'd them to print
@@ -190,9 +178,9 @@ async def print_channel_log(left_bar_width):
                         try: author_name = msg.author.display_name
                         except:
                             try: author_name = msg.author.name
-                            except: continue
+                            except: author_name = "Unknown Author"
                         
-                        prefix_length = len(author_name)
+                        author_name_length = len(author_name)
                         author_prefix = await get_role_color(msg) + author_name + ": "
 
                         proposed_line = author_prefix + term.white(msg.clean_content.strip())
@@ -212,36 +200,47 @@ async def print_channel_log(left_bar_width):
                             # that means the author has a long-line comment
                             # that wasn't using new line chars...
                             # We must manually wrap it.
-                            if len(line) > MAX_LENGTH:
 
-                                # Loop through, wrapping the lines until it behaves
-                                while len(line) > MAX_LENGTH:
+                                                        
 
-                                    line = line.strip()
+                            line_length = len(line)
+                            # Loop through, wrapping the lines until it behaves
+                            while line_length > MAX_LENGTH:
 
-                                    # Take a section out of the line based on our max length
-                                    sect = line[:MAX_LENGTH - offset]
+                                line = line.strip()
 
-                                    # Make sure we did not cut a word in half 
-                                    sect = sect[:sect.strip().rfind(' ')]
-                                    
-                                    # If this section isn't the first line of the comment,
-                                    # we should offset it to better distinguish it
-                                    offset = 0
-                                    if author_prefix not in sect:
-                                        if line != msg_lines[0]:
-                                            offset = prefix_length + MARGIN
+                                # Take a section out of the line based on our max length
+                                sect = line[:MAX_LENGTH - offset]
 
-                                    # add in now formatted line!
-                                    formatted_lines.append(Line(sect.strip(), offset))
+                                # Make sure we did not cut a word in half 
+                                sect = sect[:sect.strip().rfind(' ')]
                                 
-                                    # since we just wrapped a line, we need to 
-                                    # make sure we don't overwrite it next time
+                                # If this section isn't the first line of the comment,
+                                # we should offset it to better distinguish it
+                                offset = 0
+                                if author_prefix not in sect:
+                                    if line is not msg_lines[0]:
+                                        offset = author_name_length + MARGIN
+                                # add in now formatted line!
+                                formatted_lines.append(Line(sect.strip(), offset))
+                            
+                                # since we just wrapped a line, we need to 
+                                # make sure we don't overwrite it next time
 
-                                    # Split the line between what has been formatted, and
-                                    # what still remains needing to be formatted
-                                    if len(line) > len(sect):
-                                        line = line.split(sect)[1]
+                                # Split the line between what has been formatted, and
+                                # what still remains needing to be formatted
+                                if len(line) > len(sect):
+                                    line = line.split(sect)[1]
+                                    
+                                # find the "real" length of the line, by subtracting
+                                # any escape characters it might have. It would
+                                # be wasteful to loop through all of the possibilities
+                                # so instead we will simply subtract the length
+                                # of the shortest for each that it has.
+                                line_length = len(line)
+                                target = "\e"
+                                for target in line:
+                                    line_length -= 5
 
 
                             # Once here, the string was either A: already short enough
@@ -251,14 +250,15 @@ async def print_channel_log(left_bar_width):
                                 
                                 offset = 0
                                 if author_prefix not in line:
-                                    offset = prefix_length + 2
+                                    offset = author_name_length + MARGIN
 
                                 formatted_lines.append(Line(line.strip(), offset))
                                 
-                    # Once all lines have been formatted, we may now print them
                     # the max number of lines that can be shown on the screen
                     MAX_LINES = await get_max_lines()
+                    
                     # where we should start printing from
+                    # clamp the index as not to show whitespace
                     if INDEX < MAX_LINES: INDEX = MAX_LINES 
 
                     # ----- Trim out list to print out nicely ----- #
@@ -267,10 +267,9 @@ async def print_channel_log(left_bar_width):
                     # retains the amount of lines for our screen, deletes remainder
                     del formatted_lines[MAX_LINES:]
 
-                    step = MARGIN // 2
                     for line in formatted_lines:
-                        screen_buffer.append(" " * (left_bar_width + MARGIN + line.offset) + line.text + "\n")
-                        step += 1
+                        screen_buffer.append(" " * (left_bar_width + \
+                                MARGIN + line.offset) + line.text + "\n")
 
                     # return as not to loop through all channels unnecessarily
                     return
