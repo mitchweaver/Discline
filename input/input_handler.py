@@ -85,6 +85,7 @@ async def input_handler():
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_channel() is def_chan:
                                     chanlog.unread = False
+                                    chanlog.mentioned_in = False
                                     break
                             break
 
@@ -98,6 +99,7 @@ async def input_handler():
                                         if chanlog.get_channel().permissions_for(servlog.get_server().me).read_messages:
                                             client.set_current_channel(arg)
                                             chanlog.unread = False
+                                            chanlog.mentioned_in = False
                                             break
                             break
 

@@ -16,7 +16,10 @@ async def on_incoming_message(msg):
                     channel_log.append(await calc_mutations(msg))
                     
                     if channel_log.get_channel() is not client.get_current_channel():
-                        channel_log.unread = True
+                        if msg.server.me.mention in msg.content:
+                            channel_log.mentioned_in = True
+                        else:
+                            channel_log.unread = True
 
     # redraw the screen
     await print_screen()

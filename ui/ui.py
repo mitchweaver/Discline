@@ -114,8 +114,9 @@ async def print_left_bar(left_bar_width):
             if log.get_channel() is not channel_logs[0]:
                 pass
 
-            if log.unread and log.get_channel() is not client.get_current_channel():
-                text = term.blink_red + text + term.normal
+            if log.get_channel() is not client.get_current_channel():
+                if log.unread: text = term.blink_yellow + text + term.normal
+                elif log.mentioned_in: text = term.blink_red + text + term.normal
             
             buffer.append(text + "\n")
         

@@ -4,6 +4,7 @@ class ChannelLog():
     __channel = ""
     __logs = []
     unread = False
+    mentioned_in = False
 
     def __init__(self, channel, logs):
         self.__channel = channel
