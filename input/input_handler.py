@@ -30,11 +30,12 @@ async def key_input():
                 if len(input_buffer) > 0:
                     del input_buffer[-1]             
             else: input_buffer.append(key)
+  
             await ui.print_screen()
         # This number could be adjusted, but it feels alright as is.
         # Too much higher lags the typing, but set it too low
         # and it will thrash the CPU
-        await asyncio.sleep(0.0125)
+        await asyncio.sleep(0.0115)
 
 async def input_handler():
     await client.wait_until_ready()
