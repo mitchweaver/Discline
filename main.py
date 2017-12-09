@@ -143,12 +143,22 @@ async def on_message_delete(msg):
 
 def main():
     check_for_updates()
-    print("Starting...")
    
     # start the client coroutine
-    try: client.run(sys.argv[1], bot=False)
+    TOKEN=""
+    try: TOKEN=sys.argv[1]
+    except IndexError:
+        print(term.red + "Error: You did not specify a token! Please see the README.md")
+        quit()
+    except: 
+        print(term.red + "Unknown error while trying to parse token from argument")
+        quit()
+
+    print("Starting...")
+    try: client.run(TOKEN, bot=False)
     except SystemExit: pass
     except KeyboardInterrupt: pass
+
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()
