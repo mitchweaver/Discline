@@ -9,8 +9,10 @@ async def calc_mutations(msg):
     try:
         json = str(msg.attachments[0]).split("'")
         msg.content = json[5]
-    except: pass
-    
+    except IndexError: pass
+
+    return msg
+
     # otherwise it must not have any attachments and its a regular message
     text = msg.content
 
