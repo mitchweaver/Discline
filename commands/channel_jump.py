@@ -24,3 +24,4 @@ async def channel_jump(arg):
 
 
     client.set_current_channel(logs[num].get_name()) 
+    logs[num].unread = False
