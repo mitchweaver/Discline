@@ -59,7 +59,6 @@ async def on_ready():
     try: sys.stdout.flush()
     except: pass
 
-    # list to store our "ChannelLog" data type
     for server in client.servers:
         serv_logs = []
         count = 0
@@ -82,8 +81,8 @@ async def on_ready():
                                     channel_log.insert(0, await calc_mutations(msg))
                                 serv_logs.append(ChannelLog(channel, channel_log))
                             except:
-                                print("Error loading logs from channel: " + \
-                                    channel.name + " in server: " + server.name)
+                                print(term.red + "Error loading logs from channel: " + \
+                                    channel.name + " in server: " + server.name + term.normal)
                                 continue
                         except: continue
 
@@ -115,10 +114,12 @@ async def on_ready():
 # called whenever the client receives a message (from anywhere)
 @client.event
 async def on_message(message):
+    await client.wait_until_ready()
     await on_incoming_message(message)
 
 @client.event
 async def on_message_edit(msg_old, msg_new):
+    await client.wait_until_ready()
     msg_new.content = msg_new.content + " *(edited)*"
 
     # redraw the screen
@@ -126,6 +127,7 @@ async def on_message_edit(msg_old, msg_new):
 
 @client.event
 async def on_message_delete(msg):
+    await client.wait_until_ready()
     # TODO: PM's have 'None' as a server -- fix this later
     if msg.server is None: return
 
