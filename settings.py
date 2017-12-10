@@ -52,7 +52,7 @@ LEFT_BAR_DIVIDER = 9
 TRUNCATE_CHANNELS = False
 
 # the amount of lines to scroll up/down on each trigger
-SCROLL_LINES = 1
+SCROLL_LINES = 3
 
 # ---------------- COLOR SETTINGS ------------------------------------ #
 # Available colors are: "white", "red", "blue", "black"
