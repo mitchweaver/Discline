@@ -1,7 +1,5 @@
 api-ref.html
 notes.md
-token_login.txt
-start.sh
 
 # more token things just incase someone tries to push
 # their branch with their token in here... (smh)
@@ -13,10 +11,13 @@ discord-token
 token.sh
 run.sh
 start
+start.sh
 note.txt
 notes.txt
 token.txt
 token
+token_login.txt
+login.txt
 
 
 # Byte-compiled / optimized / DLL files
