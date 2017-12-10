@@ -25,6 +25,8 @@ else:
     print(term.red + "Sorry, but this requires python 3.5+")
     quit()
 
+init_complete = False
+
 @client.event
 async def on_ready():
     await client.wait_until_login()
@@ -110,20 +112,23 @@ async def on_ready():
     # Print initial screen
     await print_screen()
 
+    global init_complete
+    init_complete = True
 
 # called whenever the client receives a message (from anywhere)
 @client.event
 async def on_message(message):
     await client.wait_until_ready()
-    await on_incoming_message(message)
+    if init_complete:
+        await on_incoming_message(message)
 
 @client.event
 async def on_message_edit(msg_old, msg_new):
     await client.wait_until_ready()
     msg_new.content = msg_new.content + " *(edited)*"
 
-    # redraw the screen
-    await print_screen()
+    if init_complete:
+        await print_screen()
 
 @client.event
 async def on_message_delete(msg):
@@ -137,7 +142,8 @@ async def on_message_delete(msg):
                 for channellog in serverlog.get_logs():
                     if channellog.get_channel()== msg.channel:
                         channellog.get_logs().remove(msg)
-                        await print_screen()
+                        if init_complete:
+                            await print_screen()
                         return
     except:
         # if the message cannot be found, an exception will be raised
