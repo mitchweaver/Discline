@@ -58,7 +58,7 @@ async def key_input():
                 # elif ordkey == 12 or ordkey == 76: # ctrl/shift  + l
                 #     print("LLLL")
 
-                elif ordkey >= 33 and ordkey <= 122:
+                elif ordkey >= 32 and ordkey <= 122:
                     input_buffer.append(key)
                 elif ordkey == 9:
                     input_buffer.append(" " * 4) # tab key
