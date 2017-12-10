@@ -88,46 +88,77 @@ async def input_handler():
             if ' ' in user_input:
                 # split into command and argument
                 command,arg = user_input.split(" ", 1)
+
                 if command == "server" or command == 's':
+                    
+                    server_name = ""
                     # check if arg is a valid server, then switch
                     for servlog in server_log_tree:
                         if servlog.get_name().lower() == arg.lower():
-                            client.set_current_server(arg)
-                            
-                            # discord.py's "server.default_channel" is buggy.
-                            # often times it will return 'none' even when
-                            # there is a default channel. to combat this,
-                            # we can just get it ourselves.
-                            def_chan = ""
-                            for chan in servlog.get_server().channels:
-                                if chan.type == discord.ChannelType.text:
-                                    if chan.permissions_for(servlog.get_server().me).read_messages:
-                                        if chan.position == 0:
-                                            def_chan = chan
-                                            break
-
-                            client.set_current_channel(def_chan.name)
-                            # and set the default channel as read
-                            for chanlog in servlog.get_logs():
-                                if chanlog.get_channel() is def_chan:
-                                    chanlog.unread = False
-                                    chanlog.mentioned_in = False
-                                    break
+                            server_name = servlog.get_name()
                             break
+
+                    # if we didn't find an exact match, assume only partial
+                    # Note if there are multiple servers containing the same
+                    # word, this will only pick the first one. Better than nothing.
+                    if server_name == "":
+                        for servlog in server_log_tree:
+                            if arg.lower() in servlog.get_name().lower():
+                                server_name = servlog.get_name()
+                                break
+
+                    if server_name != "":
+                        client.set_current_server(server_name)
+
+                        # discord.py's "server.default_channel" is buggy.
+                        # often times it will return 'none' even when
+                        # there is a default channel. to combat this,
+                        # we can just get it ourselves.
+                        def_chan = ""
+                        for chan in servlog.get_server().channels:
+                            if chan.type is discord.ChannelType.text:
+                                if chan.permissions_for(servlog.get_server().me).read_messages:
+                                    if chan.position == 0:
+                                        def_chan = chan
+                                        break
+
+                        client.set_current_channel(def_chan.name)
+                        # and set the default channel as read
+                        for chanlog in servlog.get_logs():
+                            if chanlog.get_channel() is def_chan:
+                                chanlog.unread = False
+                                chanlog.mentioned_in = False
+                                break
+                    else:
+                        ui.set_display(term.red + "Can't find server" + term.normal)
+
 
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
                     for servlog in server_log_tree:
                         if servlog.get_server() is client.get_current_server():
+                            final_chanlog = ""
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_name().lower() == arg.lower():
-                                    if chanlog.get_channel().type == discord.ChannelType.text:
+                                    if chanlog.get_channel().type is discord.ChannelType.text:
                                         if chanlog.get_channel().permissions_for(servlog.get_server().me).read_messages:
-                                            client.set_current_channel(arg)
-                                            chanlog.unread = False
-                                            chanlog.mentioned_in = False
+                                            final_chanlog = chanlog
                                             break
-                            break
+
+                            # if we didn't find an exact match, assume partial
+                            if final_chanlog == "":
+                                for chanlog in servlog.get_logs():
+                                    if chanlog.get_channel().type is discord.ChannelType.text:
+                                        if chanlog.get_channel().permissions_for(servlog.get_server().me).read_messages:
+                                            if arg.lower() in chanlog.get_name().lower():
+                                                final_chanlog = chanlog
+                                                break
+
+                            if final_chanlog != "":
+                                client.set_current_channel(final_chanlog.get_name())
+                                final_chanlog.unread = False
+                                final_chanlog.mentioned_in = False
+                                break
 
                 elif command == "nick":
                     try: 
