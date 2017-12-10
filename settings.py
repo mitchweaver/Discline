@@ -105,14 +105,7 @@ CHANNEL_IGNORE_LIST = {
 
     "server_name": ('some_channel', 'some_other_channel'), 
     "another_server_name": ('foo', 'bar', 'they_can_be_separated_nicely', \
-                            'using_the_\_operator', 'i_think_you_get_it_now'),
-
-    "DisKvlt": ("black_metal", "death_metal", "punk_core_grind_slam", \
-                "kvlt_memes", "non_metal", "new_releases", "kvlt_pics", \
-                "kvltness", "music_pick_ups", "admin_chat", "other_pickups", \
-                "kvlt_speak", "dungeon_synth", "heavy_power_speed_trad", \
-                "musicians_talk", "doom_drone_metal", "merch_pick_ups", \
-                "prog_avantgarde_djent", "thrash_crossover", "pin_board")
+                            'using_the_\_operator', 'i_think_you_get_it_now')
 
 }
 
