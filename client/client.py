@@ -56,7 +56,7 @@ class Client(discord.Client):
         online_count = 0
         for member in self.get_current_server().members:
             if member is None: continue # happens if a member left the server
-            if member.status is discord.Status.online:
+            if member.status is not discord.Status.offline:
                 online_count +=1 
         return online_count
 
