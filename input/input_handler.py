@@ -34,11 +34,9 @@ async def key_input():
                 if key == "6": # page down
                     client.get_current_channel_log().dec_index(SCROLL_LINES)
                     input_buffer.pop()
-                    await ui.print_screen()
                 elif key == "5": # page up
                     client.get_current_channel_log().inc_index(SCROLL_LINES)
                     input_buffer.pop()
-                    await ui.print_screen()
             else:
                 if ordkey == 10 or ordkey == 13: # enter key
                     user_input = "".join(input_buffer)
@@ -63,10 +61,9 @@ async def key_input():
                 elif ordkey == 9:
                     input_buffer.append(" " * 4) # tab key
                 
-                await ui.print_screen()
-        
-            
             memory = key
+            if key != "[":
+                await ui.print_screen()
 
         if key != "[":
             await asyncio.sleep(0.015)
