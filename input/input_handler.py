@@ -159,6 +159,8 @@ async def input_handler():
                                 final_chanlog.unread = False
                                 final_chanlog.mentioned_in = False
                                 break
+                            else:
+                                ui.set_display(term.red + "Can't find channel" + term.normal)
 
                 elif command == "nick":
                     try: 
