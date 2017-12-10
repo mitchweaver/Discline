@@ -4,10 +4,10 @@ def check_for_updates():
     try:# git pull at start as to automatically update to master repo
         from subprocess import Popen,PIPE
         print(term.green + "Checking for updates..." + term.normal)
-        process = Popen(["git", "pull"], stdout=PIPE)
+        process = Popen(["git", "pull", "--force"], stdout=PIPE)
         output = process.communicate()[0].decode('utf-8').strip()
 
-        if "Already up to date." not in output:
+        if "Already up to date" not in output:
             print("Updates downloaded! Please restart.")
             print("\n \n")
             quit()
