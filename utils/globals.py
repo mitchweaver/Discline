@@ -60,6 +60,16 @@ async def get_color(string):
     if arg == "on_magenta": return term.on_magenta
     if arg == "on_green":   return term.on_green
 
+    if arg == "blink_white": return term.blink_white
+    if arg == "blink_black": return term.blink_black
+    if arg == "blink_red": return term.blink_red
+    if arg == "blink_blue": return term.blink_blue
+    if arg == "blink_yellow": return term.blink_yellow
+    if arg == "blink_cyan": return term.blink_cyan
+    if arg == "blink_magenta": return term.blink_magenta
+    if arg == "blink_green": return term.blink_green
+
+
     # if we're here, someone has one of their settings.py
     # colors defined wrong. We'll be nice and just return white.
     return term.normal + term.white

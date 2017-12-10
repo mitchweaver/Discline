@@ -116,9 +116,9 @@ async def print_left_bar(left_bar_width):
 
             if log.get_channel() is not client.get_current_channel():
                 if log.unread and BLINK_UNREADS: 
-                    text = term.blink_yellow + text + term.normal
+                    text = get_color(UNREAD_CHANNEL_COLOR) + text + term.normal
                 elif log.mentioned_in and BLINK_MENTIONS: 
-                    text = term.blink_red + text + term.normal
+                    text = get_color(UNREAD_MENTION_COLOR) + text + term.normal
             
             buffer.append(text + "\n")
         

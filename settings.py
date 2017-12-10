@@ -55,6 +55,7 @@ TRUNCATE_CHANNELS = False
 # Available colors are: "white", "red", "blue", "black"
 #                       "green", "yellow", "cyan", "magenta"
 # Or: you can say "on_<color>" to make it the background (ex: 'on_red')
+# Or: you can say "blink_<color>" to have it flash (ex: 'blink_blue')
 SEPARATOR_COLOR="white"
 SERVER_DISPLAY_COLOR = "cyan"
 PROMPT_COLOR = "white"
@@ -69,7 +70,9 @@ CODE_BLOCK_COLOR="on_black"
 URL_COLOR="cyan"
 CHANNEL_LIST_COLOR="white"
 CURRENT_CHANNEL_COLOR="green"
-UNREAD_CHANNEL_COLOR="red"
+
+UNREAD_CHANNEL_COLOR="blink_yellow"
+UNREAD_MENTION_COLOR="blink_red"
 
 # whether channels should blink when they have unread messages
 BLINK_UNREAD=True
