@@ -82,7 +82,7 @@ UNREAD_CHANNEL_COLOR="blink_yellow"
 UNREAD_MENTION_COLOR="blink_red"
 
 # whether channels should blink when they have unread messages
-BLINK_UNREAD=True
+BLINK_UNREADS=True
 # same as above, but for @mentions 
 BLINK_MENTIONS=True
 
