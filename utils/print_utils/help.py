@@ -27,6 +27,8 @@ async def print_help():
         + term.magenta + "Note: You can send emojis by using :emojiname: \n" \
         + term.cyan + "Nitro emojis do work! Make sure you have \n" \
         + term.cyan + "nitro enabled in your settings. \n" \
+        + term.yellow + "You can scroll up/down in channel logs \n" \
+        + term.yellow + "by using PageUp/PageDown." \
         + term.green + "~ \n" \
         + term.green + "~ \n" \
         + term.green + "~ \n" \
