@@ -34,6 +34,20 @@ async def key_input():
             elif ordkey == 127 or ordkey == 8: # backspace
                 if len(input_buffer) > 0:
                     del input_buffer[-1]             
+            
+                
+                
+           
+            # elif ordkey == 8 or ordkey == 72: # ctrl/shift  + h
+            #     for i in range(0, 100):
+            #         print("HHHHHH")
+            # elif ordkey == 10 or ordkey == 74: # ctrl/shift  + j
+            #     print("JJJJJ")
+            # elif ordkey == 11 or ordkey == 75: # ctrl/shift  + k
+            #     print("KKKK")
+            # elif ordkey == 12 or ordkey == 76: # ctrl/shift  + l
+            #     print("LLLL")
+
             else: input_buffer.append(key)
   
             await ui.print_screen()

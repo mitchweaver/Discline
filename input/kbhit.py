@@ -8,7 +8,14 @@ from utils.globals import term, kill
 class KBHit:
     
     def __init__(self):
-        self.fd = os.fdopen(os.dup(sys.stdin.fileno()))
+        try:
+            self.fd = sys.stdin.fileno()
+            if self.fd is not None:
+                self.fd = os.fdopen(os.dup(self.fd))
+        except:
+            print(term.red + "Unknown error attempting to grab input." + term.normal)
+            kill()
+
         self.new_term = termios.tcgetattr(self.fd)
         self.old_term = termios.tcgetattr(self.fd)
 
