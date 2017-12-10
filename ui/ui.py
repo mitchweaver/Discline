@@ -186,7 +186,7 @@ async def print_channel_log(left_bar_width):
                         author_name_length = len(author_name)
                         author_prefix = await get_role_color(msg) + author_name + ": "
 
-                        proposed_line = author_prefix + term.white(msg.clean_content.strip())
+                        proposed_line = author_prefix + await get_color(TEXT_COLOR) + msg.clean_content.strip()
 
                         # If our message actually consists of
                         # of multiple lines separated by new-line
@@ -203,8 +203,6 @@ async def print_channel_log(left_bar_width):
                             # that means the author has a long-line comment
                             # that wasn't using new line chars...
                             # We must manually wrap it.
-
-                                                        
 
                             line_length = len(line)
                             # Loop through, wrapping the lines until it behaves
@@ -244,7 +242,6 @@ async def print_channel_log(left_bar_width):
                                 target = "\e"
                                 for target in line:
                                     line_length -= 5
-
 
                             # Once here, the string was either A: already short enough
                             # to begin with, or B: made through our while loop and has

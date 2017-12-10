@@ -66,11 +66,15 @@ MOD_COLOR = "blue"
 BOT_COLOR = "yellow"
 NORMAL_USER_COLOR = "green"
 
+# the "default" text color for messages and other things
+TEXT_COLOR = "white"
+
 CODE_BLOCK_COLOR="on_black"
 URL_COLOR="cyan"
 CHANNEL_LIST_COLOR="white"
 CURRENT_CHANNEL_COLOR="green"
 
+# colors for the channels in the left bar upon unreads
 UNREAD_CHANNEL_COLOR="blink_yellow"
 UNREAD_MENTION_COLOR="blink_red"
 
