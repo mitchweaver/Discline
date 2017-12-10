@@ -1,5 +1,5 @@
 import asyncio
-from discord import ChannelType
+import discord
 
 from input.kbhit import KBHit
 import ui.ui as ui 
@@ -100,7 +100,7 @@ async def input_handler():
                             # we can just get it ourselves.
                             def_chan = ""
                             for chan in servlog.get_server().channels:
-                                if chan.type == ChannelType.text:
+                                if chan.type == discord.ChannelType.text:
                                     if chan.permissions_for(servlog.get_server().me).read_messages:
                                         if chan.position == 0:
                                             def_chan = chan
@@ -121,7 +121,7 @@ async def input_handler():
                         if servlog.get_server() is client.get_current_server():
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_name().lower() == arg.lower():
-                                    if chanlog.get_channel().type == ChannelType.text:
+                                    if chanlog.get_channel().type == discord.ChannelType.text:
                                         if chanlog.get_channel().permissions_for(servlog.get_server().me).read_messages:
                                             client.set_current_channel(arg)
                                             chanlog.unread = False
@@ -135,9 +135,9 @@ async def input_handler():
                     except: # you don't have permission to do this here
                         pass
                 elif command == "game":
-                    try:
-                        await client.change_presence(game=discord.game(name=arg),status=none,afk=False)
-                    except: pass
+                    # try:
+                    await client.change_presence(game=discord.game(name=arg),status=none,afk=False)
+                    # except: pass
                 elif command == "file":
                     await send_file(client, arg)
 
