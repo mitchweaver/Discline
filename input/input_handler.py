@@ -24,6 +24,7 @@ async def key_input():
     
     global user_input, kb
     memory = ""
+    key = ""
     while True:
         if await kb.kbhit() or memory == "[":
             key = await kb.getch()
@@ -63,10 +64,12 @@ async def key_input():
                     input_buffer.append(" " * 4) # tab key
                 
                 await ui.print_screen()
-                if key != "[":
-                    await asyncio.sleep(0.0115)
+        
             
             memory = key
+
+        if key != "[":
+            await asyncio.sleep(0.015)
 
 async def input_handler():
     await client.wait_until_ready()
@@ -76,7 +79,7 @@ async def input_handler():
 
         # If input is blank, don't do anything
         if user_input == '': 
-            await asyncio.sleep(0.025)
+            await asyncio.sleep(0.05)
             continue
 
         # # check if input is a command
@@ -213,5 +216,4 @@ async def input_handler():
         # update the screen
         await ui.print_screen()
         
-        # sleep while we wait for the screen to print and/or network
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.25)
