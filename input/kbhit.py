@@ -3,18 +3,13 @@ import sys
 import termios
 import atexit
 from select import select
-from utils.globals import term, kill
 
 class KBHit:
     
     def __init__(self):
-        try:
-            self.fd = sys.stdin.fileno()
-            if self.fd is not None:
-                self.fd = os.fdopen(os.dup(self.fd))
-        except:
-            print(term.red + "Unknown error attempting to grab input." + term.normal)
-            kill()
+        self.fd = sys.stdin.fileno()
+        if self.fd is not None:
+            self.fd = os.fdopen(os.dup(self.fd))
 
         self.new_term = termios.tcgetattr(self.fd)
         self.old_term = termios.tcgetattr(self.fd)
@@ -25,7 +20,6 @@ class KBHit:
 
         # Support normal-terminal reset at exit
         atexit.register(self.set_normal_term)
-    
     
     def set_normal_term(self):
         ''' Resets to normal terminal. '''
