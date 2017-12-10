@@ -23,21 +23,35 @@ def kill():
     except: pass
     exit()
 
-# returns a "Channel" object from the given strings
-async def get_channel(server, channel):
+# returns a "Channel" object from the given string
+async def string2channel(channel):
     for srv in client.servers:
-        if srv.name == server.name:
+        if srv.name == channel.server.name:
             for chan in srv.channels:
-                if chan.name == channel.name:
+                if chan.name == channel:
                     return chan
 
-# returns a "Channellog" object from the given strings
-async def get_channel_log(server, channel):
+# returns a "Channellog" object from the given string
+async def get_channel_log(channel):
     for srvlog in server_log_tree:
-        if srvlog.get_name() == server.name:
+        if srvlog.get_name().lower() == channel.server.name.lower():
             for chanlog in srvlog.get_logs():
-                if chanlog.get_name() == channel.name:
+                if chanlog.get_name().lower() == channel.name.lower():
                     return chanlog
+
+# returns a "Channellog" from a given "Channel"
+async def chan2log(chan):
+    for srvlog in server_log_tree:
+        if srvlog.get_name().lower() == chan.server.name.lower():
+            for clog in srvlog.get_logs():
+                if clog.get_name().lower() == chan.name.lower():
+                    return clog
+ 
+# returns a "Serverlog" from a given "Server"
+async def serv2log(serv):
+    for srvlog in server_log_tree:
+        if srvlog.get_name().lower() == serv.name.lower():
+            return srvlog
 
 # takes in a string, returns the appropriate term.color
 async def get_color(string):
@@ -60,14 +74,14 @@ async def get_color(string):
     if arg == "on_magenta": return term.on_magenta
     if arg == "on_green":   return term.on_green
 
-    if arg == "blink_white": return term.blink_white
-    if arg == "blink_black": return term.blink_black
-    if arg == "blink_red": return term.blink_red
-    if arg == "blink_blue": return term.blink_blue
-    if arg == "blink_yellow": return term.blink_yellow
-    if arg == "blink_cyan": return term.blink_cyan
+    if arg == "blink_white":   return term.blink_white
+    if arg == "blink_black":   return term.blink_black
+    if arg == "blink_red":     return term.blink_red
+    if arg == "blink_blue":    return term.blink_blue
+    if arg == "blink_yellow":  return term.blink_yellow
+    if arg == "blink_cyan":    return term.blink_cyan
     if arg == "blink_magenta": return term.blink_magenta
-    if arg == "blink_green": return term.blink_green
+    if arg == "blink_green":   return term.blink_green
 
 
     # if we're here, someone has one of their settings.py
