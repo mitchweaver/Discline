@@ -19,7 +19,7 @@ HAS_NITRO = False
 DEFAULT_PROMPT = "~"
 
 # the default 'playing ' status in discord
-DEFAULT_GAME = ""
+DEFAULT_GAME = "Terminal Discord"
 
 # used for various things, your preference
 ARRAYS_START_AT_ZERO = False
