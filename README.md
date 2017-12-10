@@ -54,6 +54,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * URL detection, highlighting in blue + italics
 * automatic updating, fetching the latest master branch's commit
 * channel logs blink red upon unread messages
+* line scrolling
 * discord "Nitro" emojis
 
 ### Planned Features
@@ -63,7 +64,6 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * comment editing and deletion
 * private messaging
 * message searching
-* line scrolling
 * @member expansion
 * externalize settings.py to a ~/.config file
 
