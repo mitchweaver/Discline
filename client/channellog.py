@@ -5,6 +5,8 @@ class ChannelLog():
     __logs = []
     unread = False
     mentioned_in = False
+    # the index of where to start printing the messages
+    __index = 0
 
     def __init__(self, channel, logs):
         self.__channel = channel
@@ -33,3 +35,15 @@ class ChannelLog():
 
     def len(self):
         return len(self.__logs)
+
+    def get_index(self):
+        return self.__index
+
+    def set_index(self, int):
+        self.__index = int
+
+    def inc_index(self, int):
+        self.__index += int
+
+    def dec_index(self, int):
+        self.__index -= int

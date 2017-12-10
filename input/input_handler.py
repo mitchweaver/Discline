@@ -23,38 +23,50 @@ async def key_input():
     await client.wait_until_ready()
     
     global user_input, kb
+    memory = ""
     while True:
-        if await kb.kbhit():
+        if await kb.kbhit() or memory == "[":
             key = await kb.getch()
             ordkey = ord(key)
-            if ordkey == 10 or ordkey == 13: # enter key
-                user_input = "".join(input_buffer)
-                del input_buffer[:]
-            # elif ordkey == 27: kill() # escape # why are arrow keys doing this?
-            elif ordkey == 127 or ordkey == 8: # backspace
-                if len(input_buffer) > 0:
-                    del input_buffer[-1]             
             
+            if memory == "[":
+                if key == "6": # page down
+                    client.get_current_channel_log().dec_index(SCROLL_LINES)
+                    input_buffer.pop()
+                    await ui.print_screen()
+                elif key == "5": # page up
+                    client.get_current_channel_log().inc_index(SCROLL_LINES)
+                    input_buffer.pop()
+                    await ui.print_screen()
+            else:
+                if ordkey == 10 or ordkey == 13: # enter key
+                    user_input = "".join(input_buffer)
+                    del input_buffer[:]
+                elif ordkey == 127 or ordkey == 8: # backspace
+                    if len(input_buffer) > 0:
+                        del input_buffer[-1]             
+                # elif ordkey == 27: kill() # escape # why are arrow keys doing this?
                 
-                
-           
-            # elif ordkey == 8 or ordkey == 72: # ctrl/shift  + h
-            #     for i in range(0, 100):
-            #         print("HHHHHH")
-            # elif ordkey == 10 or ordkey == 74: # ctrl/shift  + j
-            #     print("JJJJJ")
-            # elif ordkey == 11 or ordkey == 75: # ctrl/shift  + k
-            #     print("KKKK")
-            # elif ordkey == 12 or ordkey == 76: # ctrl/shift  + l
-            #     print("LLLL")
+                # elif ordkey == 8 or ordkey == 72: # ctrl/shift  + h
+                #     for i in range(0, 100):
+                #         print("HHHHHH")
+                # elif ordkey == 10 or ordkey == 74: # ctrl/shift  + j
+                #     print("JJJJJ")
+                # elif ordkey == 11 or ordkey == 75: # ctrl/shift  + k
+                #     print("KKKK")
+                # elif ordkey == 12 or ordkey == 76: # ctrl/shift  + l
+                #     print("LLLL")
 
-            else: input_buffer.append(key)
-  
-            await ui.print_screen()
-        # This number could be adjusted, but it feels alright as is.
-        # Too much higher lags the typing, but set it too low
-        # and it will thrash the CPU
-        await asyncio.sleep(0.0115)
+                elif ordkey >= 33 and ordkey <= 122:
+                    input_buffer.append(key)
+                elif ordkey == 9:
+                    input_buffer.append(" " * 4) # tab key
+                
+                await ui.print_screen()
+                if key != "[":
+                    await asyncio.sleep(0.0115)
+            
+            memory = key
 
 async def input_handler():
     await client.wait_until_ready()

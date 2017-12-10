@@ -51,6 +51,9 @@ LEFT_BAR_DIVIDER = 9
 # appends "..." to the end when the screen is too small to display them
 TRUNCATE_CHANNELS = False
 
+# the amount of lines to scroll up/down on each trigger
+SCROLL_LINES = 1
+
 # ---------------- COLOR SETTINGS ------------------------------------ #
 # Available colors are: "white", "red", "blue", "black"
 #                       "green", "yellow", "cyan", "magenta"
@@ -112,7 +115,6 @@ CHANNEL_IGNORE_LIST = {
                 "prog_avantgarde_djent", "thrash_crossover", "pin_board")
 
 }
-
 
 # ignore this unless you know what you're doing
 DEBUG = False

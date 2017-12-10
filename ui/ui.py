@@ -12,8 +12,6 @@ from utils.print_utils.userlist import print_userlist
 # maximum number of lines that can be on the screen
 # is updated every cycle as to allow automatic resizing
 MAX_LINES = 0
-# the index in the channel log the user is at
-INDEX = 0
 # buffer to allow for double buffering (stops screen flashing)
 screen_buffer = []
 # text that can be set to be displayed for 1 frame
@@ -132,7 +130,6 @@ async def print_left_bar(left_bar_width):
 
 
 async def print_bottom_bar():
-  
     with term.location(0, term.height - 2):
         print(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
             + "\n" + term.normal, end="")
@@ -163,6 +160,9 @@ async def print_channel_log(left_bar_width):
     # List to put our *formatted* lines in, once we have OK'd them to print
     formatted_lines = []
  
+    # the max number of lines that can be shown on the screen
+    MAX_LINES = await get_max_lines()
+
     for server_log in server_log_tree:
         if server_log.get_server() is client.get_current_server():
             for channel_log in server_log.get_logs():
@@ -171,8 +171,7 @@ async def print_channel_log(left_bar_width):
                     # as a text channel, confusion will occur
                     # TODO: private messages are not "text" channeltypes
                     if channel_log.get_channel().type != ChannelType.text: continue
-                    # check to make sure the user can read the logs
-
+                    
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
                         msg_lines = []
@@ -254,16 +253,17 @@ async def print_channel_log(left_bar_width):
 
                                 formatted_lines.append(Line(line.strip(), offset))
                                 
-                    # the max number of lines that can be shown on the screen
-                    MAX_LINES = await get_max_lines()
-                    
                     # where we should start printing from
                     # clamp the index as not to show whitespace
-                    if INDEX < MAX_LINES: INDEX = MAX_LINES 
+                    if channel_log.get_index() < MAX_LINES: 
+                        channel_log.set_index(MAX_LINES)
+                    elif channel_log.get_index() > len(formatted_lines): 
+                        channel_log.set_index(len(formatted_lines))
 
                     # ----- Trim out list to print out nicely ----- #
                     # trims off the front of the list, until our index
-                    del formatted_lines[0:(len(formatted_lines) - INDEX)]
+                    del formatted_lines[0:(len(formatted_lines) - \
+                                           channel_log.get_index())]
                     # retains the amount of lines for our screen, deletes remainder
                     del formatted_lines[MAX_LINES:]
 
