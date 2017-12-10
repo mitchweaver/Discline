@@ -16,6 +16,7 @@ MAX_LINES = 0
 screen_buffer = []
 # text that can be set to be displayed for 1 frame
 display = ""
+display_frames = 0
 
 async def print_screen():
     global display
@@ -36,9 +37,11 @@ async def print_screen():
 
     await print_left_bar(left_bar_width)
 
-    if display is not None: 
+    if display != "": 
         print(display)
-        display = ""
+        display_frames -= 1
+        if display_frames <=  0:
+            display = ""
 
 async def print_top_bar():
     topic = ""
@@ -74,6 +77,7 @@ async def print_top_bar():
 async def set_display(string):
     global display
     display = string
+    display_frames = 3
 
 async def print_left_bar(left_bar_width):
     sep_color = await get_color(SEPARATOR_COLOR)
@@ -245,7 +249,7 @@ async def print_channel_log(left_bar_width):
                             # Once here, the string was either A: already short enough
                             # to begin with, or B: made through our while loop and has
                             # since been chopped down to less than our MAX_LENGTH
-                            if len(line) > 0:
+                            if len(line.strip()) > 0:
                                 
                                 offset = 0
                                 if author_prefix not in line:
@@ -262,8 +266,7 @@ async def print_channel_log(left_bar_width):
 
                     # ----- Trim out list to print out nicely ----- #
                     # trims off the front of the list, until our index
-                    del formatted_lines[0:(len(formatted_lines) - \
-                                           channel_log.get_index())]
+                    del formatted_lines[0:(len(formatted_lines) - channel_log.get_index())]
                     # retains the amount of lines for our screen, deletes remainder
                     del formatted_lines[MAX_LINES:]
 
