@@ -42,6 +42,19 @@ class Client(discord.Client):
                             if channel.permissions_for(server.me).read_messages:
                                 return channel
 
+    def get_current_channel_log(self):
+        if self.__current_channel is None:
+            print(globals.term.red + "Current channel is None!" + globals.term.normal)
+            return
+        for slog in server_log_tree:
+            if slog.get_server() == self.get_current_server():
+                for clog in slog.get_logs():
+                    if clog.get_channel().type is discord.ChannelType.text:
+                        if clog.get_channel().name.lower() == self.__current_channel.lower():
+                            if clog.get_channel().permissions_for(slog.get_server().me).read_messages:
+                                return clog.get_channel()
+
+
     # returns online members in current server
     async def get_online(self):
         online_count = 0
