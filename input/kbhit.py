@@ -31,25 +31,9 @@ class KBHit:
         ''' Resets to normal terminal. '''
         termios.tcsetattr(self.fd, termios.TCSAFLUSH, self.old_term)
 
-
     async def getch(self):
         return self.fd.read(1)
                         
-
-    # async def getarrow(self):
-    #     ''' Returns an arrow-key code after kbhit() has been called. Codes are
-    #     0 : up
-    #     1 : right
-    #     2 : down
-    #     3 : left
-    #     Should not be called in the same program as getch(). '''
-        
-    #     c = self.fd.read(3)[2]
-    #     vals = [65, 67, 66, 68]
-        
-    #     return vals.index(ord(c.decode('utf-8')))
-        
-
     async def kbhit(self):
         ''' Returns if keyboard character was hit '''
         dr,dw,de = select([self.fd], [], [], 0)
