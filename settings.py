@@ -54,7 +54,7 @@ TRUNCATE_CHANNELS = False
 # ---------------- COLOR SETTINGS ------------------------------------ #
 # Available colors are: "white", "red", "blue", "black"
 #                       "green", "yellow", "cyan", "magenta"
-# Or: you can say "on_<color" to make it the background (ex: 'on_red')
+# Or: you can say "on_<color>" to make it the background (ex: 'on_red')
 SEPARATOR_COLOR="white"
 SERVER_DISPLAY_COLOR = "cyan"
 PROMPT_COLOR = "white"
@@ -73,6 +73,8 @@ UNREAD_CHANNEL_COLOR="red"
 
 # whether channels should blink when they have unread messages
 BLINK_UNREAD=True
+# same as above, but for @mentions 
+BLINK_MENTIONS=True
 
 # here you can define your own custom roles - NOTE: text must match exactly!
 # These for example could be "helper" or "trusted", whatever roles

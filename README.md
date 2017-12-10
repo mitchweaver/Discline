@@ -78,11 +78,11 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 
 To install dependencies:
 
-    1. Download Python 3.5/3.6 from the link above
-    2. Install `pip3`, normally called `python3-pip` in package managers
-    3. Download the dependencies using pip with the following command:
+1. Download Python 3.5/3.6 from the link above
+2. Install `pip3`, normally called `python3-pip` in package managers
+3. Download the dependencies using pip with the following command:
 
-    `sudo pip3 install asyncio discord blessings`
+`sudo pip3 install asyncio discord blessings`
     
 
 ### Color Customization
