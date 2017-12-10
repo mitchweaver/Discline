@@ -7,9 +7,10 @@ def check_for_updates():
         process = Popen(["git", "pull"], stdout=PIPE)
         output = process.communicate()[0].decode('utf-8').strip()
 
-        if output != "Already up to date.":
+        if "Already up to date." not in output:
             print("Updates downloaded! Please restart.")
             print("\n \n")
+            quit()
         else:
             print("Already up to date!" + "\n")
     except KeyboardInterrupt: print("Call to cancel update received, skipping.")
