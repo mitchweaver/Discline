@@ -9,3 +9,6 @@ class Line():
     def __init__(self, text, offset):
         self.text = text
         self.offset = offset
+
+    def length(self):
+        return len(self.text)
