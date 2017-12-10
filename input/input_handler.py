@@ -135,9 +135,8 @@ async def input_handler():
                     except: # you don't have permission to do this here
                         pass
                 elif command == "game":
-                    # try:
-                    await client.change_presence(game=discord.game(name=arg),status=none,afk=False)
-                    # except: pass
+                    try: await client.change_presence(game=discord.Game(name=arg),status=None,afk=False)
+                    except: pass
                 elif command == "file":
                     await send_file(client, arg)
 
