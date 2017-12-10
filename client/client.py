@@ -28,7 +28,7 @@ class Client(discord.Client):
                 return server
 
     def get_current_server_log(self):
-        for slog in server_log_tree:
+        for slog in utils.globals.server_log_tree:
             if slog.get_server() == self.get_current_server():
                 return slog
 
@@ -42,14 +42,12 @@ class Client(discord.Client):
                                 return channel
 
     def get_current_channel_log(self):
-        for slog in server_log_tree:
-            if slog.get_server() == self.get_current_server():
-                for clog in slog.get_logs():
-                    if clog.get_channel().type is discord.ChannelType.text:
-                        if clog.get_channel().name.lower() == self.__current_channel.lower():
-                            if clog.get_channel().permissions_for(slog.get_server().me).read_messages:
-                                return clog.get_channel()
-
+        slog = self.get_current_server_log()
+        for clog in slog.get_logs():
+            if clog.get_channel().type is discord.ChannelType.text:
+                if clog.get_channel().name.lower() == self.__current_channel.lower():
+                    if clog.get_channel().permissions_for(slog.get_server().me).read_messages:
+                        return clog
 
     # returns online members in current server
     async def get_online(self):
