@@ -1,7 +1,7 @@
 # Terminal Discord
 --------------------
 
-![Image](https://0x0.st/soYP.png)
+![Image](https://0x0.st/sH7s.png)
 
 
 __**Warning**__: Currently Linux/Mac only, it may be a while before support for Windows comes back
