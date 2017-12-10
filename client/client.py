@@ -23,17 +23,16 @@ class Client(discord.Client):
     def get_current_channel_name(self): return self.__current_channel
 
     def get_current_server(self):
-        if self.__current_server is None:
-            print(globals.term.red + "Current server is None!" + globals.term.normal)
-            return
         for server in self.servers:
             if server.name.lower() == self.__current_server:
                 return server
 
+    def get_current_server_log(self):
+        for slog in server_log_tree:
+            if slog.get_server() == self.get_current_server():
+                return slog
+
     def get_current_channel(self): 
-        if self.__current_channel is None:
-            print(globals.term.red + "Current channel is None!" + globals.term.normal)
-            return
         for server in self.servers:
             if server.name.lower() == self.__current_server.lower():
                 for channel in server.channels:
@@ -43,9 +42,6 @@ class Client(discord.Client):
                                 return channel
 
     def get_current_channel_log(self):
-        if self.__current_channel is None:
-            print(globals.term.red + "Current channel is None!" + globals.term.normal)
-            return
         for slog in server_log_tree:
             if slog.get_server() == self.get_current_server():
                 for clog in slog.get_logs():
