@@ -1,6 +1,12 @@
-from utils.globals import term
-
 def check_for_updates():
+    from utils.globals import term
+    from os import path
+    
+    if not path.exists(".git"):
+        print(term.red("Error: client not started from repo location! Cancelling..."))
+        print(term.yellow("You must start the client from its folder to get automatic updates. \n"))
+        return
+
     try:# git pull at start as to automatically update to master repo
         from subprocess import Popen,PIPE
         print(term.green + "Checking for updates..." + term.normal)
