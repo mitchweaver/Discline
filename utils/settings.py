@@ -20,32 +20,44 @@ def copy_skeleton():
     except KeyboardInterrupt: 
         print("Cancelling...")
         quit()
-    except SystemExit:
-        quit()
+    except SystemExit: quit()
     except:
         print(term.red("Error creating skeleton file."))
         quit()
 
-# can't import globals.term due to globals.py needing settings
-term = Terminal()
+import sys
+arg = ""
+try: arg = sys.argv[1]
+except IndexError: pass
+# Before we automatically load the settings, make sure we
+# are actually trying to start the client
+if arg != "--skeleton" and arg != "--copy-skeleton" \
+   and arg != "--help" and arg != "--token" \
+   and arg != "--store-token":
 
-# This runs on the module import, before the client or main() starts
-os.system("clear")
-if not os.path.exists(os.getenv("HOME") + "/.config/Discline/config"):
-    print(term.yellow("Configuration file not found, creating skeleton..."))
-    copy_skeleton()
-    print("\n")
+    # can't import globals.term due to globals.py needing settings
+    term = Terminal()
 
-try:
-    with open(os.getenv("HOME") + "/.config/Discline/config") as f:
-        settings = safe_load(f)
-except:
+    # This runs on the module import, before the client or main() starts
+    os.system("clear")
+    if not os.path.exists(os.getenv("HOME") + "/.config/Discline/config"):
+        print(term.yellow("Configuration file not found, creating skeleton..."))
+        copy_skeleton()
+        print("\n")
+
     try:
-        with open(os.getenv("HOME") + "/.Discline") as f:
+        with open(os.getenv("HOME") + "/.config/Discline/config") as f:
             settings = safe_load(f)
     except:
-        print(term.red("ERROR: could not get settings."))
-        quit()
+        try:
+            with open(os.getenv("HOME") + "/.Discline") as f:
+                settings = safe_load(f)
+        except:
+            print(term.red("ERROR: could not get settings."))
+            quit()
 
-# null it when we're done
-term = None
+    # null it when we're done
+    term = None
+elif arg == "--skeleton" or arg == "--copy-skeleton":
+    copy_skeleton()
+    quit()

@@ -20,7 +20,7 @@ from ui.text_manipulation import calc_mutations
 from utils.print_utils.help import print_help
 from utils.print_utils.print_utils import *
 from utils.globals import *
-from utils.settings import settings
+from utils.settings import copy_skeleton, settings
 from utils.updates import check_for_updates
 from utils.token_utils import get_token
 from utils import hidecursor
@@ -170,14 +170,16 @@ def main():
             print_help()
             quit()
 
-        if sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":
-           from utils.settings import copy_skeleton
-           copy_skeleton()
-           quit()
-
-        if sys.argv[1] == "--token" or sys.argv[1] == "--store-token":
+        elif sys.argv[1] == "--token" or sys.argv[1] == "--store-token":
             from utils.token_utils import  store_token
             store_token()
+            quit()
+        elif sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton": 
+            # handled in utils.settings.py
+            pass
+        else:
+            print(term.red("Error: Unknown command."))
+            print(term.yellow("See --help for options."))
             quit()
     except IndexError: pass
 
@@ -189,7 +191,6 @@ def main():
 
     # start the client
     try: client.run(token, bot=False)
-    # except SystemExit: pass
     except KeyboardInterrupt: pass
 
     # if we are here, the client's loop was cancelled or errored, or user exited

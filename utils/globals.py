@@ -1,8 +1,7 @@
-import re
+from sys import exit
 from client.client import Client
 from blessings import Terminal
 from utils.settings import settings
-from sys import exit
 
 term = Terminal()
 client = Client(max_messages=settings["max_messages"])
