@@ -10,7 +10,7 @@ def check_for_updates():
         if "Already up to date" not in output:
             print("Updates downloaded! Please restart.")
             print("\n \n")
-            quit()
+            # quit()
         else:
             print("Already up to date!" + "\n")
     except KeyboardInterrupt: print("Call to cancel update received, skipping.")
