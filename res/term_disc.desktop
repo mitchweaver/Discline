@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=term_disc
-Comment="A terminal discord client you can actually use"
-Exec=gnome-terminal -c ~/Documents/term_disc/res/start.sh
-Terminal=true
-Type=Application
-Icon=~/Documents/term_disc/res/term_disc_icon.png
