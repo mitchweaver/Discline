@@ -27,7 +27,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
     
     * Clicking this will show you a list of variables. Look for a line that looks like:
     
-    `"token = 322332r093fwaf032f90323f32f903f23wfa"`
+        `"token = 322332r093fwaf032f90323f32f903f23wfa"`
     
     If you're having troubles, google around, there's a few guides on the net.
     
