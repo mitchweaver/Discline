@@ -179,9 +179,7 @@ def main():
             from utils.token_utils import  store_token
             store_token()
             quit()
-
-    except IndexError:
-        quit()
+    except IndexError: pass
 
     check_for_updates()
     token = get_token()
@@ -191,7 +189,7 @@ def main():
 
     # start the client
     try: client.run(token, bot=False)
-    except SystemExit: pass
+    # except SystemExit: pass
     except KeyboardInterrupt: pass
 
     # if we are here, the client's loop was cancelled or errored, or user exited
