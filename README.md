@@ -15,25 +15,27 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 
 2. Clone the repo
 
-`git clone https://github.com/mitchweaver/terminal-discord`
+`git clone https://github.com/MitchWeaver/Discline`
 
 3. Find your discord "token"
    
-    This can be found by going to http://discordapp.com/channels/@me,
-    and opening your browser developer console. This is normally `F12` or
-    `CTRL-SHIFT-I`. 
+    * Go to http://discordapp.com/channels/@me
+     
+    * Open your browser's developer console. (Normally `F12` or `CTRL-SHIFT-I`)
     
-    Now click on "storage" or "local storage" and look for the discord url. 
-    Clicking this will show you a list of variables. Look for a line that looks like:
+    * Look for "storage" or "local storage", then find the discord url. 
+    
+    * Clicking this will show you a list of variables. Look for a line that looks like:
     
     `"token = 322332r093fwaf032f90323f32f903f23wfa"`
     
     If you're having troubles, google around, there's a few guides on the net.
+    
     If all else fails, join the dev discord and we'll be glad to help!
     
 4. Run `--store-token` to store your token
 
-5. run `--copy-skeleton` to get a template config 
+5. Run `--copy-skeleton` to get a template config 
 
 6. Edit `~/.config/Discline/config` to your choosing.
 
