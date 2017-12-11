@@ -77,7 +77,6 @@ async def calc_mutations(msg):
     # else it must be a regular message, nothing else
     return msg
 
-
 async def convert_pin(msg):
     name = ""
     if msg.author.nick is not None and msg.author.nick != "":

@@ -223,20 +223,30 @@ async def input_handler():
             # if we're here, we've determined its not a command,
             # and we've processed all mutations to the input we want
             # now we will try to send the message.
-            try: 
-                # sometimes this fails --- this could be due to occasional
-                # bugs in the api, or there was a connection problem
-                await client.send_message(client.get_current_channel(), user_input)
-            except:
+            text_to_send = user_input
+            if "@" in user_input:
+                sections = user_input.lower().strip().split(" ")
+                sects_copy = []
+                for sect in sections:
+                    if "@" in sect:
+                        for member in client.get_current_server().members:
+                            if member is not client.get_current_server().me:
+                                if sect[1:] in member.display_name.lower():
+                                    sect = "<@!" + member.id + ">"
+                    sects_copy.append(sect)
+                text_to_send = " ".join(sects_copy)
+
+            # sometimes this fails --- this could be due to occasional
+            # bugs in the api, or there was a connection problem
+            # So we will try it 3 times, sleeping a bit inbetween
+            for i in range(0,2):
                 try:
-                    # we'll try to sleep 3s and resend, 2 more times
-                    for i in range(0,1):
-                        await asyncio.sleep(3)
-                        await client.send_message(client.get_current_channel(), user_input)
+                    await client.send_message(client.get_current_channel(), text_to_send)
+                    break
                 except:
-                    # if the message failed to send 3x in a row, there's
-                    # something wrong. notify the user.
-                    ui.set_display(term.blink_red + "error: could not send message!")
+                    await asyncio.sleep(3)
+                    if i == 2:
+                        ui.set_display(term.blink_red + "error: could not send message")
 
         # clear our input as we've just sent it
         user_input = ""
