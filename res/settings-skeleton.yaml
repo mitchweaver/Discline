@@ -76,9 +76,6 @@ server_display_color: cyan
 prompt_color: white
 prompt_hash_color: red
 prompt_border_color: magenta
-admin_color: magenta
-mod_color: blue
-bot_color: yellow
 normal_user_color: green
 
 # the "default" text color for messages and other things
@@ -101,13 +98,14 @@ blink_mentions: true
 
 # here you can define your own custom roles - NOTE: text must match exactly!
 # These for example could be "helper" or "trusted", whatever roles
-# your servers use that aren't the default 'admin/mod/bot'
-custom_role:
-custom_role_color:
-custom_role_2:
-custom_role_2_color:
-custom_role_3:
-custom_role_3_color:
+# your servers use
+custom_roles:
+- name: admin
+  color: magenta
+- name: mod
+  color: blue
+- name: bot
+  color: yellow
   
 # Channel ignore list - This stops the channel from being loaded.
 # Effectively like the "mute" + "hide" feature on the official client,
