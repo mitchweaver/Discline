@@ -37,19 +37,19 @@ async def on_ready():
     # completely hide the system's cursor
     await hidecursor.hide_cursor()
 
-    # these values are set in settings.py
-    if DEFAULT_PROMPT is not None:
-        client.set_prompt(DEFAULT_PROMPT.lower())
+    # these values are set in settings.yaml
+    if settings["default_prompt"] is not None:
+        client.set_prompt(settings["default_prompt"].lower())
     else: client.set_prompt('~')
 
-    if DEFAULT_SERVER is not None:
-        client.set_current_server(DEFAULT_SERVER)
-        if DEFAULT_CHANNEL is not None:
-            client.set_current_channel(DEFAULT_CHANNEL.lower())
-            client.set_prompt(DEFAULT_CHANNEL.lower())
+    if settings["default_server"] is not None:
+        client.set_current_server(settings["default_server"])
+        if settings["default_channel"] is not None:
+            client.set_current_channel(settings["default_channel"].lower())
+            client.set_prompt(settings["default_channel"].lower())
 
-    if DEFAULT_GAME is not None:
-        await client.change_presence(game=discord.Game(name=DEFAULT_GAME), \
+    if settings["default_game"] is not None:
+        await client.change_presence(game=discord.Game(name=settings["default_game"]), \
                                         status=None,afk=False)
 
     # --------------- INIT SERVERS ----------------------------------------- #
@@ -69,16 +69,16 @@ async def on_ready():
             if channel.type == discord.ChannelType.text:
                     if channel.permissions_for(server.me).read_messages:
                         try: # try/except in order to 'continue' out of multiple for loops
-                            for serv_key in CHANNEL_IGNORE_LIST:
-                                if serv_key.lower() == server.name.lower():
-                                    for name in CHANNEL_IGNORE_LIST[serv_key]:
+                            for serv_key in settings["channel_ignore_list"]:
+                                if serv_key["server_name"].lower() == server.name.lower():
+                                    for name in serv_key["ignores"]:
                                         if channel.name.lower() == name.lower():
                                             raise Found
 
                             print("    loading " + term.yellow + channel.name + term.normal)
                             channel_log = []
                             try:
-                                async for msg in client.logs_from(channel, limit=MAX_LOG_ENTRIES):
+                                async for msg in client.logs_from(channel, limit=settings["max_log_entries"]):
                                     count+=1
                                     channel_log.insert(0, await calc_mutations(msg))
                                 serv_logs.append(ChannelLog(channel, channel_log))
@@ -93,7 +93,7 @@ async def on_ready():
         # add the channellog to the tree
         server_log_tree.append(ServerLog(server, serv_logs)) 
             
-        if DEBUG:
+        if settings["debug"]:
             for slog in server_log_tree:
                 for clog in slog.get_logs():
                     print(slog.get_name() + " ---- " + clog.get_name())
@@ -168,13 +168,8 @@ def main():
 
     # start the client
     try: client.run(TOKEN, bot=False)
-    except SystemExit: 
-        try: kill()
-        except: pass
-    except KeyboardInterrupt:
-        try: kill()
-        except: pass
-
+    except SystemExit: pass
+    except KeyboardInterrupt: pass
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()

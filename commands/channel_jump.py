@@ -1,6 +1,6 @@
 from utils.globals import server_log_tree, client
 from utils.quicksort import quick_sort_channel_logs
-from settings import ARRAYS_START_AT_ZERO
+from settings import *
 
 async def channel_jump(arg):
     logs = []
@@ -8,7 +8,7 @@ async def channel_jump(arg):
     num = int(arg[1:]) - 1
 
     # sub one to allow for "/c0" being the top channel
-    if ARRAYS_START_AT_ZERO:
+    if settings["arrays_start_at_zero"]:
         num -= 1
    
     # in case someone tries to go to a negative index

@@ -1,9 +1,10 @@
+import re
 from client.client import Client
 from blessings import Terminal
 from settings import *
 from sys import exit
 
-client = Client(max_messages=MAX_MESSAGES)
+client = Client(max_messages=settings["max_messages"])
 term = Terminal()
 server_log_tree = []
 input_buffer = []
@@ -55,7 +56,10 @@ async def serv2log(serv):
 
 # takes in a string, returns the appropriate term.color
 async def get_color(string):
-    arg = string.strip().lower()
+    arg = re.sub(r'\s+', '', str(string.strip().lower()))
+    with open("colors.txt", "a") as oh:
+        oh.write(arg)
+    #arg = str(string.strip().lower())
     if arg == "white":   return term.white
     if arg == "black":   return term.black
     if arg == "red":     return term.red

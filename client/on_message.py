@@ -1,6 +1,6 @@
 from ui.ui import print_screen
 from utils.globals import *
-from settings import *
+# from settings import *
 from ui.text_manipulation import calc_mutations
 
 async def on_incoming_message(msg):

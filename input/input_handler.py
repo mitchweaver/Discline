@@ -32,10 +32,10 @@ async def key_input():
             
             if memory == "[":
                 if key == "6": # page down
-                    client.get_current_channel_log().dec_index(SCROLL_LINES)
+                    client.get_current_channel_log().dec_index(settings["scroll_lines"])
                     input_buffer.pop()
                 elif key == "5": # page up
-                    client.get_current_channel_log().inc_index(SCROLL_LINES)
+                    client.get_current_channel_log().inc_index(settings["scroll_lines"])
                     input_buffer.pop()
             else:
                 if ordkey == 10 or ordkey == 13: # enter key
@@ -80,7 +80,7 @@ async def input_handler():
             continue
 
         # # check if input is a command
-        if user_input[0] == PREFIX:
+        if user_input[0] == settings["prefix"]:
             # strip the PREFIX
             user_input = user_input[1:]
 

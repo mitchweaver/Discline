@@ -118,7 +118,7 @@ async def convert_code(string):
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + term.white +  left + " " + await get_color(CODE_BLOCK_COLOR) \
+    return term.normal + term.white +  left + " " + await get_color(settings["code_block_color"]) \
             + target  + term.normal \
             + term.white + " " + right
 
@@ -141,7 +141,7 @@ async def convert_url(string):
     for entity in entities:
         if "http://" in entity or "https://" in entity or "www." in entity \
            or "ftp://" in entity or ".com" in entity:
-            entity = await get_color(URL_COLOR) + term.italic + term.underline + entity + term.normal
+            entity = await get_color(settings["url_color"]) + term.italic + term.underline + entity + term.normal
         formatted_line.append(entity)
 
     return " ".join(formatted_line)
