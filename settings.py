@@ -1,11 +1,12 @@
 from yaml import safe_load
+from os import getenv
 
 try:
-    with open(os.getenv("HOME") + "/.config/Discline/config") as f:
+    with open(getenv("HOME") + "/.config/Discline/config") as f:
         settings = safe_load(f)
 except:
     try:
-        with open(os.getenv("HOME") + "/.Discline") as f:
+        with open(getenv("HOME") + "/.Discline") as f:
             settings = safe_load(f)
     except:
         try:

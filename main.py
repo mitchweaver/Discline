@@ -166,9 +166,25 @@ async def on_message_delete(msg):
 def main():
     # start the client coroutine
     TOKEN=""
-    try: TOKEN=sys.argv[1]
+    try: 
+        if sys.argv[1] == "--help" or sys.argv[1] == "-help":
+            from utils.print_utils.help import print_help
+            print_help()
+            quit()
+
+        if sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":
+            from shutil import copyfile
+            import os
+            if not os.path.exists(os.getenv("HOME") + "/.config/Discline"):
+                os.mkdir(os.getenv("HOME") + "/.config/Discline")
+            
+            copyfile("res/settings-skeleton.yaml", os.getenv("HOME") + "/.config/Discline/config", follow_symlinks=True) 
+            print("Copied skeleton!")
+            quit()
+
+        TOKEN=sys.argv[1]
     except IndexError:
-        print(term.red + "Error: You did not specify a token! Please see the README.md")
+        print(term.red + "Error: You did not specify a token! Please see the --help and the README.md")
         quit()
 
     check_for_updates()
