@@ -1,7 +1,7 @@
 from os import system
 from ui.ui import clear_screen, set_display
 from utils.globals import client, term, server_log_tree, get_color
-from settings import settings
+from utils.settings import settings
 
 async def print_serverlist():
     pass

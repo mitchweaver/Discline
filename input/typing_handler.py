@@ -1,5 +1,5 @@
 import asyncio
-from settings import *
+from utils.settings import settings
 from utils.globals import client, input_buffer
 
 async def is_typing_handler():

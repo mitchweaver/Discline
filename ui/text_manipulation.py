@@ -1,6 +1,6 @@
 import re
 from discord import MessageType
-from settings import *
+from utils.settings import settings
 from utils.globals import *
 
 async def calc_mutations(msg):

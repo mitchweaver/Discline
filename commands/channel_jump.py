@@ -1,6 +1,6 @@
 from utils.globals import server_log_tree, client
 from utils.quicksort import quick_sort_channel_logs
-from settings import *
+from utils.settings import settings
 
 async def channel_jump(arg):
     logs = []

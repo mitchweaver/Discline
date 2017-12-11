@@ -1,11 +1,11 @@
 import re
 from client.client import Client
 from blessings import Terminal
-from settings import settings
+from utils.settings import settings
 from sys import exit
 
-client = Client(max_messages=settings["max_messages"])
 term = Terminal()
+client = Client(max_messages=settings["max_messages"])
 server_log_tree = []
 input_buffer = []
 user_input = ""

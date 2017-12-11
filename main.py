@@ -20,13 +20,13 @@ from ui.text_manipulation import calc_mutations
 from utils.print_utils.help import print_help
 from utils.print_utils.print_utils import *
 from utils.globals import *
+from utils.settings import settings
 from utils.updates import check_for_updates
 from utils import hidecursor
 from client.serverlog import ServerLog
 from client.channellog import ChannelLog
 from client.on_message import on_incoming_message
 from client.client import Client
-from settings import settings
 
 # check if using python 3.5+
 # TODO: this still fails if they're using python2
@@ -40,10 +40,7 @@ init_complete = False
 @client.event
 async def on_ready():
     await client.wait_until_login()
-
-    # clear screen while the client loads
-    system("clear")
-
+    
     # completely hide the system's cursor
     await hidecursor.hide_cursor()
 
@@ -173,23 +170,18 @@ def main():
             quit()
 
         if sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":
-            from shutil import copyfile
-            import os
-            if not os.path.exists(os.getenv("HOME") + "/.config/Discline"):
-                os.mkdir(os.getenv("HOME") + "/.config/Discline")
-            
-            copyfile("res/settings-skeleton.yaml", os.getenv("HOME") + "/.config/Discline/config", follow_symlinks=True) 
-            print("Copied skeleton!")
-            quit()
+           from settings import copy_skeleton
+           copy_skeleton()
+           quit()
 
         TOKEN=sys.argv[1]
     except IndexError:
-        print(term.red + "Error: You did not specify a token! Please see the --help and the README.md")
+        print(term.red("Error: You did not specify a token! Please see the --help and the README.md"))
         quit()
 
     check_for_updates()
     
-    print("Starting...")
+    print(term.yellow("Starting..."))
     init_input()
 
     # start the client

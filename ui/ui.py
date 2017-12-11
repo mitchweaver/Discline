@@ -6,7 +6,7 @@ from ui.line import Line
 from ui.ui_utils import *
 from utils.globals import *
 from utils.quicksort import quick_sort_channel_logs
-from settings import settings
+from utils.settings import settings
 from utils.print_utils.userlist import print_userlist
 
 # maximum number of lines that can be on the screen

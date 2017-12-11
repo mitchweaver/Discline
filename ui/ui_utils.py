@@ -1,5 +1,5 @@
 from utils.globals import term, client, get_color
-from settings import *
+from utils.settings import settings
 
 async def get_prompt():
     left = await get_color(settings["prompt_border_color"]) + "["
