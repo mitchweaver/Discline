@@ -209,10 +209,19 @@ If you have a specific issue that isn't listed here or in the
 wiki, post a github issue with a detailed explanation and I can
 try to get it fixed. Join the discord if you want live help.
 
+### Token Warning
+-------------------------------
+Do *NOT* share your token with anybody, if someone else gets ahold
+of your token, they may control your account. If you are someone
+who keeps their ~/.config on github, **add your token to your .gitignore**.
+Otherwise it will become public.
+
+
 ### License
 -------------------------------
 
 Licensed under GNU-GPLv3
+
 
 ### Legal Disclaimer
 --------------------------------
