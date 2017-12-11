@@ -16,13 +16,12 @@ async def get_prompt():
 
 async def get_max_lines():
     num = 0
-    if settings["show_top_bar"]:
+    if settings["show_top_bar"] and settings["show_separators"]:
         num = term.height - settings["margin"] * 2
-    else:
+    elif settings["show_top_bar"] and not settings["show_separators"]:
         num = term.height - settings["margin"]
-
-    if not settings["show_separators"]:
-        num += 2
+    elif not settings["show_top_bar"] and not settings["show_separators"]:
+        num = term.height - 1
         
     return num
 
