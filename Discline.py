@@ -12,7 +12,7 @@
 import sys
 import asyncio
 from os import system
-import discord
+from discord import ChannelType, Game
 from input.input_handler import input_handler, key_input, init_input
 from input.typing_handler import is_typing_handler
 from ui.ui import print_screen
@@ -57,11 +57,11 @@ async def on_ready():
             client.set_prompt(settings["default_channel"].lower())
 
     if settings["default_game"] is not None:
-        await client.change_presence(game=discord.Game(name=settings["default_game"]), \
+        await client.change_presence(game=Game(name=settings["default_game"]), \
                                         status=None,afk=False)
 
     # --------------- INIT SERVERS ----------------------------------------- #
-    print("Welcome to " + term.cyan + "Terminal Discord" + term.normal + "!")
+    print("Welcome to " + term.cyan + "Discline" + term.normal + "!")
     await print_line_break()
     await print_user()
     await print_line_break()
@@ -74,7 +74,7 @@ async def on_ready():
         count = 0
         print("loading " + term.magenta + server.name + term.normal + " ...")
         for channel in server.channels:
-            if channel.type == discord.ChannelType.text:
+            if channel.type == ChannelType.text:
                     if channel.permissions_for(server.me).read_messages:
                         try: # try/except in order to 'continue' out of multiple for loops
                             for serv_key in settings["channel_ignore_list"]:
