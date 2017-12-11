@@ -171,7 +171,7 @@ def main():
             quit()
 
         if sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":
-           from settings import copy_skeleton
+           from utils.settings import copy_skeleton
            copy_skeleton()
            quit()
 

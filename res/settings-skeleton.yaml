@@ -51,6 +51,9 @@ left_bar_divider: 9
 # appends "..." to the end when the screen is too small to display them
 truncate_channels: false
 
+# Whether to number channels in the left bar (ex: "1. general")
+number_channels: true
+
 # the amount of lines to scroll up/down on each trigger
 scroll_lines: 3
 

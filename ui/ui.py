@@ -98,18 +98,25 @@ async def print_left_bar(left_bar_width):
    
     # buffer to print
     buffer = []
-    count = 0
+    count = 1
             
     for log in channel_logs:
         # don't print categories or voice chats
         # TODO: this will break on private messages
         if log.get_channel().type != ChannelType.text: continue
         text = log.get_name()
-        if len(text) > left_bar_width:
+        length = len(text)
+
+        if settings["number_channels"]:
+            if count <= 9: length += 1
+            else: length += 2
+
+        if length > left_bar_width:
             if settings["truncate_channels"]:
                 text = text[0:left_bar_width - 1]
             else:
                 text = text[0:left_bar_width - 4] + "..."
+
         if log.get_channel() is client.get_current_channel():
             buffer.append(term.green + text + term.normal + "\n")
         else: 
@@ -117,17 +124,21 @@ async def print_left_bar(left_bar_width):
                 pass
 
             if log.get_channel() is not client.get_current_channel():
+
                 if log.unread and settings["blink_unreads"]: 
                     text = await get_color(settings["unread_channel_color"]) + text + term.normal
                 elif log.mentioned_in and settings["blink_mentions"]: 
                     text = await get_color(settings["unread_mention_color"]) + text + term.normal
             
-            buffer.append(text + "\n")
+            if settings["number_channels"]:
+                buffer.append(term.normal + str(count) + ". " + text + "\n")
+            else:
+                buffer.append(text + "\n")
         
         count += 1
         # should the server have *too many channels!*, stop them
         # from spilling over the screen
-        if count == term.height - 2 - settings["margin"]: break
+        if count - 1  == term.height - 2 - settings["margin"]: break
 
     with term.location(0, 2):
         print("".join(buffer))
