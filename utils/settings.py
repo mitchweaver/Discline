@@ -30,10 +30,8 @@ arg = ""
 try: arg = sys.argv[1]
 except IndexError: pass
 # Before we automatically load the settings, make sure we
-# are actually trying to start the client
-if arg != "--skeleton" and arg != "--copy-skeleton" \
-   and arg != "--help" and arg != "--token" \
-   and arg != "--store-token":
+# aren't trying to save them
+if arg != "--skeleton" and arg != "--copy-skeleton":
 
     # can't import globals.term due to globals.py needing settings
     term = Terminal()
