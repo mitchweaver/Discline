@@ -5,7 +5,7 @@
 # -------------------------------------------------------------------------
 
 # the default server which will be joined upon startup - CASE SENSITIVE!
-default_server: term_disc
+default_server: discline
 # the default channel which will be joined upon startup - CASE SENSITIVE!
 default_channel: test_bed
 
