@@ -1,4 +1,14 @@
 #!/usr/bin/python3
+############################################
+#                                          #
+# Discline                                 #
+#                                          #
+# http://github.com/MitchWeaver/Discline   #
+#                                          #
+# Licensed under GNU GPLv3                 #
+#                                          #
+############################################ 
+
 import sys
 import asyncio
 from os import system
@@ -16,7 +26,7 @@ from client.serverlog import ServerLog
 from client.channellog import ChannelLog
 from client.on_message import on_incoming_message
 from client.client import Client
-from settings import *
+from settings import settings
 
 # check if using python 3.5+
 # TODO: this still fails if they're using python2
