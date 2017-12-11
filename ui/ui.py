@@ -118,7 +118,10 @@ async def print_left_bar(left_bar_width):
                 text = text[0:left_bar_width - 4] + "..."
 
         if log.get_channel() is client.get_current_channel():
-            buffer.append(term.green + text + term.normal + "\n")
+            if settings["number_channels"]:
+                buffer.append(term.normal + str(count) + ". " + term.green + text + term.normal + "\n")
+            else: 
+                buffer.append(term.green + text + term.normal + "\n")
         else: 
             if log.get_channel() is not channel_logs[0]:
                 pass
