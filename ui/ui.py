@@ -69,11 +69,12 @@ async def print_top_bar():
         print(await get_color(settings["server_display_color"]) + online_text \
               + term.normal + online_count, end="")
 
-    divider = await get_color(settings["separator_color"]) \
-            + ("-" * term.width) + "\n" + term.normal
+    if settings["show_separators"]:
+        divider = await get_color(settings["separator_color"]) \
+                + ("-" * term.width) + "\n" + term.normal
 
-    with term.location(0, 1):
-        print(divider, end="")
+        with term.location(0, 1):
+            print(divider, end="")
 
 async def set_display(string):
     global display
@@ -81,10 +82,12 @@ async def set_display(string):
     display_frames = 3
 
 async def print_left_bar(left_bar_width):
-    sep_color = await get_color(settings["separator_color"])
-    for i in range(2, term.height - settings["margin"]):
-        print(term.move(i, left_bar_width) + sep_color + "|" \
-              + term.normal, end="")
+
+    if settings["show_separators"]:
+        sep_color = await get_color(settings["separator_color"])
+        for i in range(2, term.height - settings["margin"]):
+            print(term.move(i, left_bar_width) + sep_color + "|" \
+                + term.normal, end="")
 
     # Create a new list so we can preserve the server's channel order
     channel_logs = []
@@ -149,9 +152,10 @@ async def print_left_bar(left_bar_width):
 
 
 async def print_bottom_bar():
-    with term.location(0, term.height - 2):
-        print(await get_color(settings["separator_color"]) + ("-" * term.width) \
-            + "\n" + term.normal, end="")
+    if settings["show_separators"]:
+        with term.location(0, term.height - 2):
+            print(await get_color(settings["separator_color"]) + ("-" * term.width) \
+                + "\n" + term.normal, end="")
 
     bottom = await get_prompt()
     if len(input_buffer) > 0: bottom = bottom + "".join(input_buffer)

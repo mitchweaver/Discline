@@ -45,6 +45,9 @@ show_emojis: true
 # Whether to show, or hide the left channel bar
 show_left_bar: true
 
+# Whether to show the separator lines
+show_separators: true
+
 # the denominator used to calculate the width of the "left bar"
 # NOTE: larger number here, the smaller the bar will be,
 #       (although there is still a minimum of 8 chars...) 
