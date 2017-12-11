@@ -10,6 +10,9 @@ def check_for_updates():
         if "Already up to date" not in output:
             print("Updates downloaded! Please restart.")
             print("\n \n")
+            # This quit() call is breaking the client on MacOS and Linux Mint
+            # The if statement above is being triggered, even when the output IS
+            # "Already up to date". Why is this happening?
             # quit()
         else:
             print("Already up to date!" + "\n")
