@@ -1,4 +1,4 @@
-# Terminal Discord
+# Discline
 --------------------
 
 ![Image](https://0x0.st/sH7s.png)
