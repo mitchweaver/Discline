@@ -8,7 +8,10 @@ async def calc_mutations(msg):
     # if the message is a file, extract the discord url from it
     try:
         json = str(msg.attachments[0]).split("'")
-        msg.content = json[5]
+        for string in json:
+            if string is not None and string != "":
+                if "cdn.discordapp.com/attachments" in string:
+                    msg.content = string
     except IndexError: pass
     
     # otherwise it must not have any attachments and its a regular message
