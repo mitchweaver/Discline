@@ -52,7 +52,7 @@ left_bar_divider: 9
 truncate_channels: false
 
 # Whether to number channels in the left bar (ex: "1. general")
-number_channels: true
+number_channels: false
 
 # the amount of lines to scroll up/down on each trigger
 scroll_lines: 3
