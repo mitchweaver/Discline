@@ -71,6 +71,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * line scrolling
 * discord "Nitro" emojis
 * Externalized configs via YAML ~/.config/Discline/config
+* @member expansion/mentions
 
 ### Planned Features
 ---------------------------
@@ -79,7 +80,6 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * comment editing and deletion
 * private messaging
 * message searching
-* @member expansion
 
 ## Dependencies
 ------------------------
