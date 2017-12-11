@@ -1,7 +1,7 @@
 ---
 # -------------------------------------------------------------------------
 #       You can edit these to your preferences. Note: anything silly
-#       like MAX_MESSAGES=-1 will break the client. Duh.
+#       like max_messages=-1 will break the client. Duh.
 # -------------------------------------------------------------------------
 
 # the default server which will be joined upon startup - CASE SENSITIVE!
@@ -16,10 +16,10 @@ prefix: /
 has_nitro: false
 
 # the default prompt when not in a channel
-default_prompt: "-"
+default_prompt: "~"
 
 # the default 'playing ' status in discord
-default_game: 
+default_game: Terminal Discord
 
 # used for various things, your preference
 arrays_start_at_zero: false
@@ -59,27 +59,27 @@ scroll_lines: 3
 #                       "green", "yellow", "cyan", "magenta"
 # Or: you can say "on_<color>" to make it the background (ex: 'on_red')
 # Or: you can say "blink_<color>" to have it flash (ex: 'blink_blue')
-separator_color: "white"
-server_display_color: "cyan"
-prompt_color: "white"
-prompt_hash_color: "red"
-prompt_border_color: "magenta"
-admin_color: "magenta"
-mod_color: "blue"
-bot_color: "yellow"
-normal_user_color: "green"
+separator_color: white
+server_display_color: cyan
+prompt_color: white
+prompt_hash_color: red
+prompt_border_color: magenta
+admin_color: magenta
+mod_color: blue
+bot_color: yellow
+normal_user_color: green
 
 # the "default" text color for messages and other things
-text_color: "white"
+text_color: white
 
-code_block_color: "on_black"
-url_color: "cyan"
-channel_list_color: "white"
-current_channel_color: "green"
+code_block_color: on_black
+url_color: cyan
+channel_list_color: white
+current_channel_color: green
 
 # colors for the channels in the left bar upon unreads 
-unread_channel_color: "blink_yellow"
-unread_mention_color: "blink_red"
+unread_channel_color: blink_yellow
+unread_mention_color: blink_red
   
 # whether channels should blink when they have unread messages
 blink_unreads: true

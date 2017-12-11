@@ -22,7 +22,7 @@ from settings import *
 # TODO: this still fails if they're using python2
 if sys.version_info >= (3, 5): pass
 else:
-    print(term.red + "Sorry, but this requires python 3.5+")
+    print(term.red + "Sorry, but this requires python 3.5+" + term.normal)
     quit()
 
 init_complete = False

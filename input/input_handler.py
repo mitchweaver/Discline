@@ -8,7 +8,7 @@ from utils.print_utils.help import print_help
 from utils.print_utils.userlist import print_userlist
 from utils.print_utils.serverlist import print_serverlist
 from utils.print_utils.channellist import print_channellist
-from settings import *
+from settings import settings
 from commands.text_emoticons import check_emoticons
 from commands.sendfile import send_file
 from commands.channel_jump import channel_jump
@@ -203,7 +203,7 @@ async def input_handler():
             if user_input.count(":") >= 2:
                 
                 # if user has nitro, loop through *all* emojis
-                if HAS_NITRO:
+                if settings["has_nitro"]:
                     for emoji in client.get_all_emojis():
                         short_name = ':' + emoji.name + ':'
                         if short_name in user_input:

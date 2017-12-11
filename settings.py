@@ -1,4 +1,4 @@
-import yaml
+from yaml import safe_load
 
 with open("settings.yaml") as f:
-    settings = yaml.safe_load(f)
+    settings = safe_load(f)
