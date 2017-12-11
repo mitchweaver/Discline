@@ -4,8 +4,6 @@ from utils.globals import client, term, server_log_tree, get_color
 from utils.settings import settings
 
 async def print_serverlist():
-    pass
-
     if len(client.servers) == 0:
         set_display(term.red + "Error: You are not in any servers." + term.normal)
         return
@@ -36,5 +34,5 @@ async def print_serverlist():
         + "".join(buffer) \
         + term.green + "~ \n" \
         + term.green + "~ \n" \
-        + term.green + "(press \'q\' to quit this dialog) \n" \
+        + term.green + "(press q to quit this dialog) \n" \
         + "' | less -R")
