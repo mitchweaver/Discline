@@ -168,8 +168,13 @@ def main():
 
     # start the client
     try: client.run(TOKEN, bot=False)
-    except SystemExit: pass
-    except KeyboardInterrupt: pass
+    except SystemExit: 
+        try: kill()
+        except: pass
+    except KeyboardInterrupt:
+        try: kill()
+        except: pass
+
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()
