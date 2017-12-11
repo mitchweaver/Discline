@@ -115,6 +115,7 @@ custom_role_3_color:
 # be stored in RAM.    
 
 # Follow the format as below. 
+# Note it is TWO spaces, not a tab!
 channel_ignore_list:
 - server_name: server name
   ignores:
