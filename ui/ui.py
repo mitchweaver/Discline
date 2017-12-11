@@ -34,8 +34,13 @@ async def print_screen():
 
     # Print the buffer containing our message logs
     if settings["show_top_bar"]:
-        with term.location(0, 2):
-            print("".join(screen_buffer), end="")
+        if settings["show_separators"]:
+            with term.location(0, 2):
+                print("".join(screen_buffer), end="")
+        else:
+            with term.location(0, 1):
+                print("".join(screen_buffer), end="")
+
     else:
         with term.location(0, 0):
             print("".join(screen_buffer), end="")
