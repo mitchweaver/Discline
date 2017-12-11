@@ -9,12 +9,11 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 ## How to use:
 -------------------------
 
-1. Clone the repo
-    
+1. Install the dependencies
+`sudo pip3 install asyncio discord blessings pyyaml`
+2. Clone the repo
     `git clone https://github.com/mitchweaver/terminal-discord`
-    
-2. Find your discord "token"
-   
+3. Find your discord "token"
     This can be found by going to https://discordapp.com/channels/@me,
     and opening your browser developer console. This is normally `F12` or
     `CTRL-SHIFT-I`. Now click on "storage", (may be called something different),
@@ -22,18 +21,16 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
     variables. Look for a line that looks like:
     
     `"token = 322332r093fwaf032f90323f32f903f23wfa"`
-
-3. Edit settings.py to your choosing.
-
-4. Launch with python3, using your token as an argument
-
-    `python3 main.py $TOKEN`
+4. Run `--store-token` to store your token
+5. run `--copy-skeleton` to get a template config 
+6. Edit `~/.config/Discline/config` to your choosing.
+7. Launch with python3
+    `python3 main.py`
 
 
 ### Current Features
 --------------------------
 
-* login via token
 * /channel to switch channel
 * /server to switch server
 * /nick to change nickname (per server)
@@ -56,6 +53,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * channel logs blink red upon unread messages
 * line scrolling
 * discord "Nitro" emojis
+* Externalized configs via YAML ~/.config/Discline/config
 
 ### Planned Features
 ---------------------------
@@ -65,7 +63,6 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * private messaging
 * message searching
 * @member expansion
-* externalize settings.py to a ~/.config file
 
 ## Dependencies
 ------------------------
@@ -77,13 +74,13 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * [PyYAML](https://pypi.python.org/pypi/PyYAML/)
 * asyncio
 
-To install dependencies:
+**To install dependencies**:
 
 1. Download Python 3.5/3.6 from the link above
 2. Install `pip3`, normally called `python3-pip` in package managers
 3. Download the dependencies using pip with the following command:
 
-`sudo pip3 install asyncio discord blessings`
+`sudo pip3 install asyncio discord blessings pyyaml`
     
 
 ### Color Customization
@@ -119,27 +116,6 @@ support terminal/font. Experiment with different setups to see what works.
 ![Image](https://0x0.st/sHQ0.png)
 
 *Letting me know what setups __don't__ work helps a lot!*
-
-### Starting this with my token as an argument is such a pain!
---------------------------------------------------------
-
-To make it easier, you can create a bash script to launch it for you.
-
-Example:
-
-```bash
-#!/bin/bash
-
-TOKEN="put your token here"
-FOLDER=/path/to/term_disc
-
-cd $FOLDER
-python3.6 $FOLDER/main.py "$TOKEN"
-```
-
-`chmod +x` it when you're done. 
-
-You could also edit the .desktop file in the /res folder for a 1-click option.
 
 ### Dude this is awesome! How can I support the project?
 --------------------------------------------------------
@@ -183,6 +159,11 @@ Python Version: 3.6
 How to reproduce: xxxxxx
 ```
 
+> It says my python is out of date even though I have 3.5+ installed?
+
+Probably because you have multiple versions installed. Try running with 
+`python3.5` or `python3.6` rather than just "python3"
+
 ### Misc Screenshots
 --------------------------
 
@@ -197,10 +178,6 @@ How to reproduce: xxxxxx
 
 ### Known Bugs
 --------------------------
-
-> Sometimes when I submit a message the client crashes
-
-This should(?) be fixed, but if it keeps happening, do let me know.
 
 > Line wrapping sometimes doesn't work
 
