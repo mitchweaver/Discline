@@ -191,6 +191,9 @@ Probably because you have multiple versions installed. Try running with
 
 ![Image](https://0x0.st/sHez.png)
 
+It can even be configured to hide elements of the UI in the config:
+
+![Image](https://i.imgur.com/tFv9Dpc.png)
 
 ### Known Bugs
 --------------------------
