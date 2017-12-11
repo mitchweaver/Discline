@@ -74,6 +74,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * [Python 3.5+](https://www.python.org/downloads/)
 * [discord.py](https://github.com/Rapptz/discord.py)
 * [blessings.py](https://pypi.python.org/pypi/blessings/)
+* [PyYAML](https://pypi.python.org/pypi/PyYAML/)
 * asyncio
 
 To install dependencies:

@@ -1,6 +1,5 @@
 import asyncio
 import discord
-
 from input.kbhit import KBHit
 import ui.ui as ui 
 from utils.globals import *
@@ -8,7 +7,7 @@ from utils.print_utils.help import print_help
 from utils.print_utils.userlist import print_userlist
 from utils.print_utils.serverlist import print_serverlist
 from utils.print_utils.channellist import print_channellist
-from settings import *
+from utils.settings import settings
 from commands.text_emoticons import check_emoticons
 from commands.sendfile import send_file
 from commands.channel_jump import channel_jump
@@ -32,10 +31,10 @@ async def key_input():
             
             if memory == "[":
                 if key == "6": # page down
-                    client.get_current_channel_log().dec_index(SCROLL_LINES)
+                    client.get_current_channel_log().dec_index(settings["scroll_lines"])
                     input_buffer.pop()
                 elif key == "5": # page up
-                    client.get_current_channel_log().inc_index(SCROLL_LINES)
+                    client.get_current_channel_log().inc_index(settings["scroll_lines"])
                     input_buffer.pop()
             else:
                 if ordkey == 10 or ordkey == 13: # enter key
@@ -80,7 +79,7 @@ async def input_handler():
             continue
 
         # # check if input is a command
-        if user_input[0] == PREFIX:
+        if user_input[0] == settings["prefix"]:
             # strip the PREFIX
             user_input = user_input[1:]
 
@@ -203,7 +202,7 @@ async def input_handler():
             if user_input.count(":") >= 2:
                 
                 # if user has nitro, loop through *all* emojis
-                if HAS_NITRO:
+                if settings["has_nitro"]:
                     for emoji in client.get_all_emojis():
                         short_name = ':' + emoji.name + ':'
                         if short_name in user_input:

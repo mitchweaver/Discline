@@ -1,6 +1,5 @@
 from os import system
 from discord import Status
-
 from utils.globals import term, client
 
 # On call of the /users command, this will print

@@ -6,7 +6,7 @@ from ui.line import Line
 from ui.ui_utils import *
 from utils.globals import *
 from utils.quicksort import quick_sort_channel_logs
-from settings import *
+from utils.settings import settings
 from utils.print_utils.userlist import print_userlist
 
 # maximum number of lines that can be on the screen
@@ -54,7 +54,7 @@ async def print_top_bar():
         except: pass
 
     with term.location(1,0):
-        print("Server: " + await get_color(SERVER_DISPLAY_COLOR) \
+        print("Server: " + await get_color(settings["server_display_color"]) \
                          + client.get_current_server_name() + term.normal, end="")
 
     with term.location(term.width // 2 - len(topic) // 2, 0):
@@ -65,10 +65,10 @@ async def print_top_bar():
     online_length = len(online_text) + len(online_count)
 
     with term.location(term.width - online_length - 1, 0):
-        print(await get_color(SERVER_DISPLAY_COLOR) + online_text \
+        print(await get_color(settings["server_display_color"]) + online_text \
               + term.normal + online_count, end="")
 
-    divider = await get_color(SEPARATOR_COLOR) \
+    divider = await get_color(settings["separator_color"]) \
             + ("-" * term.width) + "\n" + term.normal
 
     with term.location(0, 1):
@@ -80,8 +80,8 @@ async def set_display(string):
     display_frames = 3
 
 async def print_left_bar(left_bar_width):
-    sep_color = await get_color(SEPARATOR_COLOR)
-    for i in range(2, term.height - MARGIN):
+    sep_color = await get_color(settings["separator_color"])
+    for i in range(2, term.height - settings["margin"]):
         print(term.move(i, left_bar_width) + sep_color + "|" \
               + term.normal, end="")
 
@@ -106,7 +106,7 @@ async def print_left_bar(left_bar_width):
         if log.get_channel().type != ChannelType.text: continue
         text = log.get_name()
         if len(text) > left_bar_width:
-            if TRUNCATE_CHANNELS:
+            if settings["truncate_channels"]:
                 text = text[0:left_bar_width - 1]
             else:
                 text = text[0:left_bar_width - 4] + "..."
@@ -117,17 +117,17 @@ async def print_left_bar(left_bar_width):
                 pass
 
             if log.get_channel() is not client.get_current_channel():
-                if log.unread and BLINK_UNREADS: 
-                    text = await get_color(UNREAD_CHANNEL_COLOR) + text + term.normal
-                elif log.mentioned_in and BLINK_MENTIONS: 
-                    text = await get_color(UNREAD_MENTION_COLOR) + text + term.normal
+                if log.unread and settings["blink_unreads"]: 
+                    text = await get_color(settings["unread_channel_color"]) + text + term.normal
+                elif log.mentioned_in and settings["blink_mentions"]: 
+                    text = await get_color(settings["unread_mention_color"]) + text + term.normal
             
             buffer.append(text + "\n")
         
         count += 1
         # should the server have *too many channels!*, stop them
         # from spilling over the screen
-        if count == term.height - 2 - MARGIN: break
+        if count == term.height - 2 - settings["margin"]: break
 
     with term.location(0, 2):
         print("".join(buffer))
@@ -135,7 +135,7 @@ async def print_left_bar(left_bar_width):
 
 async def print_bottom_bar():
     with term.location(0, term.height - 2):
-        print(await get_color(SEPARATOR_COLOR) + ("-" * term.width) \
+        print(await get_color(settings["separator_color"]) + ("-" * term.width) \
             + "\n" + term.normal, end="")
 
     bottom = await get_prompt()
@@ -158,7 +158,7 @@ async def print_channel_log(left_bar_width):
     # NOTE: term.width is calculating every time this function is called.
     #       Meaning that this will automatically resize the screen.
     # note: the "1" is the space at the start
-    MAX_LENGTH = term.width - (left_bar_width + MARGIN) - 1
+    MAX_LENGTH = term.width - (left_bar_width + settings["margin"]) - 1
     # For wrapped lines, offset them to line up with the previous line
     offset = 0
     # List to put our *formatted* lines in, once we have OK'd them to print
@@ -189,7 +189,7 @@ async def print_channel_log(left_bar_width):
                         author_name_length = len(author_name)
                         author_prefix = await get_role_color(msg) + author_name + ": "
 
-                        proposed_line = author_prefix + await get_color(TEXT_COLOR) + msg.clean_content.strip()
+                        proposed_line = author_prefix + await get_color(settings["text_color"]) + msg.clean_content.strip()
 
                         # If our message actually consists of
                         # of multiple lines separated by new-line
@@ -224,7 +224,7 @@ async def print_channel_log(left_bar_width):
                                 offset = 0
                                 if author_prefix not in sect:
                                     if line is not msg_lines[0]:
-                                        offset = author_name_length + MARGIN
+                                        offset = author_name_length + settings["margin"]
                                 # add in now formatted line!
                                 formatted_lines.append(Line(sect.strip(), offset))
                             
@@ -253,7 +253,7 @@ async def print_channel_log(left_bar_width):
                                 
                                 offset = 0
                                 if author_prefix not in line:
-                                    offset = author_name_length + MARGIN
+                                    offset = author_name_length + settings["margin"]
 
                                 formatted_lines.append(Line(line.strip(), offset))
                                 
@@ -272,7 +272,7 @@ async def print_channel_log(left_bar_width):
 
                     for line in formatted_lines:
                         screen_buffer.append(" " * (left_bar_width + \
-                                MARGIN + line.offset) + line.text + "\n")
+                                settings["margin"] + line.offset) + line.text + "\n")
 
                     # return as not to loop through all channels unnecessarily
                     return

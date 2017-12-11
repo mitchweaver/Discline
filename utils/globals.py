@@ -1,10 +1,11 @@
+import re
 from client.client import Client
 from blessings import Terminal
-from settings import *
+from utils.settings import settings
 from sys import exit
 
-client = Client(max_messages=MAX_MESSAGES)
 term = Terminal()
+client = Client(max_messages=settings["max_messages"])
 server_log_tree = []
 input_buffer = []
 user_input = ""
@@ -56,6 +57,7 @@ async def serv2log(serv):
 # takes in a string, returns the appropriate term.color
 async def get_color(string):
     arg = string.strip().lower()
+
     if arg == "white":   return term.white
     if arg == "black":   return term.black
     if arg == "red":     return term.red
@@ -84,6 +86,6 @@ async def get_color(string):
     if arg == "blink_green":   return term.blink_green
 
 
-    # if we're here, someone has one of their settings.py
+    # if we're here, someone has one of their settings.yaml
     # colors defined wrong. We'll be nice and just return white.
     return term.normal + term.white

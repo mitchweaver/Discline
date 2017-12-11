@@ -1,0 +1,117 @@
+---
+# -------------------------------------------------------------------------
+#       You can edit these to your preferences. Note: anything silly
+#       like max_messages=-1 will break the client. Duh.
+# -------------------------------------------------------------------------
+
+# the default server which will be joined upon startup - CASE SENSITIVE!
+default_server: term_disc
+# the default channel which will be joined upon startup - CASE SENSITIVE!
+default_channel: test_bed
+
+# the leading character used for commands
+prefix: /
+
+# whether you have discord "Nitro" -- this enables external emojis
+has_nitro: false
+
+# the default prompt when not in a channel
+default_prompt: "~"
+
+# the default 'playing ' status in discord
+default_game: Terminal Discord
+
+# used for various things, your preference
+arrays_start_at_zero: false
+
+# Margins for inside the terminal and between elements. NOTE: must be >= 2
+# NOTE: some ratios have weird glitches. Just experiment.
+margin: 2
+
+# the max amount of messages to be downloaded + kept
+# NOTE: minimum = 100! This is normally safe to increase.
+max_messages: 100
+
+# the max amount of entries in each channel log to be downloaded + kept
+# NOTE: minimum = 100! The larger this is, the slower the client will start.
+max_log_entries: 100
+
+# Whether to send "... is typing" when the input buffer is not blank or '/'
+send_is_typing: true
+
+# Whether to show in-line emojis in messages
+show_emojis: true
+
+# the denominator used to calculate the width of the "left bar"
+# NOTE: larger number here, the smaller the bar will be,
+#       (although there is still a minimum of 8 chars...) 
+left_bar_divider: 9
+
+# Determines whether the left bar 'truncates' the channels or 
+# appends "..." to the end when the screen is too small to display them
+truncate_channels: false
+
+# the amount of lines to scroll up/down on each trigger
+scroll_lines: 3
+
+# ---------------- COLOR SETTINGS ------------------------------------ #
+# Available colors are: "white", "red", "blue", "black"
+#                       "green", "yellow", "cyan", "magenta"
+# Or: you can say "on_<color>" to make it the background (ex: 'on_red')
+# Or: you can say "blink_<color>" to have it flash (ex: 'blink_blue')
+separator_color: white
+server_display_color: cyan
+prompt_color: white
+prompt_hash_color: red
+prompt_border_color: magenta
+admin_color: magenta
+mod_color: blue
+bot_color: yellow
+normal_user_color: green
+
+# the "default" text color for messages and other things
+text_color: white
+
+code_block_color: on_black
+url_color: cyan
+channel_list_color: white
+current_channel_color: green
+
+# colors for the channels in the left bar upon unreads 
+unread_channel_color: blink_yellow
+unread_mention_color: blink_red
+  
+# whether channels should blink when they have unread messages
+blink_unreads: true
+
+# same as above, but for @mentions 
+blink_mentions: true
+
+# here you can define your own custom roles - NOTE: text must match exactly!
+# These for example could be "helper" or "trusted", whatever roles
+# your servers use that aren't the default 'admin/mod/bot'
+custom_role:
+custom_role_color:
+custom_role_2:
+custom_role_2_color:
+custom_role_3:
+custom_role_3_color:
+  
+# Channel ignore list - This stops the channel from being loaded.
+# Effectively like the "mute" + "hide" feature on the official client,
+# However with the added benefit that this means these channels won't
+# be stored in RAM.    
+
+# Follow the format as below. 
+channel_ignore_list:
+- server_name: server name
+  ignores:
+  - some_channel
+  - some_other_channel
+- server_name: another server name
+  ignores:
+  - foo
+  - bar
+
+# ignore this unless you know what you're doing 
+debug: false

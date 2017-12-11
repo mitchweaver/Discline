@@ -1,5 +1,4 @@
 from getpass import getuser
-
 from utils.globals import term
 from ui.ui import set_display
 
