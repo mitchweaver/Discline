@@ -22,6 +22,7 @@ from utils.print_utils.print_utils import *
 from utils.globals import *
 from utils.settings import settings
 from utils.updates import check_for_updates
+from utils.token_utils import get_token
 from utils import hidecursor
 from client.serverlog import ServerLog
 from client.channellog import ChannelLog
@@ -174,18 +175,22 @@ def main():
            copy_skeleton()
            quit()
 
-        TOKEN=sys.argv[1]
+        if sys.argv[1] == "--token" or sys.argv[1] == "--store-token":
+            from utils.token_utils import  store_token
+            store_token()
+            quit()
+
     except IndexError:
-        print(term.red("Error: You did not specify a token! Please see the --help and the README.md"))
         quit()
 
     check_for_updates()
+    token = get_token()
+    init_input()
     
     print(term.yellow("Starting..."))
-    init_input()
 
     # start the client
-    try: client.run(TOKEN, bot=False)
+    try: client.run(token, bot=False)
     except SystemExit: pass
     except KeyboardInterrupt: pass
 

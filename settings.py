@@ -2,7 +2,6 @@ from yaml import safe_load
 import utils.globals as globals
 import os
 
-
 def copy_skeleton():
     try:
         from shutil import copyfile
@@ -14,7 +13,6 @@ def copy_skeleton():
     except:
         print(globals.term.red("Error creating skeleton file."))
         quit()
-
 
 # This runs on the module import, before the client or main() starts
 os.system("clear")
