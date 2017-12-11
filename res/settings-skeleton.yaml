@@ -19,7 +19,7 @@ has_nitro: false
 default_prompt: "~"
 
 # the default 'playing ' status in discord
-default_game: Terminal Discord
+default_game: Discline
 
 # used for various things, your preference
 arrays_start_at_zero: false
