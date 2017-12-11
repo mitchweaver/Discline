@@ -178,7 +178,7 @@ async def input_handler():
                 if command == "clear": await ui.clear_screen()
                 elif command == "quit": kill()
                 elif command == "exit": kill()
-                elif command == "help": await print_help()
+                elif command == "help": print_help()
                 elif command == "servers": await print_serverlist()
                 elif command == "channels": await print_channellist()
                 elif command == "users" or command == "members": 
