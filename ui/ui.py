@@ -215,6 +215,10 @@ async def print_channel_log(left_bar_width):
                         # The lines of this unformatted message
                         msg_lines = []
            
+                        HAS_MENTION = False
+                        if "@" + client.get_current_server().me.display_name in msg.clean_content:
+                            HAS_MENTION = True
+
                         author_name = ""
                         try: author_name = msg.author.display_name
                         except:
@@ -224,7 +228,12 @@ async def print_channel_log(left_bar_width):
                         author_name_length = len(author_name)
                         author_prefix = await get_role_color(msg) + author_name + ": "
 
-                        proposed_line = author_prefix + await get_color(settings["text_color"]) + msg.clean_content.strip()
+                        color = ""
+                        if HAS_MENTION:
+                            color = await get_color(settings["mention_color"])
+                        else:
+                            color = await get_color(settings["text_color"])
+                        proposed_line = author_prefix + color + msg.clean_content.strip()
 
                         # If our message actually consists of
                         # of multiple lines separated by new-line

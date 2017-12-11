@@ -78,6 +78,9 @@ prompt_hash_color: red
 prompt_border_color: magenta
 normal_user_color: green
 
+# messages that contain @you mentions will be this color
+mention_color: yellow
+
 # the "default" text color for messages and other things
 text_color: white
 
