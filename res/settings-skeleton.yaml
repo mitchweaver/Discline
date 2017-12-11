@@ -45,6 +45,9 @@ show_emojis: true
 # Whether to show, or hide the left channel bar
 show_left_bar: true
 
+# Whether to show, or hide the top bar
+show_top_bar: true
+
 # Whether to show the separator lines
 show_separators: true
 

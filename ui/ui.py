@@ -24,7 +24,8 @@ async def print_screen():
     left_bar_width = await get_left_bar_width()
     await clear_screen()
 
-    await print_top_bar()
+    if settings["show_top_bar"]:
+        await print_top_bar()
 
     if server_log_tree is not None:
         await print_channel_log(left_bar_width)
@@ -32,8 +33,12 @@ async def print_screen():
     await print_bottom_bar()
 
     # Print the buffer containing our message logs
-    with term.location(0, 2):
-        print("".join(screen_buffer), end="")
+    if settings["show_top_bar"]:
+        with term.location(0, 2):
+            print("".join(screen_buffer), end="")
+    else:
+        with term.location(0, 0):
+            print("".join(screen_buffer), end="")
 
     if settings["show_left_bar"]:
         await print_left_bar(left_bar_width)
@@ -82,10 +87,16 @@ async def set_display(string):
     display_frames = 3
 
 async def print_left_bar(left_bar_width):
+    start = 0
+    if settings["show_top_bar"]:
+        start = 2
 
     if settings["show_separators"]:
+        length = 0
+        length = term.height - settings["margin"]
+
         sep_color = await get_color(settings["separator_color"])
-        for i in range(2, term.height - settings["margin"]):
+        for i in range(start, length):
             print(term.move(i, left_bar_width) + sep_color + "|" \
                 + term.normal, end="")
 
@@ -147,7 +158,7 @@ async def print_left_bar(left_bar_width):
         # from spilling over the screen
         if count - 1  == term.height - 2 - settings["margin"]: break
 
-    with term.location(0, 2):
+    with term.location(0, start):
         print("".join(buffer))
 
 

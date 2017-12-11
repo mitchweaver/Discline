@@ -15,7 +15,10 @@ async def get_prompt():
 
 
 async def get_max_lines():
-    return term.height - settings["margin"] * 2
+    if settings["show_top_bar"]:
+        return term.height - settings["margin"] * 2
+    else:
+        return term.height - settings["margin"]
 
 async def get_left_bar_width():
     if not settings["show_left_bar"]: return 0
