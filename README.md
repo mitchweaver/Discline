@@ -11,11 +11,11 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 
 1. Install the dependencies:
 
-`sudo pip3 install asyncio discord blessings pyyaml`
+    `sudo pip3 install asyncio discord blessings pyyaml`
 
 2. Clone the repo
 
-`git clone https://github.com/MitchWeaver/Discline`
+    `git clone https://github.com/MitchWeaver/Discline`
 
 3. Find your discord "token"
    
@@ -41,7 +41,9 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 
 7. Launch with python3
    
-    `python3 main.py`
+    `python3 Discline.py`
+    
+    *(alternatively if you have python3.6 you can simply use `./Discline.py`)*
 
 
 ### Current Features
@@ -96,7 +98,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 2. Install `pip3`, normally called `python3-pip` in package managers
 3. Download the dependencies using pip with the following command:
 
-`sudo pip3 install asyncio discord blessings pyyaml`
+    `sudo pip3 install asyncio discord blessings pyyaml`
     
 
 ### Color Customization
