@@ -53,7 +53,6 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * /server to switch server
 * /nick to change nickname (per server)
 * typing without a leading prefix will submit to current chat
-* User customization via editing settings.py
 * "<USER> is typing..." support
 * private channels
 * colored output, with user definable colors and custom roles
@@ -105,8 +104,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 ------------------------
 
 Almost all aspects of the client can be colored to
-the user's wishes. You can set these colors from within
-settings.py
+the user's wishes. You can set these colors from within `~/.config/Discline/config`
 
 ### A Note On Emojis
 -------------------------
