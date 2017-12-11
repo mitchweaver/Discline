@@ -18,6 +18,8 @@ async def get_max_lines():
     return term.height - settings["margin"] * 2
 
 async def get_left_bar_width():
+    if not settings["show_left_bar"]: return 0
+
     left_bar_width = term.width // settings["left_bar_divider"]
     if left_bar_width < 8: return  8
     else: return left_bar_width

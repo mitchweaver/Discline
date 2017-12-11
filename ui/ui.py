@@ -35,7 +35,8 @@ async def print_screen():
     with term.location(0, 2):
         print("".join(screen_buffer), end="")
 
-    await print_left_bar(left_bar_width)
+    if settings["show_left_bar"]:
+        await print_left_bar(left_bar_width)
 
     if display != "": 
         print(display)
@@ -284,8 +285,14 @@ async def print_channel_log(left_bar_width):
                     # retains the amount of lines for our screen, deletes remainder
                     del formatted_lines[MAX_LINES:]
 
+                    # if user does not want the left bar, do not add margin
+                    space = " "
+                    if not settings["show_left_bar"]:
+                        space = ""
+                    
+                    # add to the buffer!
                     for line in formatted_lines:
-                        screen_buffer.append(" " * (left_bar_width + \
+                        screen_buffer.append(space * (left_bar_width + \
                                 settings["margin"] + line.offset) + line.text + "\n")
 
                     # return as not to loop through all channels unnecessarily
