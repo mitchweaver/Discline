@@ -36,18 +36,12 @@ async def get_role_color(msg):
     color = ""
     try: 
         r = msg.author.top_role.name.lower()
-        if r == "admin":
-            color = await get_color(settings["admin_color"])
-        elif r == "mod": 
-            color = await get_color(settings["mod_color"])
-        elif r == "bot": 
-            color = await get_color(settings["bot_color"])
-        elif settings["custom_role"] is not None and r == settings["custom_role"].lower():
-            color = await get_color(settings["custom_role_color"])
-        elif settings["custom_role_2"] is not None and r == settings["custom_role_2"].lower():
-            color = await get_color(settings["custom_role_2_color"])
-        elif settings["custom_role_3"] is not None and r == settings["custom_role_3"].lower():
-            color = await get_color(settings["custom_role_3_color"])
+        for role in settings["custom_roles"]:
+            if r == role["name"].lower():
+                color = await get_color(role["color"])
+
+        if color is not "": # The user must have already been assigned a custom role
+            pass
         elif settings["normal_user_color"] is not None:
             color = await get_color(settings["normal_user_color"])
         else: color = term.green
