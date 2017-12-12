@@ -19,7 +19,6 @@ display = ""
 display_frames = 0
 
 async def print_screen():
-    global display
     # Get ready to redraw the screen
     left_bar_width = await get_left_bar_width()
     await clear_screen()
@@ -48,6 +47,7 @@ async def print_screen():
     if settings["show_left_bar"]:
         await print_left_bar(left_bar_width)
 
+    global display, display_frames
     if display != "": 
         print(display)
         display_frames -= 1
@@ -87,8 +87,12 @@ async def print_top_bar():
             print(divider, end="")
 
 async def set_display(string):
-    global display
-    display = string
+    global display, display_frames
+    loc = term.width - 1 - len(string)
+    escape_chars = "\e"
+    for escape_chars in string:
+        loc = loc - 5
+    display = term.move(term.height - 1, loc) + string
     display_frames = 3
 
 async def print_left_bar(left_bar_width):
