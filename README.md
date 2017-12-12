@@ -72,7 +72,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * discord "Nitro" emojis
 * Externalized configs via YAML ~/.config/Discline/config
 * @member expansion/mentions
-* /status to chagne online presence
+* /status to change online presence
 
 ### Planned Features
 ---------------------------
