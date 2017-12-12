@@ -15,7 +15,11 @@ async def print_channellist():
     buffer = []
     for channel in client.get_current_server().channels:
         if channel.type == ChannelType.text:
-            buffer.append(channel.name + "\n")
+            name = channel.name
+            name = name.replace("'", "")
+            name = name.replace('"', "")
+            name = name.replace("`", "")
+            buffer.append(name + "\n")
 
     await clear_screen()
     system("echo '" + term.cyan + "Available Channels in " \

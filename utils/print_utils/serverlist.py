@@ -10,21 +10,26 @@ async def print_serverlist():
 
     buffer = []
     for slog in server_log_tree:
+        name = slog.get_name()
+        name = name.replace("'", "")
+        name = name.replace('"', "")
+        name = name.replace("`", "")
+
         if slog.get_server() is client.get_current_server():
-            buffer.append(await get_color(settings["current_channel_color"]) + slog.get_name() + term.normal + "\n")
+            buffer.append(await get_color(settings["current_channel_color"]) + name + term.normal + "\n")
             continue
 
         string = ""
         for clog in slog.get_logs():
             if clog.mentioned_in:
-                string = await get_color(settings["unread_mention_color"]) + slog.get_name() + term.normal + "\n"
+                string = await get_color(settings["unread_mention_color"]) + name + term.normal + "\n"
                 break
             elif clog.unread:
-                string = await get_color(settings["unread_channel_color"]) + slog.get_name() + term.normal + "\n"
+                string = await get_color(settings["unread_channel_color"]) + name + term.normal + "\n"
                 break
         
         if string == "":
-            string = await get_color(settings["text_color"]) + slog.get_name() + term.normal + "\n"
+            string = await get_color(settings["text_color"]) + name + term.normal + "\n"
 
         buffer.append(string)
             

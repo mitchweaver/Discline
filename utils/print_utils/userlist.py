@@ -104,10 +104,17 @@ async def print_userlist():
 
     if nonroles is not None: buffer.append(nonroles.sort())
 
+    buffer_copy = []
+    for name in buffer:
+        name = name.replace("'", "")
+        name = name.replace('"', "")
+        name = name.replace("`", "")
+        buffer_copy.append(name)
+
     system("echo '" + term.yellow + "Members in " \
            + client.get_current_server_name() + ": \n" \
            + term.magenta + "---------------------------- \n \n" \
-           + "".join(buffer) \
+           + "".join(buffer_copy) \
            + term.green + "~ \n" \
            + term.green + "~ \n" \
            + term.green + "(press \'q\' to quit this dialog) \n" \
