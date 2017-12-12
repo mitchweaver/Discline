@@ -11,6 +11,8 @@ from utils.settings import settings
 from commands.text_emoticons import check_emoticons
 from commands.sendfile import send_file
 from commands.channel_jump import channel_jump
+from client.channellog import ChannelLog
+from client.serverlog import ServerLog
 
 kb = ""
 
@@ -171,6 +173,63 @@ async def input_handler():
                     except: pass
                 elif command == "file":
                     await send_file(client, arg)
+                elif command == "join":
+                    if "http" and "discord.gg" in arg:
+
+                        # invite = ""
+                        # try: invite = await client.get_invite(arg)
+                        # except HTTPSException: await ui.set_display(term.red("Connection error."))
+                        # except NotFound: await ui.set_display(term.red("Bad invite url"))
+                        # except: await ui.set_display(term.red("Error retrieving invite."))
+
+# -------------------------------------------------------------------------------------------------- #
+
+                        # I think discord.py's API is broken for this method.
+                        # Trying both creating an invite first (above) and joining,
+                        # and trying to join a hard-coded URL (below), neither work.
+                        # No errors. None of the exceptions trigger. But, it does not join.
+
+
+                        # Try to fix if you want, it would be great. But it may just be a
+                        # problem on discord.py's end, not ours.
+
+# -------------------------------------------------------------------------------------------------- #
+                        try: 
+                            await client.accept_invite("http://discord.gg/8ZeA6P6")
+                            print("INVITE ACCEPTED!")
+                            await ui.set_display(term.green("Server added!"))
+                        except HTTPSException: await ui.set_display(term.red("Connection error."))
+                        except NotFound: await ui.set_display(term.red("Bad invite link."))
+                        except Forbidden: await ui.set_display(term.red("Bad permissions."))
+                        except: await ui.set_display(term.red("Error joining server."))
+
+                        # For some reason discord.py gives us a invite.server that has no channels.
+                        # To get around this bug we will get a new .server instance ourselves.
+
+
+
+                        #     clogs = []
+                        #     # try:
+                        #     # if the user deleted their invite, it will not be valid
+                        #     if invite.revoked: pass
+                        #     else:
+                        #         # try: 
+                        #         await client.accept_invite(invite)
+                        #         server_log_tree.append(ServerLog(invite.server, clogs)) 
+                        #         await ui.set_display(term.green("Server added!"))
+                        #         # except: await ui.set_display(term.red("Error joining server."))
+                        #         if invite.server.channels is not None and len(invite.server.channels) > 0:
+                        #                 for channel in invite.server.channels:
+                        #                     if channel.type == discord.ChannelType.text:
+                        #                         if channel.permissions_for(invite.server.me).read_messages:
+                        #                             channel_log = []
+                        #                             async for msg in client.logs_from(channel, limit=settings["max_log_entries"]):
+                        #                                 try: channel_log.insert(0, await calc_mutations(msg))
+                        #                                 except: continue
+                        #                             if len(channel_log) > 0:
+                        #                                 clogs.append(ChannelLog(channel, channel_log))
+                            # except:
+                                # await ui.set_display(term.red("Error gettings server logs."))
 
             # else we must have only a command, no argument
             else:
