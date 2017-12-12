@@ -167,10 +167,19 @@ async def input_handler():
                     except: # you don't have permission to do this here
                         pass
                 elif command == "game":
-                    try: await client.change_presence(game=discord.Game(name=arg),status=None,afk=False)
-                    except: pass
+                    await client.set_game(arg)
                 elif command == "file":
                     await send_file(client, arg)
+                elif command == "status":
+                    status = arg.lower()
+                    if status == "away" or status == "afk":
+                        status = "idle"
+                    elif "disturb" in status:
+                        status = "dnd"
+
+                    if status == "online" or status == "offline" \
+                       or status == "idle" or status == "dnd":
+                        await client.set_status(status)
 
             # else we must have only a command, no argument
             else:

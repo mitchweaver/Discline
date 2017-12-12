@@ -25,6 +25,9 @@ def print_help():
         + get_line("/nick", "      - ", "change server nick name") \
         + get_line("/game", "      - ", "change your game status") \
         + get_line("/file", "      - ", "upload a file via path") \
+        + get_line("/status", "      - ", "change online presence") \
+        + term.cyan + "This can be either 'online', 'offline', 'away', 'dnd' \n" \
+        + term.cyan + "(dnd = do not disturb) \n" \
         + "\n" \
         + get_line("/cX", "        - ", "shorthand to change channel (Ex: /c1)") \
         + term.cyan("This can be configured to start at 0 in settings.py") \

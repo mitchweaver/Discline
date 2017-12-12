@@ -12,7 +12,7 @@
 import sys
 import asyncio
 from os import system
-from discord import ChannelType, Game
+from discord import ChannelType
 from input.input_handler import input_handler, key_input, init_input
 from input.typing_handler import is_typing_handler
 from ui.ui import print_screen
@@ -57,8 +57,7 @@ async def on_ready():
             client.set_prompt(settings["default_channel"].lower())
 
     if settings["default_game"] is not None:
-        await client.change_presence(game=Game(name=settings["default_game"]), \
-                                        status=None,afk=False)
+        await client.set_game(settings["default_game"])
 
     # --------------- INIT SERVERS ----------------------------------------- #
     print("Welcome to " + term.cyan + "Discline" + term.normal + "!")

@@ -8,7 +8,14 @@ class Client(discord.Client):
     __current_server = ""
     __current_channel = ""
     __prompt = ""
-    
+
+    # discord.Status object
+    __status = ""
+
+    # discord.Game object
+    __game = ""
+   
+
     # Note: setting only allows for string types
     def set_prompt(self, string): 
         self.__prompt = string.lower()
@@ -61,3 +68,40 @@ class Client(discord.Client):
     # because the built-in .say is really buggy, just overriding it with my own
     async def say(self, string):
         await self.send_message(self.get_current_channel(), string)
+
+    async def set_game(self, string):
+        self.__game = discord.Game(name=string,type=0)
+        self.__status = discord.Status.online
+        # Note: the 'afk' kwarg handles how the client receives messages, (rates, etc)
+        # This is meant to be a "nice" feature, but for us it causes more headache
+        # than its worth.
+        if self.__game is not None and self.__game != "":
+            if self.__status is not None and self.__status != "":
+                try: await self.change_presence(game=self.__game, status=self.__status, afk=False)
+                except: pass
+            else:
+                try: await self.change_presence(game=self.__game, status=discord.Status.online, afk=False)
+                except: pass
+
+    async def get_game(self):
+        return self.__game
+
+    async def set_status(self, string):
+        if string == "online":
+            self.__status = discord.Status.online
+        elif string == "offline":
+            self.__status = discord.Status.offline
+        elif string == "idle":
+            self.__status = discord.Status.idle
+        elif string == "dnd":
+            self.__status = discord.Status.dnd
+       
+        if self.__game is not None and self.__game != "":
+            try: await self.change_presence(game=self.__game, status=self.__status, afk=False)
+            except: pass
+        else:
+            try: await self.change_presence(status=self.__status, afk=False)
+            except: pass
+
+    async def get_status(self):
+        return self.__status
