@@ -34,7 +34,12 @@ def store_token():
     if not os.path.exists(os.getenv("HOME") + "/.config/Discline"):
         os.mkdir(os.getenv("HOME") + "/.config/Discline")
 
-    if token is None or len(token) < 59:
+    if token is not None and token != "":
+        # trim off quotes if user added them
+        token = token.strip('"')
+        token = token.strip("'")
+
+    if token is None or len(token) != 59:
         print(Terminal().red("Error: Bad token. Did you paste it correctly?"))
         quit()
     
