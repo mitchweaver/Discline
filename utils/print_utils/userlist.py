@@ -112,7 +112,7 @@ async def print_userlist():
         buffer_copy.append(name)
 
     system("echo '" + term.yellow + "Members in " \
-           + client.get_current_server_name() + ": \n" \
+           + client.get_current_server().name + ": \n" \
            + term.magenta + "---------------------------- \n \n" \
            + "".join(buffer_copy) \
            + term.green + "~ \n" \
