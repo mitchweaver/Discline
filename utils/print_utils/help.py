@@ -26,18 +26,18 @@ def print_help():
         + get_line("/game", "      - ", "change your game status") \
         + get_line("/file", "      - ", "upload a file via path") \
         + get_line("/status", "    - ", "change online presence") \
-        + term.cyan + "This can be either 'online', 'offline', 'away', 'dnd' \n" \
+        + term.cyan + "This can be either 'online', 'offline', 'away', or 'dnd' \n" \
         + term.cyan + "(dnd = do not disturb) \n" \
         + "\n" \
         + get_line("/cX", "        - ", "shorthand to change channel (Ex: /c1)") \
-        + term.cyan("This can be configured to start at 0 in settings.py") \
+        + term.cyan("This can be configured to start at 0 in your config") \
         + "\n" \
         + "\n" \
         + get_line("/quit", "      - ", "exit cleanly") \
         + "\n \n" \
         + term.magenta + "Note: You can send emojis by using :emojiname: \n" \
         + term.cyan("Nitro emojis do work! Make sure you have \n") \
-        + term.cyan("nitro enabled in your settings. \n") \
+        + term.cyan("nitro enabled in your config. \n") \
         + "\n"
         + term.yellow + "You can scroll up/down in channel logs \n" \
         + term.yellow + "by using PageUp/PageDown. \n" \
