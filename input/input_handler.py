@@ -7,6 +7,7 @@ from utils.print_utils.help import print_help
 from utils.print_utils.userlist import print_userlist
 from utils.print_utils.serverlist import print_serverlist
 from utils.print_utils.channellist import print_channellist
+from utils.print_utils.emojis import print_emojilist
 from utils.settings import settings
 from commands.text_emoticons import check_emoticons
 from commands.sendfile import send_file
@@ -190,6 +191,7 @@ async def input_handler():
                 elif command == "help": print_help()
                 elif command == "servers": await print_serverlist()
                 elif command == "channels": await print_channellist()
+                elif command == "emojis": await print_emojilist()
                 elif command == "users" or command == "members": 
                     await ui.clear_screen()
                     await print_userlist()

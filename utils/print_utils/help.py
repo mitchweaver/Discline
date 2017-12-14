@@ -21,6 +21,7 @@ def print_help():
         + get_line("/servers", "   - ", "list available servers") \
         + get_line("/channels", "  - ", "list available channels") \
         + get_line("/users", "     - ", "list servers users") \
+        + get_line("/emojis", "     - ", "list servers custom emojis") \
         + "\n" \
         + get_line("/nick", "      - ", "change server nick name") \
         + get_line("/game", "      - ", "change your game status") \
