@@ -180,6 +180,20 @@ How to reproduce: xxxxxx
 Probably because you have multiple versions installed. Try running with 
 `python3.5` or `python3.6` rather than just "python3"
 
+> I'm getting weird encoding errors on startup
+
+You probably don't have UTF-8 set. If you're using Linux,
+look up how to do this according to your distro.
+
+If you're on BSD, add this to your /etc/profile:
+
+```
+export LC_CTYPE=en_US.UTF-8
+export LESSCHARSET=utf-8
+```
+
+and make sure it gets sourced upon opening your terminal.
+
 ### Misc Screenshots
 --------------------------
 
