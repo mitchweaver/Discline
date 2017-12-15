@@ -1,8 +1,7 @@
-# Discline
---------------------
+# ![logo_small.png](res/logo_small.png) Discline
+------------------------------
 
-![Image](https://0x0.st/sH7s.png)
-
+![screenshot_main.png](res/screenshot_main.png)
 
 __**Warning**__: Currently Linux/Mac only, it may be a while before support for Windows comes back
 
