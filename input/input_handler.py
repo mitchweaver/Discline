@@ -55,9 +55,8 @@ async def key_input():
                 #     print("KKKK")
                 # elif ordkey == 12 or ordkey == 76: # ctrl/shift  + l
                 #     print("LLLL")
-                elif ordkey == 126: pass # page up
-                elif ordkey == 97: pass # page down
-                elif ordkey >= 32 and ordkey <= 255: # all letters and special characters
+                elif ordkey == 126: pass # page up/down
+                elif ordkey >= 32 and ordkey <= 256: # all letters and special characters
                     input_buffer.append(key)
                 elif ordkey == 9:
                     input_buffer.append(" " * 4) # tab key
