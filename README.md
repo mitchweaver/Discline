@@ -5,6 +5,8 @@
 
 __**Warning**__: Currently Linux/Mac only, it may be a while before support for Windows comes back
 
+**NOTE**: A total rewrite of Discline in curses/ncurses is planned. Possibly also in another language.
+
 ## How to use:
 -------------------------
 
@@ -17,31 +19,31 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
     `git clone https://github.com/MitchWeaver/Discline`
 
 3. Find your discord "token"
-   
+
     * Go to http://discordapp.com/channels/@me
-     
+
     * Open your browser's developer console. (Normally `F12` or `CTRL-SHIFT-I`)
-    
-    * Look for "storage" or "local storage", then find the discord url. 
-    
+
+    * Look for "storage" or "local storage", then find the discord url.
+
     * Clicking this will show you a list of variables. Look for a line that looks like:
-    
+
         `"token = 322332r093fwaf032f90323f32f903f23wfa"`
-    
+
     If you're having troubles, google around, there's a few guides on the net.
-    
+
     If all else fails, join the dev discord and we'll be glad to help!
-    
+
 4. Run `--store-token` to store your token
 
-5. Run `--copy-skeleton` to get a template config 
+5. Run `--copy-skeleton` to get a template config
 
 6. Edit `~/.config/Discline/config` to your choosing.
 
 7. Launch with python3
-   
+
     `python3 Discline.py`
-    
+
     *(alternatively if you have python3.6 you can simply use `./Discline.py`)*
 
 
@@ -98,7 +100,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 3. Download the dependencies using pip with the following command:
 
     `sudo pip3 install asyncio discord blessings pyyaml`
-    
+
 
 ### Color Customization
 ------------------------
@@ -126,7 +128,7 @@ Custom emojis however, are displayed as :emoji_name:
 
 Like emojis, not all terminals and fonts support
 italic/bold/underline and 'background' colors, (which are used for \`code\`).
-If these features aren't working for you, odds are you are not using a 
+If these features aren't working for you, odds are you are not using a
 support terminal/font. Experiment with different setups to see what works.
 
 ![Image](https://0x0.st/sHQ0.png)
@@ -136,7 +138,7 @@ support terminal/font. Experiment with different setups to see what works.
 ### Dude this is awesome! How can I support the project?
 --------------------------------------------------------
 
-Star it! 🌟 
+Star it! 🌟
 
 It helps to get it higher in GitHub's search results as well as
 making me feel good inside. ;)
@@ -152,7 +154,7 @@ project in general, come join the discord server at: https://discord.gg/rBGQMTk
 > Yet another discord cli?
 
 I didn't like any of the implementations I found around github. Too buggy.
-Too bloated. Bad UI. No customization. Some, after discord updates, 
+Too bloated. Bad UI. No customization. Some, after discord updates,
 no longer functioning at all.
 
 > Why use a token and not email/password?
@@ -177,7 +179,7 @@ How to reproduce: xxxxxx
 
 > It says my python is out of date even though I have 3.5+ installed?
 
-Probably because you have multiple versions installed. Try running with 
+Probably because you have multiple versions installed. Try running with
 `python3.5` or `python3.6` rather than just "python3"
 
 > I'm getting weird encoding errors on startup
@@ -245,13 +247,13 @@ Licensed under GNU-GPLv3
 ### Legal Disclaimer
 --------------------------------
 
-Discord hasn't put out any official statement on whether using their 
+Discord hasn't put out any official statement on whether using their
 API for 3rd party clients is allowed or not. They *have* said that using
 their API to make "self-bots" is against their ToS. By self-bots, it is
 my understanding they mean automating non-bot accounts as bots.
 My code has no automated functions, or any on_events that provide features
-not included in the official client. 
+not included in the official client.
 
-As far as I know, nobody has been banned for using things like this before, 
-but Discord might one day change their mind. With this said, I take **no** 
+As far as I know, nobody has been banned for using things like this before,
+but Discord might one day change their mind. With this said, I take **no**
 responsibility if this gets you banned.
