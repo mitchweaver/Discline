@@ -39,7 +39,7 @@ def store_token():
         token = token.strip('"')
         token = token.strip("'")
 
-    if token is None or len(token) != 59:
+    if token is None or len(token) < 59 or len(token) > 88:
         print(Terminal().red("Error: Bad token. Did you paste it correctly?"))
         quit()
     
