@@ -59,11 +59,12 @@ class Client(discord.Client):
     # returns online members in current server
     async def get_online(self):
         online_count = 0
-        for member in self.get_current_server().members:
-            if member is None: continue # happens if a member left the server
-            if member.status is not discord.Status.offline:
-                online_count +=1 
-        return online_count
+        if not self.get_current_server() == None:
+            for member in self.get_current_server().members:
+                if member is None: continue # happens if a member left the server
+                if member.status is not discord.Status.offline:
+                    online_count +=1 
+            return online_count
 
     # because the built-in .say is really buggy, just overriding it with my own
     async def say(self, string):
