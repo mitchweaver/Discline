@@ -115,20 +115,30 @@ async def input_handler():
                         # there is a default channel. to combat this,
                         # we can just get it ourselves.
                         def_chan = ""
+                        
+                        lowest = 999
                         for chan in servlog.get_server().channels:
                             if chan.type is discord.ChannelType.text:
                                 if chan.permissions_for(servlog.get_server().me).read_messages:
-                                    if chan.position == 0:
+                                    if chan.position < lowest:
+                                        try:
+                                            for serv_key in settings["channel_ignore_list"]:
+                                                if serv_key["server_name"].lower() == server_name:
+                                                    for name in serv_key["ignores"]:
+                                                        if chan.name.lower() == name.lower():
+                                                            raise Found
+                                        except:
+                                            continue
+                                        lowest = chan.position
                                         def_chan = chan
-                                        break
 
-                        client.set_current_channel(def_chan.name)
-                        # and set the default channel as read
-                        for chanlog in servlog.get_logs():
-                            if chanlog.get_channel() is def_chan:
-                                chanlog.unread = False
-                                chanlog.mentioned_in = False
-                                break
+                            client.set_current_channel(def_chan.name)
+                            # and set the default channel as read
+                            for chanlog in servlog.get_logs():
+                                if chanlog.get_channel() is def_chan:
+                                    chanlog.unread = False
+                                    chanlog.mentioned_in = False
+                                    break
                     else:
                         ui.set_display(term.red + "Can't find server" + term.normal)
 

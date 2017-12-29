@@ -199,6 +199,7 @@ and make sure it gets sourced upon opening your terminal.
 ### Misc Screenshots
 --------------------------
 
+![Image](res/screenshot2.png)
 ![Image](https://0x0.st/sH5g.png)
 
 ![Image](https://0x0.st/sHjn.png)

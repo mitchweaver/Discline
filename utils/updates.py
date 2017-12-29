@@ -14,7 +14,7 @@ def check_for_updates():
         output = process.communicate()[0].decode('utf-8').strip()
 
         if "Already up to date" not in output:
-            print(term.yellow("Updates downloaded! Please restart."))
+            # print(term.yellow("Updates downloaded! Please restart."))
             print("\n \n")
             # This quit() call is breaking the client on MacOS and Linux Mint
             # The if statement above is being triggered, even when the output IS
