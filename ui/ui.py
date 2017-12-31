@@ -24,12 +24,12 @@ async def print_screen():
     await clear_screen()
 
     if settings["show_top_bar"]:
-        await print_top_bar()
+        await print_top_bar(left_bar_width)
 
     if server_log_tree is not None:
         await print_channel_log(left_bar_width)
 
-    await print_bottom_bar()
+    await print_bottom_bar(left_bar_width)
 
     # Print the buffer containing our message logs
     if settings["show_top_bar"]:
@@ -54,7 +54,7 @@ async def print_screen():
         if display_frames <=  0:
             display = ""
 
-async def print_top_bar():
+async def print_top_bar(left_bar_width):
     topic = ""
     try: 
         if client.get_current_channel().topic is not None:
@@ -81,10 +81,14 @@ async def print_top_bar():
 
     if settings["show_separators"]:
         divider = await get_color(settings["separator_color"]) \
-                + ("-" * term.width) + "\n" + term.normal
+                + ("─" * term.width) + "\n" + term.normal
 
         with term.location(0, 1):
             print(divider, end="")
+
+        with term.location(left_bar_width, 1):
+            print(await get_color(settings["separator_color"]) + "┬", end="")
+
 
 async def set_display(string):
     global display, display_frames
@@ -106,7 +110,7 @@ async def print_left_bar(left_bar_width):
 
         sep_color = await get_color(settings["separator_color"])
         for i in range(start, length):
-            print(term.move(i, left_bar_width) + sep_color + "|" \
+            print(term.move(i, left_bar_width) + sep_color + "│" \
                 + term.normal, end="")
 
     # Create a new list so we can preserve the server's channel order
@@ -171,11 +175,14 @@ async def print_left_bar(left_bar_width):
         print("".join(buffer))
 
 
-async def print_bottom_bar():
+async def print_bottom_bar(left_bar_width):
     if settings["show_separators"]:
         with term.location(0, term.height - 2):
-            print(await get_color(settings["separator_color"]) + ("-" * term.width) \
+            print(await get_color(settings["separator_color"]) + ("─" * term.width) \
                 + "\n" + term.normal, end="")
+
+        with term.location(left_bar_width, term.height - 2):
+            print(await get_color(settings["separator_color"]) + "┴", end="")
 
     bottom = await get_prompt()
     if len(input_buffer) > 0: bottom = bottom + "".join(input_buffer)
