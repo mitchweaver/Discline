@@ -28,15 +28,16 @@ async def key_input():
     while True:
         if await kb.kbhit() or memory == "[":
             key = await kb.getch()
+
             ordkey = ord(key)
             
             if memory == "[":
                 if key == "6": # page down
                     client.get_current_channel_log().dec_index(settings["scroll_lines"])
-                    input_buffer.pop()
+                    del input_buffer[-1]
                 elif key == "5": # page up
                     client.get_current_channel_log().inc_index(settings["scroll_lines"])
-                    input_buffer.pop()
+                    del input_buffer[-1]
             else:
                 if ordkey == 10 or ordkey == 13: # enter key
                     user_input = "".join(input_buffer)
@@ -44,20 +45,10 @@ async def key_input():
                 elif ordkey == 127 or ordkey == 8: # backspace
                     if len(input_buffer) > 0:
                         del input_buffer[-1]             
-                # elif ordkey == 27: kill() # escape # why are arrow keys doing this?
                 
-                # elif ordkey == 8 or ordkey == 72: # ctrl/shift  + h
-                #     for i in range(0, 100):
-                #         print("HHHHHH")
-                # elif ordkey == 10 or ordkey == 74: # ctrl/shift  + j
-                #     print("JJJJJ")
-                # elif ordkey == 11 or ordkey == 75: # ctrl/shift  + k
-                #     print("KKKK")
-                # elif ordkey == 12 or ordkey == 76: # ctrl/shift  + l
-                #     print("LLLL")
-                elif ordkey == 126: pass # page up/down
                 elif ordkey >= 32 and ordkey <= 256: # all letters and special characters
-                    input_buffer.append(key)
+                    if not (ordkey == 126 and (memory == "5" or memory == "6")): # tilde left over from page up/down
+                        input_buffer.append(key)
                 elif ordkey == 9:
                     input_buffer.append(" " * 4) # tab key
                 
@@ -67,6 +58,8 @@ async def key_input():
 
         if key != "[":
             await asyncio.sleep(0.015)
+        elif key == "~":
+            await asyncio.sleep(0.1)
 
 async def input_handler():
     await client.wait_until_ready()
