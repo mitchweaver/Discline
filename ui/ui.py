@@ -64,6 +64,11 @@ async def print_top_bar(left_bar_width):
         try: topic = client.get_current_channel().name
         except: pass
 
+    
+    text_length = term.width - (36 + len(client.get_current_server_name()))
+    if len(topic) > text_length:
+        topic = topic[:text_length]
+
     with term.location(1,0):
         print("Server: " + await get_color(settings["server_display_color"]) \
                          + client.get_current_server_name() + term.normal, end="")
