@@ -1,5 +1,8 @@
 import sys
+import time
 from os import system
+import curses
+from curses import ascii as cAscii
 from discord import ChannelType
 from blessings import Terminal
 from ui.line import Line
@@ -12,59 +15,85 @@ from utils.print_utils.userlist import print_userlist
 # maximum number of lines that can be on the screen
 # is updated every cycle as to allow automatic resizing
 MAX_LINES = 0
+# screen
+global stdscr
+stdscr = None
+global windows
+windows = []
 # buffer to allow for double buffering (stops screen flashing)
 screen_buffer = []
 # text that can be set to be displayed for 1 frame
 display = ""
 display_frames = 0
 
+def cursesInit():
+    stdscr = curses.initscr()
+    curses.noecho()
+    curses.cbreak()
+    stdscr.keypad(True)
+
+def cursesDestroy():
+    curses.nocbreak()
+    stdscr.keypad(False)
+    curses.echo()
+    curses.endwin()
+
+def cursesRefresh():
+    stdscr.noutrefresh()
+    for win in windows:
+        win.noutrefresh()
+    curses.doupdate()
+
 async def print_screen():
-    # Get ready to redraw the screen
-    left_bar_width = await get_left_bar_width()
-    await clear_screen()
+    stdscr.clear()
+    stdscr.addstr("Test")
+    cursesRefresh()
+    ## Get ready to redraw the screen
+    #left_bar_width = await get_left_bar_width()
+    #await clear_screen()
 
-    if settings["show_top_bar"]:
-        await print_top_bar(left_bar_width)
+    #if settings["show_top_bar"]:
+    #    await print_top_bar(left_bar_width)
 
-    if server_log_tree is not None:
-        await print_channel_log(left_bar_width)
+    #if server_log_tree is not None:
+    #    await print_channel_log(left_bar_width)
 
-    await print_bottom_bar(left_bar_width)
+    #await print_bottom_bar(left_bar_width)
 
-    # Print the buffer containing our message logs
-    if settings["show_top_bar"]:
-        if settings["show_separators"]:
-            with term.location(0, 2):
-                print("".join(screen_buffer), end="")
-        else:
-            with term.location(0, 1):
-                print("".join(screen_buffer), end="")
+    ## Print the buffer containing our message logs
+    #if settings["show_top_bar"]:
+    #    if settings["show_separators"]:
+    #        with term.location(0, 2):
+    #            print("".join(screen_buffer), end="")
+    #    else:
+    #        with term.location(0, 1):
+    #            print("".join(screen_buffer), end="")
 
-    else:
-        with term.location(0, 0):
-            print("".join(screen_buffer), end="")
+    #else:
+    #    with term.location(0, 0):
+    #        print("".join(screen_buffer), end="")
 
-    if settings["show_left_bar"]:
-        await print_left_bar(left_bar_width)
+    #if settings["show_left_bar"]:
+    #    await print_left_bar(left_bar_width)
 
-    global display, display_frames
-    if display != "": 
-        print(display)
-        display_frames -= 1
-        if display_frames <=  0:
-            display = ""
+    #global display, display_frames
+    #if display != "":
+    #    print(display)
+    #    display_frames -= 1
+    #    if display_frames <=  0:
+    #        display = ""
 
 async def print_top_bar(left_bar_width):
     topic = ""
-    try: 
+    try:
         if client.get_current_channel().topic is not None:
             topic = client.get_current_channel().topic
-    except: 
+    except:
         # if there is no channel topic, just print the channel name
         try: topic = client.get_current_channel().name
         except: pass
 
-    
+
     text_length = term.width - (36 + len(client.get_current_server_name()))
     if len(topic) > text_length:
         topic = topic[:text_length]
@@ -128,11 +157,11 @@ async def print_left_bar(left_bar_width):
             break
 
     channel_logs = quick_sort_channel_logs(channel_logs)
-   
+
     # buffer to print
     buffer = []
     count = 1
-            
+
     for log in channel_logs:
         # don't print categories or voice chats
         # TODO: this will break on private messages
@@ -153,24 +182,24 @@ async def print_left_bar(left_bar_width):
         if log.get_channel() is client.get_current_channel():
             if settings["number_channels"]:
                 buffer.append(term.normal + str(count) + ". " + term.green + text + term.normal + "\n")
-            else: 
+            else:
                 buffer.append(term.green + text + term.normal + "\n")
-        else: 
+        else:
             if log.get_channel() is not channel_logs[0]:
                 pass
 
             if log.get_channel() is not client.get_current_channel():
 
-                if log.unread and settings["blink_unreads"]: 
+                if log.unread and settings["blink_unreads"]:
                     text = await get_color(settings["unread_channel_color"]) + text + term.normal
-                elif log.mentioned_in and settings["blink_mentions"]: 
+                elif log.mentioned_in and settings["blink_mentions"]:
                     text = await get_color(settings["unread_mention_color"]) + text + term.normal
-            
+
             if settings["number_channels"]:
                 buffer.append(term.normal + str(count) + ". " + text + "\n")
             else:
                 buffer.append(text + "\n")
-        
+
         count += 1
         # should the server have *too many channels!*, stop them
         # from spilling over the screen
@@ -195,16 +224,18 @@ async def print_bottom_bar(left_bar_width):
         print(bottom, end="")
 
 async def clear_screen():
-    # instead of "clearing", we're actually just overwriting
-    # everything with white space. This mitigates the massive
-    # screen flashing that goes on with "cls" and "clear"
-    del screen_buffer[:]
-    wipe = (" " * (term.width) + "\n") * term.height
-    print(term.move(0,0) + wipe, end="")
+    # This is more efficient
+    cursesRefresh()
+    ## instead of "clearing", we're actually just overwriting
+    ## everything with white space. This mitigates the massive
+    ## screen flashing that goes on with "cls" and "clear"
+    #del screen_buffer[:]
+    #wipe = (" " * (term.width) + "\n") * term.height
+    #print(term.move(0,0) + wipe, end="")
 
 async def print_channel_log(left_bar_width):
     global INDEX
-    
+
     # If the line would spill over the screen, we need to wrap it
     # NOTE: term.width is calculating every time this function is called.
     #       Meaning that this will automatically resize the screen.
@@ -214,34 +245,23 @@ async def print_channel_log(left_bar_width):
     offset = 0
     # List to put our *formatted* lines in, once we have OK'd them to print
     formatted_lines = []
- 
+
     # the max number of lines that can be shown on the screen
     MAX_LINES = await get_max_lines()
 
     for server_log in server_log_tree:
         if server_log.get_server() is client.get_current_server():
-            with open("log.txt", 'w') as f:
-                f.write("Total logs < 1?\n")
-            if len(server_log.get_logs()) < 1:
-                with open("log.txt", 'a') as f:
-                    f.write("...Yes\n")
-                client.get_current_channel_log()
-            else:
-                with open("log.txt", 'a') as f:
-                    f.write("...No\n")
             for channel_log in server_log.get_logs():
-                with open("log.txt", 'a') as f:
-                    f.write("There are channel logs\n")
                 if channel_log.get_channel() is client.get_current_channel():
                     # if the server has a "category" channel named the same
                     # as a text channel, confusion will occur
                     # TODO: private messages are not "text" channeltypes
                     if channel_log.get_channel().type != ChannelType.text: continue
-                    
+
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
                         msg_lines = []
-           
+
                         HAS_MENTION = False
                         if "@" + client.get_current_server().me.display_name in msg.clean_content:
                             HAS_MENTION = True
@@ -251,7 +271,7 @@ async def print_channel_log(left_bar_width):
                         except:
                             try: author_name = msg.author.name
                             except: author_name = "Unknown Author"
-                        
+
                         author_name_length = len(author_name)
                         author_prefix = await get_role_color(msg) + author_name + ": "
 
@@ -287,9 +307,9 @@ async def print_channel_log(left_bar_width):
                                 # Take a section out of the line based on our max length
                                 sect = line[:MAX_LENGTH - offset]
 
-                                # Make sure we did not cut a word in half 
+                                # Make sure we did not cut a word in half
                                 sect = sect[:sect.strip().rfind(' ')]
-                                
+
                                 # If this section isn't the first line of the comment,
                                 # we should offset it to better distinguish it
                                 offset = 0
@@ -298,15 +318,15 @@ async def print_channel_log(left_bar_width):
                                         offset = author_name_length + settings["margin"]
                                 # add in now formatted line!
                                 formatted_lines.append(Line(sect.strip(), offset))
-                            
-                                # since we just wrapped a line, we need to 
+
+                                # since we just wrapped a line, we need to
                                 # make sure we don't overwrite it next time
 
                                 # Split the line between what has been formatted, and
                                 # what still remains needing to be formatted
                                 if len(line) > len(sect):
                                     line = line.split(sect)[1]
-                                    
+
                                 # find the "real" length of the line, by subtracting
                                 # any escape characters it might have. It would
                                 # be wasteful to loop through all of the possibilities
@@ -321,18 +341,18 @@ async def print_channel_log(left_bar_width):
                             # to begin with, or B: made through our while loop and has
                             # since been chopped down to less than our MAX_LENGTH
                             if len(line.strip()) > 0:
-                                
+
                                 offset = 0
                                 if author_prefix not in line:
                                     offset = author_name_length + settings["margin"]
 
                                 formatted_lines.append(Line(line.strip(), offset))
-                                
+
                     # where we should start printing from
                     # clamp the index as not to show whitespace
-                    if channel_log.get_index() < MAX_LINES: 
+                    if channel_log.get_index() < MAX_LINES:
                         channel_log.set_index(MAX_LINES)
-                    elif channel_log.get_index() > len(formatted_lines): 
+                    elif channel_log.get_index() > len(formatted_lines):
                         channel_log.set_index(len(formatted_lines))
 
                     # ----- Trim out list to print out nicely ----- #
@@ -345,7 +365,7 @@ async def print_channel_log(left_bar_width):
                     space = " "
                     if not settings["show_left_bar"]:
                         space = ""
-                    
+
                     # add to the buffer!
                     for line in formatted_lines:
                         screen_buffer.append(space * (left_bar_width + \
@@ -353,7 +373,3 @@ async def print_channel_log(left_bar_width):
 
                     # return as not to loop through all channels unnecessarily
                     return
-                else:
-                    with open("log.txt", 'a') as f:
-                        f.write("clog chan: {}\n".format(channel_log.get_channel()))
-                        f.write("client chan: {}\n".format(client.get_current_channel()))
