@@ -82,17 +82,17 @@ async def on_ready():
                                         if channel.name.lower() == name.lower():
                                             raise Found
 
-                            print("    loading " + term.yellow + channel.name + term.normal)
-                            channel_log = []
-                            try:
-                                async for msg in client.logs_from(channel, limit=settings["max_log_entries"]):
-                                    count+=1
-                                    channel_log.insert(0, await calc_mutations(msg))
-                                serv_logs.append(ChannelLog(channel, channel_log))
-                            except:
-                                print(term.red + "Error loading logs from channel: " + \
-                                    channel.name + " in server: " + server.name + term.normal)
-                                continue
+                            #print("    loading " + term.yellow + channel.name + term.normal)
+                            #channel_log = []
+                            #try:
+                            #    async for msg in client.logs_from(channel, limit=settings["max_log_entries"]):
+                            #        count+=1
+                            #        channel_log.insert(0, await calc_mutations(msg))
+                            #    serv_logs.append(ChannelLog(channel, channel_log))
+                            #except:
+                            #    print(term.red + "Error loading logs from channel: " + \
+                            #        channel.name + " in server: " + server.name + term.normal)
+                            #    continue
                         except: continue
 
         print("\n - Channels loaded! Found " + str(count) + " messages. \n")

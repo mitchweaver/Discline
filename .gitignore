@@ -121,3 +121,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# curses notes and stuff
+log.txt
+loading.txt
+disTypes/
+

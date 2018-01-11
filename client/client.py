@@ -1,5 +1,6 @@
 import discord
 import utils.globals
+from ui.text_manipulation import calc_mutations
 
 # inherits from discord.py's Client
 class Client(discord.Client):
@@ -54,6 +55,11 @@ class Client(discord.Client):
             if clog.get_channel().type is discord.ChannelType.text:
                 if clog.get_channel().name.lower() == self.__current_channel.lower():
                     if clog.get_channel().permissions_for(slog.get_server().me).read_messages:
+                        #Load messages for channel
+                        try:
+                            for msg in client.logs_from(clog.get_channel(), limit=settings["max_log_entries"]):
+                                clog.append(calc_mutations(msg))
+                        except: pass
                         return clog
 
     # returns online members in current server
