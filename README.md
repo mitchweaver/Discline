@@ -34,9 +34,9 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 
     If all else fails, join the dev discord and we'll be glad to help!
 
-4. Run `--store-token` to store your token
+4. Run `python3 Discline.py --store-token` to store your token
 
-5. Run `--copy-skeleton` to get a template config
+5. Run `python3 Discline.py --copy-skeleton` to get a template config
 
 6. Edit `~/.config/Discline/config` to your choosing.
 
@@ -129,7 +129,7 @@ Custom emojis however, are displayed as :emoji_name:
 Like emojis, not all terminals and fonts support
 italic/bold/underline and 'background' colors, (which are used for \`code\`).
 If these features aren't working for you, odds are you are not using a
-support terminal/font. Experiment with different setups to see what works.
+supported terminal/font. Experiment with different setups to see what works.
 
 ![Image](https://0x0.st/sHQ0.png)
 
@@ -200,6 +200,9 @@ and make sure it gets sourced upon opening your terminal.
 --------------------------
 
 ![Image](res/screenshot2.png)
+
+![Image](res/kingk22-screenshot.png)
+
 ![Image](https://0x0.st/sH5g.png)
 
 ![Image](https://0x0.st/sHjn.png)

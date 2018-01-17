@@ -1,13 +1,13 @@
-#!/usr/bin/python3.6
-############################################
-#                                          #
-# Discline                                 #
-#                                          #
-# http://github.com/MitchWeaver/Discline   #
-#                                          #
-# Licensed under GNU GPLv3                 #
-#                                          #
-############################################ 
+#!/usr/bin/env python3
+# ─────────────────────────────────────────────────────── #
+#                                                         #
+# Discline                                                #
+#                                                         #
+# http://github.com/MitchWeaver/Discline                  #
+#                                                         #
+# Licensed under GNU GPLv3                                #
+#                                                         #
+# ─────────────────────────────────────────────────────── #
 
 import sys
 import asyncio
@@ -41,7 +41,7 @@ init_complete = False
 @client.event
 async def on_ready():
     await client.wait_until_login()
-    
+
     # completely hide the system's cursor
     await hidecursor.hide_cursor()
 
@@ -98,8 +98,8 @@ async def on_ready():
         print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
         # add the channellog to the tree
-        server_log_tree.append(ServerLog(server, serv_logs)) 
-            
+        server_log_tree.append(ServerLog(server, serv_logs))
+
         if settings["debug"]:
             for slog in server_log_tree:
                 for clog in slog.get_logs():
@@ -163,7 +163,7 @@ async def on_message_delete(msg):
 def main():
     # start the client coroutine
     TOKEN=""
-    try: 
+    try:
         if sys.argv[1] == "--help" or sys.argv[1] == "-help":
             from utils.print_utils.help import print_help
             print_help()
@@ -173,7 +173,7 @@ def main():
             from utils.token_utils import  store_token
             store_token()
             quit()
-        elif sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton": 
+        elif sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":
             # handled in utils.settings.py
             pass
         else:
@@ -185,7 +185,7 @@ def main():
     check_for_updates()
     token = get_token()
     init_input()
-    
+
     print(term.yellow("Starting..."))
 
     # start the client
@@ -194,7 +194,7 @@ def main():
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()
-    except: 
+    except:
         # if our cleanly-exit kill function failed for whatever reason,
         # make sure we at least exit uncleanly
         quit()
