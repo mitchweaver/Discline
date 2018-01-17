@@ -34,9 +34,9 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 
     If all else fails, join the dev discord and we'll be glad to help!
 
-4. Run `--store-token` to store your token
+4. Run `python3 Discline.py --store-token` to store your token
 
-5. Run `--copy-skeleton` to get a template config
+5. Run `python3 Discline.py --copy-skeleton` to get a template config
 
 6. Edit `~/.config/Discline/config` to your choosing.
 
