@@ -3,7 +3,7 @@ from ui.ui import clear_screen, set_display
 from utils.globals import get_color, gc
 from utils.settings import settings
 
-async def print_serverlist(gc):
+async def print_serverlist():
     if len(gc.client.servers) == 0:
         set_display(gc.term.red + "Error: You are not in any servers." + gc.term.normal)
         return
