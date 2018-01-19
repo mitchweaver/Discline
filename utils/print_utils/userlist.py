@@ -1,6 +1,6 @@
 from os import system
 from discord import Status
-from utils.globals import term, client
+from utils.globals import gc
 
 # On call of the /users command, this will print
 # out a nicely sorted, colored list of all users
@@ -38,22 +38,22 @@ class UserList:
         # the sorting algorithm
         tmp = []
         for name in self.online: 
-            tmp.append(term.green + name)
+            tmp.append(gc.term.green + name)
         self.online = list(tmp)
         del tmp[:]
 
         for name in self.idle: 
-            tmp.append(term.yellow + name)
+            tmp.append(gc.term.yellow + name)
         self.idle = list(tmp)
         del tmp[:]
        
         for name in self.dnd: 
-            tmp.append(term.black + name)
+            tmp.append(gc.term.black + name)
         self.dnd = list(tmp)
         del tmp[:]
 
         for name in self.offline: 
-            tmp.append(term.red + name)
+            tmp.append(gc.term.red + name)
         self.offline = list(tmp)
         del tmp[:]
 
@@ -61,11 +61,11 @@ class UserList:
                 + "".join(self.idle) + "".join(self.dnd)
 
 async def print_userlist():
-    if len(client.servers) == 0:
+    if len(gc.client.servers) == 0:
         print("Error: You are not in any servers.")
         return
     
-    if len(client.get_current_server().channels) == 0:
+    if len(gc.client.get_current_server().channels) == 0:
         print("Error: Does this server not have any channels?")
         return
 
@@ -76,7 +76,7 @@ async def print_userlist():
     bots = UserList() 
     everything_else = UserList() 
 
-    for member in client.get_current_server().members:
+    for member in gc.client.get_current_server().members:
         if member is None: continue # happens if a member left the server
         
         if member.top_role.name == "admin" or member.top_role.name == "Admin":
@@ -95,12 +95,12 @@ async def print_userlist():
     if admins is not None: buffer.append(admins.sort())
     if mods is not None: buffer.append(mods.sort())
 
-    buffer.append("\n" + term.magenta + "---------------------------- \n\n")
+    buffer.append("\n" + gc.term.magenta + "---------------------------- \n\n")
 
     if bots is not None: buffer.append(bots.sort())
     if everything_else is not None: buffer.append(everything_else.sort())
 
-    buffer.append("\n" + term.magenta + "---------------------------- \n\n")
+    buffer.append("\n" + gc.term.magenta + "---------------------------- \n\n")
 
     if nonroles is not None: buffer.append(nonroles.sort())
 
@@ -111,26 +111,26 @@ async def print_userlist():
         name = name.replace("`", "")
         buffer_copy.append(name)
 
-    system("echo '" + term.yellow + "Members in " \
-           + client.get_current_server().name + ": \n" \
-           + term.magenta + "---------------------------- \n \n" \
+    system("echo '" + gc.term.yellow + "Members in " \
+           + gc.client.get_current_server().name + ": \n" \
+           + gc.term.magenta + "---------------------------- \n \n" \
            + "".join(buffer_copy) \
-           + term.green + "~ \n" \
-           + term.green + "~ \n" \
-           + term.green + "(press \'q\' to quit this dialog) \n" \
+           + gc.term.green + "~ \n" \
+           + gc.term.green + "~ \n" \
+           + gc.term.green + "(press \'q\' to quit this dialog) \n" \
            # NOTE: the -R flag here enables color escape codes
            + "' | less -R")
 
 # takes in a member, returns a color based on their status
 def get_status_color(member):
     if member.status is Status.online:
-        return term.green
+        return gc.term.green
     if member.status is Status.idle:  # aka "away"
-        return term.yellow
+        return gc.term.yellow
     if member.status is Status.offline:
-        return term.red
+        return gc.term.red
     if member.status is Status.dnd: # do not disturb
-        return term.black
+        return gc.term.black
 
     # if we're still here, something is wrong
     return "ERROR: get_status_color() has returned 'None' for " \

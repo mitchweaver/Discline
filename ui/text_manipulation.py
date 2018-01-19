@@ -1,7 +1,8 @@
 import re
 from discord import MessageType
 from utils.settings import settings
-from utils.globals import *
+from utils.globals import gc, get_color
+import utils
 
 async def calc_mutations(msg):
 
@@ -96,41 +97,41 @@ async def convert_bold(string):
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + term.white + left + " " + term.bold(target) + term.normal + \
-            term.white + " " + right
+    return gc.term.normal + gc.term.white + left + " " + gc.term.bold(target) + gc.term.normal + \
+            gc.term.white + " " + right
 
 async def convert_italic(string):
     sections = string.split("*")
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + term.white +  left + " " + term.italic(target) + term.normal + \
-            term.white + " " + right
+    return gc.term.normal + gc.term.white +  left + " " + gc.term.italic(target) + gc.term.normal + \
+            gc.term.white + " " + right
 
 async def convert_underline(string):
     sections = string.split("__")
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + term.white + left + " " + term.underline(target) + term.normal + \
-            term.white + " " + right
+    return gc.term.normal + gc.term.white + left + " " + gc.term.underline(target) + gc.term.normal + \
+            gc.term.white + " " + right
 
 async def convert_code(string):
     sections = string.split("`")
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + term.white +  left + " " + await get_color(settings["code_block_color"]) \
-            + target  + term.normal \
-            + term.white + " " + right
+    return gc.term.normal + gc.term.white +  left + " " + await get_color(settings["code_block_color"]) \
+            + target  + gc.term.normal \
+            + gc.term.white + " " + right
 
 async def convert_code_block(string):
     sections = string.split("```")
     left = sections[0]
     target = sections[1]
     right = "".join(sections[2])
-    return term.normal + term.white +  left + " " + term.on_black(target) + term.normal + \
-            term.white + " " + right
+    return gc.term.normal + gc.term.white +  left + " " + gc.term.on_black(target) + gc.term.normal + \
+            gc.term.white + " " + right
 
 async def convert_url(string):
     formatted_line = []
@@ -143,7 +144,7 @@ async def convert_url(string):
     for entity in entities:
         if "http://" in entity or "https://" in entity or "www." in entity \
            or "ftp://" in entity or ".com" in entity:
-            entity = await get_color(settings["url_color"]) + term.italic + term.underline + entity + term.normal
+            entity = await get_color(settings["url_color"]) + gc.term.italic + gc.term.underline + entity + gc.term.normal
         formatted_line.append(entity)
 
     return " ".join(formatted_line)

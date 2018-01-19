@@ -1,5 +1,5 @@
 import os
-from utils.globals import term
+from utils.globals import gc
 
 def get_token():
     if os.path.exists(os.getenv("HOME") + "/.config/Discline/token"):
@@ -14,10 +14,10 @@ def get_token():
             return token
     
     from blessings import Terminal
-    term = Terminal()
-    print("\n" + term.red("Error reading token."))
-    print("\n" + term.yellow("Are you sure you stored your token?"))
-    print(term.yellow("Use --store-token to store your token."))
+    gc.term = Terminal()
+    print("\n" + gc.term.red("Error reading token."))
+    print("\n" + gc.term.yellow("Are you sure you stored your token?"))
+    print(gc.term.yellow("Use --store-token to store your token."))
     quit()
 
 def store_token():

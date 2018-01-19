@@ -7,7 +7,7 @@
 #                                          #
 # Licensed under GNU GPLv3                 #
 #                                          #
-############################################ 
+############################################
 
 import sys
 import asyncio
@@ -33,34 +33,36 @@ from client.client import Client
 # TODO: this still fails if they're using python2
 if sys.version_info >= (3, 5): pass
 else:
-    print(term.red + "Sorry, but this requires python 3.5+" + term.normal)
+    print(gc.term.red + "Sorry, but this requires python 3.5+" + gc.term.normal)
     quit()
 
 init_complete = False
 
-@client.event
+gc.initClient()
+
+@gc.client.event
 async def on_ready():
-    await client.wait_until_login()
-    
+    await gc.client.wait_until_login()
+
     # completely hide the system's cursor
     await hidecursor.hide_cursor()
 
     # these values are set in settings.yaml
     if settings["default_prompt"] is not None:
-        client.set_prompt(settings["default_prompt"].lower())
-    else: client.set_prompt('~')
+        gc.client.set_prompt(settings["default_prompt"].lower())
+    else: gc.client.set_prompt('~')
 
     if settings["default_server"] is not None:
-        client.set_current_server(settings["default_server"])
+        gc.client.set_current_server(settings["default_server"])
         if settings["default_channel"] is not None:
-            client.set_current_channel(settings["default_channel"].lower())
-            client.set_prompt(settings["default_channel"].lower())
+            gc.client.set_current_channel(settings["default_channel"].lower())
+            gc.client.set_prompt(settings["default_channel"].lower())
 
     if settings["default_game"] is not None:
-        await client.set_game(settings["default_game"])
+        await gc.client.set_game(settings["default_game"])
 
     # --------------- INIT SERVERS ----------------------------------------- #
-    print("Welcome to " + term.cyan + "Discline" + term.normal + "!")
+    print("Welcome to " + gc.term.cyan + "Discline" + gc.term.normal + "!")
     await print_line_break()
     await print_user()
     await print_line_break()
@@ -68,10 +70,10 @@ async def on_ready():
     try: sys.stdout.flush()
     except: pass
 
-    for server in client.servers:
+    for server in gc.client.servers:
         serv_logs = []
         count = 0
-        print("loading " + term.magenta + server.name + term.normal + " ...")
+        print("loading " + gc.term.magenta + server.name + gc.term.normal + " ...")
         for channel in server.channels:
             if channel.type == ChannelType.text:
                     if channel.permissions_for(server.me).read_messages:
@@ -81,27 +83,27 @@ async def on_ready():
                                     for name in serv_key["ignores"]:
                                         if channel.name.lower() == name.lower():
                                             raise Found
-
-                            #print("    loading " + term.yellow + channel.name + term.normal)
+                            serv_logs.append(ChannelLog(channel, []))
+                            #print("    loading " + gc.term.yellow + channel.name + gc.term.normal)
                             #channel_log = []
                             #try:
-                            #    async for msg in client.logs_from(channel, limit=settings["max_log_entries"]):
+                            #    async for msg in gc.client.logs_from(channel, limit=settings["max_log_entries"]):
                             #        count+=1
                             #        channel_log.insert(0, await calc_mutations(msg))
                             #    serv_logs.append(ChannelLog(channel, channel_log))
                             #except:
-                            #    print(term.red + "Error loading logs from channel: " + \
-                            #        channel.name + " in server: " + server.name + term.normal)
+                            #    print(gc.term.red + "Error loading logs from channel: " + \
+                            #        channel.name + " in server: " + server.name + gc.term.normal)
                             #    continue
                         except: continue
 
         print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
         # add the channellog to the tree
-        server_log_tree.append(ServerLog(server, serv_logs)) 
-            
+        gc.server_log_tree.append(ServerLog(server, serv_logs))
+
         if settings["debug"]:
-            for slog in server_log_tree:
+            for slog in gc.server_log_tree:
                 for clog in slog.get_logs():
                     print(slog.get_name() + " ---- " + clog.get_name())
 
@@ -123,28 +125,28 @@ async def on_ready():
     init_complete = True
 
 # called whenever the client receives a message (from anywhere)
-@client.event
+@gc.client.event
 async def on_message(message):
-    await client.wait_until_ready()
+    await gc.client.wait_until_ready()
     if init_complete:
         await on_incoming_message(message)
 
-@client.event
+@gc.client.event
 async def on_message_edit(msg_old, msg_new):
-    await client.wait_until_ready()
+    await gc.client.wait_until_ready()
     msg_new.content = msg_new.content + " *(edited)*"
 
     if init_complete:
         await print_screen()
 
-@client.event
+@gc.client.event
 async def on_message_delete(msg):
-    await client.wait_until_ready()
+    await gc.client.wait_until_ready()
     # TODO: PM's have 'None' as a server -- fix this later
     if msg.server is None: return
 
     try:
-        for serverlog in server_log_tree:
+        for serverlog in gc.server_log_tree:
             if serverlog.get_server() == msg.server:
                 for channellog in serverlog.get_logs():
                     if channellog.get_channel()== msg.channel:
@@ -163,7 +165,7 @@ async def on_message_delete(msg):
 def main():
     # start the client coroutine
     TOKEN=""
-    try: 
+    try:
         if sys.argv[1] == "--help" or sys.argv[1] == "-help":
             from utils.print_utils.help import print_help
             print_help()
@@ -173,28 +175,28 @@ def main():
             from utils.token_utils import  store_token
             store_token()
             quit()
-        elif sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton": 
+        elif sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":
             # handled in utils.settings.py
             pass
         else:
-            print(term.red("Error: Unknown command."))
-            print(term.yellow("See --help for options."))
+            print(gc.term.red("Error: Unknown command."))
+            print(gc.term.yellow("See --help for options."))
             quit()
     except IndexError: pass
 
     check_for_updates()
     token = get_token()
     init_input()
-    
-    print(term.yellow("Starting..."))
+
+    print(gc.term.yellow("Starting..."))
 
     # start the client
-    try: client.run(token, bot=False)
+    try: gc.client.run(token, bot=False)
     except KeyboardInterrupt: pass
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()
-    except: 
+    except:
         # if our cleanly-exit kill function failed for whatever reason,
         # make sure we at least exit uncleanly
         quit()

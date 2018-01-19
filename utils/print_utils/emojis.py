@@ -1,14 +1,14 @@
 from os import system
 from ui.ui import clear_screen, set_display
-from utils.globals import client, term, server_log_tree, get_color
+from utils.globals import gc, get_color
 from utils.settings import settings
 
 async def print_emojilist():
-    if len(client.servers) == 0:
-        set_display(term.red + "Error: You are not in any servers." + term.normal)
+    if len(gc.client.servers) == 0:
+        set_display(gc.term.red + "Error: You are not in any servers." + gc.term.normal)
         return
 
-    server_name = client.get_current_server_name()
+    server_name = gc.client.get_current_server_name()
     server_name = server_name.replace("'", "")
     server_name = server_name.replace('"', "")
     server_name = server_name.replace("`", "")
@@ -16,7 +16,7 @@ async def print_emojilist():
     emojis = []
     server_emojis = ""
 
-    try: server_emojis = client.get_current_server().emojis
+    try: server_emojis = gc.client.get_current_server().emojis
     except: pass
 
     if server_emojis is not None and server_emojis != "":
@@ -25,13 +25,13 @@ async def print_emojilist():
             name = name.replace("'", "")
             name = name.replace('"', "")
             name = name.replace("`", "")
-            emojis.append(term.yellow + ":" + name + ":" + "\n")
+            emojis.append(gc.term.yellow + ":" + name + ":" + "\n")
 
     await clear_screen()
-    system("echo '" + term.magenta + "Available Emojis in: " + term.cyan + server_name +"\n" + term.normal \
+    system("echo '" + gc.term.magenta + "Available Emojis in: " + gc.term.cyan + server_name +"\n" + gc.term.normal \
         + "---------------------------- \n" \
         + "".join(emojis) \
-        + term.green + "~ \n" \
-        + term.green + "~ \n" \
-        + term.green + "(press q to quit this dialog) \n" \
+        + gc.term.green + "~ \n" \
+        + gc.term.green + "~ \n" \
+        + gc.term.green + "(press q to quit this dialog) \n" \
         + "' | less -R")

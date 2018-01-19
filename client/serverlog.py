@@ -24,6 +24,7 @@ class ServerLog():
         for channel_log in self.__channel_logs:
             del channel_log[:]
 
+    # takes list of ChannelLog
     def add_logs(self, log_list):
         for logs in log_list:
             self.__channel_logs.append(logs)

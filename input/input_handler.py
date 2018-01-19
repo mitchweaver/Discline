@@ -2,7 +2,7 @@ import asyncio
 import discord
 from input.kbhit import KBHit
 import ui.ui as ui 
-from utils.globals import *
+from utils.globals import gc
 from utils.print_utils.help import print_help
 from utils.print_utils.userlist import print_userlist
 from utils.print_utils.serverlist import print_serverlist
@@ -20,9 +20,9 @@ def init_input():
     kb = KBHit()
 
 async def key_input():
-    await client.wait_until_ready()
+    await gc.client.wait_until_ready()
     
-    global user_input, kb
+    global kb
     memory = ""
     key = ""
     while True:
@@ -33,24 +33,24 @@ async def key_input():
             
             if memory == "[":
                 if key == "6": # page down
-                    client.get_current_channel_log().dec_index(settings["scroll_lines"])
-                    del input_buffer[-1]
+                    gc.client.get_current_channel_log().dec_index(settings["scroll_lines"])
+                    del gc.input_buffer[-1]
                 elif key == "5": # page up
-                    client.get_current_channel_log().inc_index(settings["scroll_lines"])
-                    del input_buffer[-1]
+                    gc.client.get_current_channel_log().inc_index(settings["scroll_lines"])
+                    del gc.input_buffer[-1]
             else:
                 if ordkey == 10 or ordkey == 13: # enter key
-                    user_input = "".join(input_buffer)
-                    del input_buffer[:]
+                    gc.user_input = "".join(gc.input_buffer)
+                    del gc.input_buffer[:]
                 elif ordkey == 127 or ordkey == 8: # backspace
-                    if len(input_buffer) > 0:
-                        del input_buffer[-1]             
+                    if len(gc.input_buffer) > 0:
+                        del gc.input_buffer[-1]             
                 
                 elif ordkey >= 32 and ordkey <= 256: # all letters and special characters
                     if not (ordkey == 126 and (memory == "5" or memory == "6")): # tilde left over from page up/down
-                        input_buffer.append(key)
+                        gc.input_buffer.append(key)
                 elif ordkey == 9:
-                    input_buffer.append(" " * 4) # tab key
+                    gc.input_buffer.append(" " * 4) # tab key
                 
             memory = key
             if key != "[":
@@ -62,25 +62,24 @@ async def key_input():
             await asyncio.sleep(0.1)
 
 async def input_handler():
-    await client.wait_until_ready()
+    await gc.client.wait_until_ready()
    
-    global user_input
     while True:
 
         # If input is blank, don't do anything
-        if user_input == '': 
+        if gc.user_input == '': 
             await asyncio.sleep(0.05)
             continue
 
         # # check if input is a command
-        if user_input[0] == settings["prefix"]:
+        if gc.user_input[0] == settings["prefix"]:
             # strip the PREFIX
-            user_input = user_input[1:]
+            gc.user_input = gc.user_input[1:]
 
             # check if contains a space
-            if ' ' in user_input:
+            if ' ' in gc.user_input:
                 # split into command and argument
-                command,arg = user_input.split(" ", 1)
+                command,arg = gc.user_input.split(" ", 1)
 
                 if command == "server" or command == 's':
                     
@@ -101,7 +100,7 @@ async def input_handler():
                                 break
 
                     if server_name != "":
-                        client.set_current_server(server_name)
+                        gc.client.set_current_server(server_name)
 
                         # discord.py's "server.default_channel" is buggy.
                         # often times it will return 'none' even when
@@ -125,7 +124,7 @@ async def input_handler():
                                         lowest = chan.position
                                         def_chan = chan
 
-                            client.set_current_channel(def_chan.name)
+                            gc.client.set_current_channel(def_chan.name)
                             # and set the default channel as read
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_channel() is def_chan:
@@ -133,13 +132,13 @@ async def input_handler():
                                     chanlog.mentioned_in = False
                                     break
                     else:
-                        ui.set_display(term.red + "Can't find server" + term.normal)
+                        ui.set_display(gc.term.red + "Can't find server" + gc.term.normal)
 
 
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
                     for servlog in server_log_tree:
-                        if servlog.get_server() is client.get_current_server():
+                        if servlog.get_server() is gc.client.get_current_server():
                             final_chanlog = ""
                             for chanlog in servlog.get_logs():
                                 if chanlog.get_name().lower() == arg.lower():
@@ -158,22 +157,22 @@ async def input_handler():
                                                 break
 
                             if final_chanlog != "":
-                                client.set_current_channel(final_chanlog.get_name())
+                                gc.client.set_current_channel(final_chanlog.get_name())
                                 final_chanlog.unread = False
                                 final_chanlog.mentioned_in = False
                                 break
                             else:
-                                ui.set_display(term.red + "Can't find channel" + term.normal)
+                                ui.set_display(gc.term.red + "Can't find channel" + gc.term.normal)
 
                 elif command == "nick":
                     try: 
-                        await client.change_nickname(client.get_current_server().me, arg)
+                        await gc.client.change_nickname(gc.client.get_current_server().me, arg)
                     except: # you don't have permission to do this here
                         pass
                 elif command == "game":
-                    await client.set_game(arg)
+                    await gc.client.set_game(arg)
                 elif command == "file":
-                    await send_file(client, arg)
+                    await send_file(gc.client, arg)
                 elif command == "status":
                     status = arg.lower()
                     if status == "away" or status == "afk":
@@ -183,11 +182,11 @@ async def input_handler():
 
                     if status == "online" or status == "offline" \
                        or status == "idle" or status == "dnd":
-                        await client.set_status(status)
+                        await gc.client.set_status(status)
 
             # else we must have only a command, no argument
             else:
-                command = user_input
+                command = gc.user_input
                 if command == "clear": await ui.clear_screen()
                 elif command == "quit": kill()
                 elif command == "exit": kill()
@@ -204,7 +203,7 @@ async def input_handler():
                             await channel_jump(command)
                     except IndexError: pass
 
-                await check_emoticons(client, command)
+                await check_emoticons(gc.client, command)
 
 
         # this must not be a command...
@@ -213,38 +212,38 @@ async def input_handler():
             # we will need to expand them.
             # these will look like <:emojiname:39432432903201>
             # check if there might be an emoji
-            if user_input.count(":") >= 2:
+            if gc.user_input.count(":") >= 2:
                 
                 # if user has nitro, loop through *all* emojis
                 if settings["has_nitro"]:
-                    for emoji in client.get_all_emojis():
+                    for emoji in gc.client.get_all_emojis():
                         short_name = ':' + emoji.name + ':'
-                        if short_name in user_input:
+                        if short_name in gc.user_input:
                             # find the "full" name of the emoji from the api
                             full_name = "<:" + emoji.name + ":" + emoji.id + ">"
-                            user_input = user_input.replace(short_name, full_name)
+                            gc.user_input = gc.user_input.replace(short_name, full_name)
 
                 # else the user can only send from this server
-                elif client.get_current_server().emojis is not None \
-                and len(client.get_current_server().emojis) > 0:
-                    for emoji in client.get_current_server().emojis:
+                elif gc.client.get_current_server().emojis is not None \
+                and len(gc.client.get_current_server().emojis) > 0:
+                    for emoji in gc.client.get_current_server().emojis:
                         short_name = ':' + emoji.name + ':'
-                        if short_name in user_input:
+                        if short_name in gc.user_input:
                             # find the "full" name of the emoji from the api
                             full_name = "<:" + emoji.name + ":" + emoji.id + ">"
-                            user_input = user_input.replace(short_name, full_name)
+                            gc.user_input = gc.user_input.replace(short_name, full_name)
 
             # if we're here, we've determined its not a command,
             # and we've processed all mutations to the input we want
             # now we will try to send the message.
-            text_to_send = user_input
-            if "@" in user_input:
-                sections = user_input.lower().strip().split(" ")
+            text_to_send = gc.user_input
+            if "@" in gc.user_input:
+                sections = gc.user_input.lower().strip().split(" ")
                 sects_copy = []
                 for sect in sections:
                     if "@" in sect:
-                        for member in client.get_current_server().members:
-                            if member is not client.get_current_server().me:
+                        for member in gc.client.get_current_server().members:
+                            if member is not gc.client.get_current_server().me:
                                 if sect[1:] in member.display_name.lower():
                                     sect = "<@!" + member.id + ">"
                     sects_copy.append(sect)
@@ -255,15 +254,15 @@ async def input_handler():
             # So we will try it 3 times, sleeping a bit inbetween
             for i in range(0,2):
                 try:
-                    await client.send_message(client.get_current_channel(), text_to_send)
+                    await gc.client.send_message(gc.client.get_current_channel(), text_to_send)
                     break
                 except:
                     await asyncio.sleep(3)
                     if i == 2:
-                        ui.set_display(term.blink_red + "error: could not send message")
+                        ui.set_display(gc.term.blink_red + "error: could not send message")
 
         # clear our input as we've just sent it
-        user_input = ""
+        gc.user_input = ""
 
         # update the screen
         await ui.print_screen()
