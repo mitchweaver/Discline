@@ -1,5 +1,5 @@
 from getpass import getuser
-from utils.globals import term
+from utils.globals import gc
 from ui.ui import set_display
 
 async def send_file(client, filepath):
@@ -17,5 +17,5 @@ async def send_file(client, filepath):
             # Either a bad file path, the file was too large,
             # or encountered a connection problem during upload
             msg = "Error: Bad filepath"
-            await set_display(term.bold + term.red + term.move(term.height - 1, \
-                term.width - len(msg) - 1) + msg)
+            await set_display(gc.term.bold + gc.term.red + gc.term.move(gc.term.height - 1, \
+                gc.term.width - len(msg) - 1) + msg)

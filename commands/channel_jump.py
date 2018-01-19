@@ -1,4 +1,4 @@
-from utils.globals import server_log_tree, client
+from utils.globals import gc
 from utils.quicksort import quick_sort_channel_logs
 from utils.settings import settings
 
@@ -15,8 +15,8 @@ async def channel_jump(arg):
     if num <= -1:
         num = 0
 
-    for slog in server_log_tree:
-        if slog.get_server() is client.get_current_server():
+    for slog in gc.server_log_tree:
+        if slog.get_server() is gc.client.get_current_server():
             for clog in slog.get_logs():
                 logs.append(clog)
 
@@ -25,6 +25,6 @@ async def channel_jump(arg):
 
     if num > len(logs): num = len(logs) - 1
 
-    client.set_current_channel(logs[num].get_name()) 
+    gc.client.set_current_channel(logs[num].get_name()) 
     logs[num].unread = False
     logs[num].mentioned_in = False

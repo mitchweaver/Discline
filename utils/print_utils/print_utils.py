@@ -1,17 +1,17 @@
 import discord
-from utils.globals import term, client
+from utils.globals import gc
 
 async def print_servers():
     print("Available servers: ")
     print_line_break();
-    for server  in  client.servers:
+    for server  in  gc.client.servers:
         print(server.name)
 
 async def print_user():
-    print('Logged in as: ' + term.green + client.user.name + term.normal)
+    print('Logged in as: ' + gc.term.green + gc.client.user.name + gc.term.normal)
 
 async def print_line_break():
-    print("-" * int(term.width * 0.45))
+    print("-" * int(gc.term.width * 0.45))
 
 async def print_channels(server):
     print("Available channels:")
