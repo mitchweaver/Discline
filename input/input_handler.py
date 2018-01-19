@@ -2,7 +2,7 @@ import asyncio
 import discord
 from input.kbhit import KBHit
 import ui.ui as ui 
-from utils.globals import gc
+from utils.globals import gc, kill
 from utils.print_utils.help import print_help
 from utils.print_utils.userlist import print_userlist
 from utils.print_utils.serverlist import print_serverlist
@@ -85,7 +85,7 @@ async def input_handler():
                     
                     server_name = ""
                     # check if arg is a valid server, then switch
-                    for servlog in server_log_tree:
+                    for servlog in gc.server_log_tree:
                         if servlog.get_name().lower() == arg.lower():
                             server_name = servlog.get_name()
                             break
@@ -94,7 +94,7 @@ async def input_handler():
                     # Note if there are multiple servers containing the same
                     # word, this will only pick the first one. Better than nothing.
                     if server_name == "":
-                        for servlog in server_log_tree:
+                        for servlog in gc.server_log_tree:
                             if arg.lower() in servlog.get_name().lower():
                                 server_name = servlog.get_name()
                                 break
@@ -124,20 +124,23 @@ async def input_handler():
                                         lowest = chan.position
                                         def_chan = chan
 
-                            gc.client.set_current_channel(def_chan.name)
-                            # and set the default channel as read
-                            for chanlog in servlog.get_logs():
-                                if chanlog.get_channel() is def_chan:
-                                    chanlog.unread = False
-                                    chanlog.mentioned_in = False
-                                    break
+                            try:
+                                gc.client.set_current_channel(def_chan.name)
+                                # and set the default channel as read
+                                for chanlog in servlog.get_logs():
+                                    if chanlog.get_channel() is def_chan:
+                                        chanlog.unread = False
+                                        chanlog.mentioned_in = False
+                                        break
+                            # TODO: Bug: def_chan is sometimes ""
+                            except: continue
                     else:
                         ui.set_display(gc.term.red + "Can't find server" + gc.term.normal)
 
 
                 elif command == "channel" or command == 'c':
                     # check if arg is a valid channel, then switch
-                    for servlog in server_log_tree:
+                    for servlog in gc.server_log_tree:
                         if servlog.get_server() is gc.client.get_current_server():
                             final_chanlog = ""
                             for chanlog in servlog.get_logs():

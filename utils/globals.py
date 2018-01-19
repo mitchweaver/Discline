@@ -9,6 +9,7 @@ class GlobalsContainer:
         self.server_log_tree = []
         self.input_buffer = []
         self.user_input = ""
+        self.channels_entered = []
 
     def initClient(self):
         from client.client import Client

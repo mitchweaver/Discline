@@ -4,7 +4,6 @@ from discord import ChannelType
 from blessings import Terminal
 from ui.line import Line
 from ui.ui_utils import *
-#from utils.globals import *
 from utils.globals import gc, get_color
 from utils.quicksort import quick_sort_channel_logs
 from utils.settings import settings
@@ -221,9 +220,11 @@ async def print_channel_log(left_bar_width):
 
     for server_log in gc.server_log_tree:
         if server_log.get_server() is gc.client.get_current_server():
-            await gc.client.populate_current_channel_log()
             for channel_log in server_log.get_logs():
                 if channel_log.get_channel() is gc.client.get_current_channel():
+                    if channel_log.get_channel() not in gc.channels_entered:
+                        await gc.client.populate_current_channel_log()
+                        gc.channels_entered.append(channel_log.get_channel())
                     # if the server has a "category" channel named the same
                     # as a text channel, confusion will occur
                     # TODO: private messages are not "text" channeltypes
