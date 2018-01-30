@@ -3,7 +3,6 @@ from utils.globals import gc
 from ui.text_manipulation import calc_mutations
 
 async def on_incoming_message(msg):
-
     # TODO: make sure it isn't a private message
     
     # find the server/channel it belongs to and add it
@@ -12,7 +11,7 @@ async def on_incoming_message(msg):
             for channel_log in server_log.get_logs():
                 if channel_log.get_channel() == msg.channel:
                     
-                    channel_log.append(await calc_mutations(msg))
+                    channel_log.append(msg)
                     
                     if channel_log.get_channel() is not gc.client.get_current_channel():
                         if msg.server.me.mention in msg.content:
@@ -21,4 +20,5 @@ async def on_incoming_message(msg):
                             channel_log.unread = True
 
     # redraw the screen
-    await print_screen()
+    if gc.ui.isInitialized:
+        await print_screen()

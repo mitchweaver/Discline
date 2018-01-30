@@ -11,11 +11,13 @@
 
 import sys
 import asyncio
+import curses
+import logging
 from os import system
 from discord import ChannelType
 from input.input_handler import input_handler, key_input, init_input
 from input.typing_handler import is_typing_handler
-from ui.ui import print_screen
+from ui.ui import print_screen, start_ui
 from ui.text_manipulation import calc_mutations
 from utils.print_utils.help import print_help
 from utils.print_utils.print_utils import *
@@ -107,16 +109,7 @@ async def on_ready():
                 for clog in slog.get_logs():
                     print(slog.get_name() + " ---- " + clog.get_name())
 
-    # start our own coroutines
-    try: asyncio.get_event_loop().create_task(key_input())
-    except SystemExit: pass
-    except KeyboardInterrupt: pass
-    try: asyncio.get_event_loop().create_task(input_handler())
-    except SystemExit: pass
-    except KeyboardInterrupt: pass
-    try: asyncio.get_event_loop().create_task(is_typing_handler())
-    except SystemExit: pass
-    except KeyboardInterrupt: pass
+    await start_ui()
 
     # Print initial screen
     await print_screen()
@@ -186,7 +179,7 @@ def main():
 
     check_for_updates()
     token = get_token()
-    init_input()
+    logging.basicConfig(filename="file.log", level=logging.INFO, filemode="w")
 
     print(gc.term.yellow("Starting..."))
 

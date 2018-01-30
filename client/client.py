@@ -57,7 +57,7 @@ class Client(discord.Client):
                 if clog.get_channel().name.lower() == self.__current_channel.lower():
                     if clog.get_channel().permissions_for(slog.get_server().me).read_messages:
                         async for msg in self.logs_from(clog.get_channel(), limit=settings["max_log_entries"]):
-                            clog.insert(0, await tm.calc_mutations(msg))
+                            clog.insert(0, msg)
 
     def get_current_channel_log(self):
         slog = self.get_current_server_log()

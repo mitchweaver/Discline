@@ -1,13 +1,10 @@
 import sys
-import time
 from os import system
-import curses
-from curses import ascii as cAscii
 from discord import ChannelType
 from blessings import Terminal
 from ui.line import Line
 from ui.ui_utils import *
-from utils.globals import *
+from utils.globals import gc, get_color
 from utils.quicksort import quick_sort_channel_logs
 from utils.settings import settings
 from utils.print_utils.userlist import print_userlist
@@ -15,122 +12,96 @@ from utils.print_utils.userlist import print_userlist
 # maximum number of lines that can be on the screen
 # is updated every cycle as to allow automatic resizing
 MAX_LINES = 0
-# screen
-global stdscr
-stdscr = None
-global windows
-windows = []
 # buffer to allow for double buffering (stops screen flashing)
 screen_buffer = []
 # text that can be set to be displayed for 1 frame
 display = ""
 display_frames = 0
 
-def cursesInit():
-    stdscr = curses.initscr()
-    curses.noecho()
-    curses.cbreak()
-    stdscr.keypad(True)
-
-def cursesDestroy():
-    curses.nocbreak()
-    stdscr.keypad(False)
-    curses.echo()
-    curses.endwin()
-
-def cursesRefresh():
-    stdscr.noutrefresh()
-    for win in windows:
-        win.noutrefresh()
-    curses.doupdate()
-
 async def print_screen():
-    stdscr.clear()
-    stdscr.addstr("Test")
-    cursesRefresh()
-    ## Get ready to redraw the screen
-    #left_bar_width = await get_left_bar_width()
-    #await clear_screen()
+    # Get ready to redraw the screen
+    left_bar_width = await get_left_bar_width()
+    await clear_screen()
 
-    #if settings["show_top_bar"]:
-    #    await print_top_bar(left_bar_width)
+    if settings["show_top_bar"]:
+        await print_top_bar(left_bar_width)
 
-    #if server_log_tree is not None:
-    #    await print_channel_log(left_bar_width)
+    if gc.server_log_tree is not None:
+        await print_channel_log(left_bar_width)
 
-    #await print_bottom_bar(left_bar_width)
+    await print_bottom_bar(left_bar_width)
 
-    ## Print the buffer containing our message logs
-    #if settings["show_top_bar"]:
-    #    if settings["show_separators"]:
-    #        with term.location(0, 2):
-    #            print("".join(screen_buffer), end="")
-    #    else:
-    #        with term.location(0, 1):
-    #            print("".join(screen_buffer), end="")
+    # Print the buffer containing our message logs
+    if settings["show_top_bar"]:
+        if settings["show_separators"]:
+            with gc.term.location(0, 2):
+                print("".join(screen_buffer), end="")
+        else:
+            with gc.term.location(0, 1):
+                print("".join(screen_buffer), end="")
 
-    #else:
-    #    with term.location(0, 0):
-    #        print("".join(screen_buffer), end="")
+    else:
+        with gc.term.location(0, 0):
+            print("".join(screen_buffer), end="")
 
-    #if settings["show_left_bar"]:
-    #    await print_left_bar(left_bar_width)
+    if settings["show_left_bar"]:
+        await print_left_bar(left_bar_width)
 
-    #global display, display_frames
-    #if display != "":
-    #    print(display)
-    #    display_frames -= 1
-    #    if display_frames <=  0:
-    #        display = ""
+    global display, display_frames
+    if display != "":
+        print(display)
+        display_frames -= 1
+        if display_frames <=  0:
+            display = ""
 
 async def print_top_bar(left_bar_width):
     topic = ""
     try:
-        if client.get_current_channel().topic is not None:
-            topic = client.get_current_channel().topic
+        if gc.client.get_current_channel().topic is not None:
+            topic = gc.client.get_current_channel().topic
     except:
         # if there is no channel topic, just print the channel name
-        try: topic = client.get_current_channel().name
+        try: topic = gc.client.get_current_channel().name
         except: pass
 
 
-    text_length = term.width - (36 + len(client.get_current_server_name()))
+    text_length = gc.term.width - (36 + len(gc.client.get_current_server_name()))
     if len(topic) > text_length:
         topic = topic[:text_length]
 
-    with term.location(1,0):
+    with gc.term.location(1,0):
         print("Server: " + await get_color(settings["server_display_color"]) \
-                         + client.get_current_server_name() + term.normal, end="")
+                         + gc.client.get_current_server_name() + gc.term.normal, end="")
 
-    with term.location(term.width // 2 - len(topic) // 2, 0):
+    with gc.term.location(gc.term.width // 2 - len(topic) // 2, 0):
         print(topic, end="")
 
     online_text = "Users online: "
-    online_count = str(await client.get_online())
+    online_count = str(await gc.client.get_online())
     online_length = len(online_text) + len(online_count)
 
-    with term.location(term.width - online_length - 1, 0):
+    with gc.term.location(gc.term.width - online_length - 1, 0):
         print(await get_color(settings["server_display_color"]) + online_text \
-              + term.normal + online_count, end="")
+              + gc.term.normal + online_count, end="")
 
     if settings["show_separators"]:
         divider = await get_color(settings["separator_color"]) \
-                + ("─" * term.width) + "\n" + term.normal
+                + ("─" * gc.term.width) + "\n" + gc.term.normal
 
-        with term.location(0, 1):
+        with gc.term.location(0, 1):
             print(divider, end="")
 
-        with term.location(left_bar_width, 1):
+        with gc.term.location(left_bar_width, 1):
             print(await get_color(settings["separator_color"]) + "┬", end="")
 
 
 async def set_display(string):
     global display, display_frames
-    loc = term.width - 1 - len(string)
+    loc = gc.term.width - 1 - len(string)
     escape_chars = "\e"
     for escape_chars in string:
         loc = loc - 5
-    display = term.move(term.height - 1, loc) + string
+    display = gc.term.move(gc.term.height - 1, loc) + string
     display_frames = 3
 
 async def print_left_bar(left_bar_width):
@@ -140,18 +111,18 @@ async def print_left_bar(left_bar_width):
 
     if settings["show_separators"]:
         length = 0
-        length = term.height - settings["margin"]
+        length = gc.term.height - settings["margin"]
 
         sep_color = await get_color(settings["separator_color"])
         for i in range(start, length):
-            print(term.move(i, left_bar_width) + sep_color + "│" \
-                + term.normal, end="")
+            print(gc.term.move(i, left_bar_width) + sep_color + "│" \
+                + gc.term.normal, end="")
 
     # Create a new list so we can preserve the server's channel order
     channel_logs = []
 
-    for servlog in server_log_tree:
-        if servlog.get_server() is client.get_current_server():
+    for servlog in gc.server_log_tree:
+        if servlog.get_server() is gc.client.get_current_server():
             for chanlog in servlog.get_logs():
                 channel_logs.append(chanlog)
             break
@@ -179,68 +150,66 @@ async def print_left_bar(left_bar_width):
             else:
                 text = text[0:left_bar_width - 4] + "..."
 
-        if log.get_channel() is client.get_current_channel():
+        if log.get_channel() is gc.client.get_current_channel():
             if settings["number_channels"]:
-                buffer.append(term.normal + str(count) + ". " + term.green + text + term.normal + "\n")
+                buffer.append(gc.term.normal + str(count) + ". " + gc.term.green + text + gc.term.normal + "\n")
             else:
-                buffer.append(term.green + text + term.normal + "\n")
+                buffer.append(gc.term.green + text + gc.term.normal + "\n")
         else:
             if log.get_channel() is not channel_logs[0]:
                 pass
 
-            if log.get_channel() is not client.get_current_channel():
+            if log.get_channel() is not gc.client.get_current_channel():
 
                 if log.unread and settings["blink_unreads"]:
-                    text = await get_color(settings["unread_channel_color"]) + text + term.normal
+                    text = await get_color(settings["unread_channel_color"]) + text + gc.term.normal
                 elif log.mentioned_in and settings["blink_mentions"]:
-                    text = await get_color(settings["unread_mention_color"]) + text + term.normal
+                    text = await get_color(settings["unread_mention_color"]) + text + gc.term.normal
 
             if settings["number_channels"]:
-                buffer.append(term.normal + str(count) + ". " + text + "\n")
+                buffer.append(gc.term.normal + str(count) + ". " + text + "\n")
             else:
                 buffer.append(text + "\n")
 
         count += 1
         # should the server have *too many channels!*, stop them
         # from spilling over the screen
-        if count - 1  == term.height - 2 - settings["margin"]: break
+        if count - 1  == gc.term.height - 2 - settings["margin"]: break
 
-    with term.location(0, start):
+    with gc.term.location(0, start):
         print("".join(buffer))
 
 
 async def print_bottom_bar(left_bar_width):
     if settings["show_separators"]:
-        with term.location(0, term.height - 2):
-            print(await get_color(settings["separator_color"]) + ("─" * term.width) \
-                + "\n" + term.normal, end="")
+        with gc.term.location(0, gc.term.height - 2):
+            print(await get_color(settings["separator_color"]) + ("─" * gc.term.width) \
+                + "\n" + gc.term.normal, end="")
 
-        with term.location(left_bar_width, term.height - 2):
+        with gc.term.location(left_bar_width, gc.term.height - 2):
             print(await get_color(settings["separator_color"]) + "┴", end="")
 
     bottom = await get_prompt()
-    if len(input_buffer) > 0: bottom = bottom + "".join(input_buffer)
-    with term.location(0, term.height - 1):
+    if len(gc.input_buffer) > 0: bottom = bottom + "".join(gc.input_buffer)
+    with gc.term.location(0, gc.term.height - 1):
         print(bottom, end="")
 
 async def clear_screen():
-    # This is more efficient
-    cursesRefresh()
-    ## instead of "clearing", we're actually just overwriting
-    ## everything with white space. This mitigates the massive
-    ## screen flashing that goes on with "cls" and "clear"
-    #del screen_buffer[:]
-    #wipe = (" " * (term.width) + "\n") * term.height
-    #print(term.move(0,0) + wipe, end="")
+    # instead of "clearing", we're actually just overwriting
+    # everything with white space. This mitigates the massive
+    # screen flashing that goes on with "cls" and "clear"
+    del screen_buffer[:]
+    wipe = (" " * (gc.term.width) + "\n") * gc.term.height
+    print(gc.term.move(0,0) + wipe, end="")
 
 async def print_channel_log(left_bar_width):
     global INDEX
 
     # If the line would spill over the screen, we need to wrap it
-    # NOTE: term.width is calculating every time this function is called.
+    # NOTE: gc.term.width is calculating every time this function is called.
     #       Meaning that this will automatically resize the screen.
     # note: the "1" is the space at the start
-    MAX_LENGTH = term.width - (left_bar_width + settings["margin"]) - 1
+    MAX_LENGTH = gc.term.width - (left_bar_width + settings["margin"]) - 1
     # For wrapped lines, offset them to line up with the previous line
     offset = 0
     # List to put our *formatted* lines in, once we have OK'd them to print
@@ -249,10 +218,13 @@ async def print_channel_log(left_bar_width):
     # the max number of lines that can be shown on the screen
     MAX_LINES = await get_max_lines()
 
-    for server_log in server_log_tree:
-        if server_log.get_server() is client.get_current_server():
+    for server_log in gc.server_log_tree:
+        if server_log.get_server() is gc.client.get_current_server():
             for channel_log in server_log.get_logs():
-                if channel_log.get_channel() is client.get_current_channel():
+                if channel_log.get_channel() is gc.client.get_current_channel():
+                    if channel_log.get_channel() not in gc.channels_entered:
+                        await gc.client.populate_current_channel_log()
+                        gc.channels_entered.append(channel_log.get_channel())
                     # if the server has a "category" channel named the same
                     # as a text channel, confusion will occur
                     # TODO: private messages are not "text" channeltypes
@@ -263,7 +235,7 @@ async def print_channel_log(left_bar_width):
                         msg_lines = []
 
                         HAS_MENTION = False
-                        if "@" + client.get_current_server().me.display_name in msg.clean_content:
+                        if "@" + gc.client.get_current_server().me.display_name in msg.clean_content:
                             HAS_MENTION = True
 
                         author_name = ""
