@@ -71,10 +71,14 @@ async def on_ready():
     except: pass
 
     for server in gc.client.servers:
+        # Null check to check server availability
+        if server is None:
+            continue
         serv_logs = []
-        count = 0
-        print("loading " + gc.term.magenta + server.name + gc.term.normal + " ...")
         for channel in server.channels:
+            # Null checks to test for bugged out channels
+            if channel is None or channel.type is None:
+                continue
             if channel.type == ChannelType.text:
                     if channel.permissions_for(server.me).read_messages:
                         try: # try/except in order to 'continue' out of multiple for loops
@@ -84,20 +88,7 @@ async def on_ready():
                                         if channel.name.lower() == name.lower():
                                             raise Found
                             serv_logs.append(ChannelLog(channel, []))
-                            #print("    loading " + gc.term.yellow + channel.name + gc.term.normal)
-                            #channel_log = []
-                            #try:
-                            #    async for msg in gc.client.logs_from(channel, limit=settings["max_log_entries"]):
-                            #        count+=1
-                            #        channel_log.insert(0, await calc_mutations(msg))
-                            #    serv_logs.append(ChannelLog(channel, channel_log))
-                            #except:
-                            #    print(gc.term.red + "Error loading logs from channel: " + \
-                            #        channel.name + " in server: " + server.name + gc.term.normal)
-                            #    continue
                         except: continue
-
-        print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
         # add the channellog to the tree
         gc.server_log_tree.append(ServerLog(server, serv_logs))
