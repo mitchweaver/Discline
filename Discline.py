@@ -157,7 +157,7 @@ def main():
     # start the client coroutine
     TOKEN=""
     try:
-        if sys.argv[1] == "--help" or sys.argv[1] == "-help":
+        if sys.argv[1] == "--help" or sys.argv[1] == "-h":
             from utils.print_utils.help import print_help
             print_help()
             quit()
@@ -184,6 +184,7 @@ def main():
     # start the client
     try: gc.client.run(token, bot=False)
     except KeyboardInterrupt: pass
+    except SystemExit: pass
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()
