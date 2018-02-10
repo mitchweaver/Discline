@@ -38,6 +38,9 @@ else:
 
 init_complete = False
 
+# Set terminal X11 window title
+print('\33]0;Discline\a', end='', flush=True)
+
 gc.initClient()
 
 @gc.client.event
