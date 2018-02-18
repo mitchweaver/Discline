@@ -82,6 +82,10 @@ async def on_ready():
             # Null checks to test for bugged out channels
             if channel is None or channel.type is None:
                 continue
+            # Null checks for bugged out members
+            if server.me is None or server.me.id is None \
+                    or channel.permissions_for(server.me) is None:
+                continue
             if channel.type == ChannelType.text:
                     if channel.permissions_for(server.me).read_messages:
                         try: # try/except in order to 'continue' out of multiple for loops
