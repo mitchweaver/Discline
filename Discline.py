@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-#!/usr/bin/python3.6
-############################################
-#                                          #
-# Discline                                 #
-#                                          #
-# http://github.com/MitchWeaver/Discline   #
-#                                          #
-# Licensed under GNU GPLv3                 #
-#                                          #
-############################################
-=======
 #!/usr/bin/env python3
 # ─────────────────────────────────────────────────────── #
 #                                                         #
@@ -20,7 +8,6 @@
 # Licensed under GNU GPLv3                                #
 #                                                         #
 # ─────────────────────────────────────────────────────── #
->>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
 
 import sys
 import asyncio
@@ -51,12 +38,9 @@ else:
 
 init_complete = False
 
-<<<<<<< HEAD
-=======
 # Set terminal X11 window title
 print('\33]0;Discline\a', end='', flush=True)
 
->>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
 gc.initClient()
 
 @gc.client.event
@@ -90,16 +74,10 @@ async def on_ready():
     except: pass
 
     for server in gc.client.servers:
-<<<<<<< HEAD
-        serv_logs = []
-        count = 0
-        print("loading " + gc.term.magenta + server.name + gc.term.normal + " ...")
-=======
         # Null check to check server availability
         if server is None:
             continue
         serv_logs = []
->>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
         for channel in server.channels:
             # Null checks to test for bugged out channels
             if channel is None or channel.type is None:
@@ -117,20 +95,6 @@ async def on_ready():
                                         if channel.name.lower() == name.lower():
                                             raise Found
                             serv_logs.append(ChannelLog(channel, []))
-<<<<<<< HEAD
-                            #print("    loading " + gc.term.yellow + channel.name + gc.term.normal)
-                            #channel_log = []
-                            #try:
-                            #    async for msg in gc.client.logs_from(channel, limit=settings["max_log_entries"]):
-                            #        count+=1
-                            #        channel_log.insert(0, await calc_mutations(msg))
-                            #    serv_logs.append(ChannelLog(channel, channel_log))
-                            #except:
-                            #    print(gc.term.red + "Error loading logs from channel: " + \
-                            #        channel.name + " in server: " + server.name + gc.term.normal)
-                            #    continue
-=======
->>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
                         except: continue
 
         # add the channellog to the tree
@@ -200,11 +164,7 @@ def main():
     # start the client coroutine
     TOKEN=""
     try:
-<<<<<<< HEAD
-        if sys.argv[1] == "--help" or sys.argv[1] == "-help":
-=======
         if sys.argv[1] == "--help" or sys.argv[1] == "-h":
->>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
             from utils.print_utils.help import print_help
             print_help()
             quit()
