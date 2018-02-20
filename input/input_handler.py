@@ -1,7 +1,7 @@
 import asyncio
 import discord
 from input.kbhit import KBHit
-import ui.ui as ui 
+import ui.ui as ui
 from utils.globals import gc, kill
 from utils.print_utils.help import print_help
 from utils.print_utils.userlist import print_userlist
@@ -21,7 +21,7 @@ def init_input():
 
 async def key_input():
     await gc.client.wait_until_ready()
-    
+
     global kb
     memory = ""
     key = ""
@@ -30,7 +30,7 @@ async def key_input():
             key = await kb.getch()
 
             ordkey = ord(key)
-            
+
             if memory == "[":
                 if key == "6": # page down
                     gc.client.get_current_channel_log().dec_index(settings["scroll_lines"])
@@ -44,14 +44,14 @@ async def key_input():
                     del gc.input_buffer[:]
                 elif ordkey == 127 or ordkey == 8: # backspace
                     if len(gc.input_buffer) > 0:
-                        del gc.input_buffer[-1]             
-                
+                        del gc.input_buffer[-1]
+
                 elif ordkey >= 32 and ordkey <= 256: # all letters and special characters
                     if not (ordkey == 126 and (memory == "5" or memory == "6")): # tilde left over from page up/down
                         gc.input_buffer.append(key)
                 elif ordkey == 9:
                     gc.input_buffer.append(" " * 4) # tab key
-                
+
             memory = key
             if key != "[":
                 await ui.print_screen()
@@ -63,11 +63,11 @@ async def key_input():
 
 async def input_handler():
     await gc.client.wait_until_ready()
-   
+
     while True:
 
         # If input is blank, don't do anything
-        if gc.user_input == '': 
+        if gc.user_input == '':
             await asyncio.sleep(0.05)
             continue
 
@@ -82,7 +82,7 @@ async def input_handler():
                 command,arg = gc.user_input.split(" ", 1)
 
                 if command == "server" or command == 's':
-                    
+
                     server_name = ""
                     # check if arg is a valid server, then switch
                     for servlog in gc.server_log_tree:
@@ -107,7 +107,7 @@ async def input_handler():
                         # there is a default channel. to combat this,
                         # we can just get it ourselves.
                         def_chan = ""
-                        
+
                         lowest = 999
                         for chan in servlog.get_server().channels:
                             if chan.type is discord.ChannelType.text:
@@ -168,7 +168,7 @@ async def input_handler():
                                 ui.set_display(gc.term.red + "Can't find channel" + gc.term.normal)
 
                 elif command == "nick":
-                    try: 
+                    try:
                         await gc.client.change_nickname(gc.client.get_current_server().me, arg)
                     except: # you don't have permission to do this here
                         pass
@@ -193,30 +193,31 @@ async def input_handler():
                 if command == "clear": await ui.clear_screen()
                 elif command == "quit": kill()
                 elif command == "exit": kill()
-                elif command == "help": print_help()
-                elif command == "servers": await print_serverlist()
-                elif command == "channels": await print_channellist()
+                elif command == "help" or command == "h": print_help(gc)
+                elif command == "servers" or command == "servs": await print_serverlist()
+                elif command == "channels" or command == "chans": await print_channellist()
                 elif command == "emojis": await print_emojilist()
-                elif command == "users" or command == "members": 
+                elif command == "users" or command == "members":
                     await ui.clear_screen()
                     await print_userlist()
                 elif command[0] == 'c':
-                    try: 
+                    try:
                         if command[1].isdigit():
                             await channel_jump(command)
-                    except IndexError: pass
+                    except IndexError:
+                        pass
 
                 await check_emoticons(gc.client, command)
 
 
         # this must not be a command...
-        else: 
+        else:
             # check to see if it has any custom-emojis, written as :emoji:
             # we will need to expand them.
             # these will look like <:emojiname:39432432903201>
             # check if there might be an emoji
             if gc.user_input.count(":") >= 2:
-                
+
                 # if user has nitro, loop through *all* emojis
                 if settings["has_nitro"]:
                     for emoji in gc.client.get_all_emojis():
@@ -269,5 +270,5 @@ async def input_handler():
 
         # update the screen
         await ui.print_screen()
-        
+
         await asyncio.sleep(0.25)

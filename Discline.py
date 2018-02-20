@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python3.6
 ############################################
 #                                          #
@@ -8,6 +9,18 @@
 # Licensed under GNU GPLv3                 #
 #                                          #
 ############################################
+=======
+#!/usr/bin/env python3
+# ─────────────────────────────────────────────────────── #
+#                                                         #
+# Discline                                                #
+#                                                         #
+# http://github.com/MitchWeaver/Discline                  #
+#                                                         #
+# Licensed under GNU GPLv3                                #
+#                                                         #
+# ─────────────────────────────────────────────────────── #
+>>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
 
 import sys
 import asyncio
@@ -38,6 +51,12 @@ else:
 
 init_complete = False
 
+<<<<<<< HEAD
+=======
+# Set terminal X11 window title
+print('\33]0;Discline\a', end='', flush=True)
+
+>>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
 gc.initClient()
 
 @gc.client.event
@@ -71,10 +90,24 @@ async def on_ready():
     except: pass
 
     for server in gc.client.servers:
+<<<<<<< HEAD
         serv_logs = []
         count = 0
         print("loading " + gc.term.magenta + server.name + gc.term.normal + " ...")
+=======
+        # Null check to check server availability
+        if server is None:
+            continue
+        serv_logs = []
+>>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
         for channel in server.channels:
+            # Null checks to test for bugged out channels
+            if channel is None or channel.type is None:
+                continue
+            # Null checks for bugged out members
+            if server.me is None or server.me.id is None \
+                    or channel.permissions_for(server.me) is None:
+                continue
             if channel.type == ChannelType.text:
                     if channel.permissions_for(server.me).read_messages:
                         try: # try/except in order to 'continue' out of multiple for loops
@@ -84,6 +117,7 @@ async def on_ready():
                                         if channel.name.lower() == name.lower():
                                             raise Found
                             serv_logs.append(ChannelLog(channel, []))
+<<<<<<< HEAD
                             #print("    loading " + gc.term.yellow + channel.name + gc.term.normal)
                             #channel_log = []
                             #try:
@@ -95,9 +129,9 @@ async def on_ready():
                             #    print(gc.term.red + "Error loading logs from channel: " + \
                             #        channel.name + " in server: " + server.name + gc.term.normal)
                             #    continue
+=======
+>>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
                         except: continue
-
-        print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
         # add the channellog to the tree
         gc.server_log_tree.append(ServerLog(server, serv_logs))
@@ -166,7 +200,11 @@ def main():
     # start the client coroutine
     TOKEN=""
     try:
+<<<<<<< HEAD
         if sys.argv[1] == "--help" or sys.argv[1] == "-help":
+=======
+        if sys.argv[1] == "--help" or sys.argv[1] == "-h":
+>>>>>>> c8aa1dc9d9e113c566daa6534f9f8c541493bbf7
             from utils.print_utils.help import print_help
             print_help()
             quit()
@@ -193,6 +231,7 @@ def main():
     # start the client
     try: gc.client.run(token, bot=False)
     except KeyboardInterrupt: pass
+    except SystemExit: pass
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()
