@@ -256,7 +256,7 @@ async def input_handler():
             # sometimes this fails --- this could be due to occasional
             # bugs in the api, or there was a connection problem
             # So we will try it 3 times, sleeping a bit inbetween
-            for i in range(0,2):
+            for i in range(0,3):
                 try:
                     await gc.client.send_message(gc.client.get_current_channel(), text_to_send)
                     break
