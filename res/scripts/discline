@@ -1,0 +1,20 @@
+#!/usr/bin/env dash
+#
+# This is a script to easily launch discline
+# from an application launcher or similar.
+#
+# http://github.com/mitchweaver/Discline
+#
+# These are just examples of what I use,
+# edit them to match your system and needs.
+
+TERM='st'
+FONT='MonteCarlo'
+SHELL='/usr/bin/env dash'
+DISCLINE_DIR="${HOME}/workspace/Discline"
+PYTHON_VERSION='3.6'
+
+# ------------------------------------------------------- 
+
+$TERM -f $FONT -e $SHELL -c "cd $DISCLINE_DIR  && \
+    python$PYTHON_VERSION Discline.py" &
