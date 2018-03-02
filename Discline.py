@@ -1,23 +1,21 @@
-#!/usr/bin/python3.6
-############################################
-#                                          #
-# Discline                                 #
-#                                          #
-# http://github.com/MitchWeaver/Discline   #
-#                                          #
-# Licensed under GNU GPLv3                 #
-#                                          #
-############################################
+#!/usr/bin/env python3
+# ------------------------------------------------------- #
+#                                                         #
+# Discline                                                #
+#                                                         #
+# http://github.com/MitchWeaver/Discline                  #
+#                                                         #
+# Licensed under GNU GPLv3                                #
+#                                                         #
+# ------------------------------------------------------- #
 
 import sys
 import asyncio
-import curses
-import logging
 from os import system
 from discord import ChannelType
 from input.input_handler import input_handler, key_input, init_input
 from input.typing_handler import is_typing_handler
-from ui.ui import print_screen, start_ui
+from ui.ui import print_screen
 from ui.text_manipulation import calc_mutations
 from utils.print_utils.help import print_help
 from utils.print_utils.print_utils import *
@@ -30,6 +28,7 @@ from client.serverlog import ServerLog
 from client.channellog import ChannelLog
 from client.on_message import on_incoming_message
 from client.client import Client
+from tests.input_test import inputTestLauncher
 
 # check if using python 3.5+
 # TODO: this still fails if they're using python2
@@ -40,11 +39,25 @@ else:
 
 init_complete = False
 
+# Set terminal X11 window title
+print('\33]0;Discline\a', end='', flush=True)
+
 gc.initClient()
 
 @gc.client.event
 async def on_ready():
     await gc.client.wait_until_login()
+
+    try:
+        if sys.argv[1] == "--test":
+            if len(sys.argv) < 3:
+                print(gc.term.red("Error: Incorrect syntax for --test"))
+                print(gc.term.yellow("Syntax: Discline.py --test testName"))
+                quit()
+            #await applySettings()
+            await runTest(sys.argv[2])
+            quit()
+    except IndexError: pass
 
     # completely hide the system's cursor
     await hidecursor.hide_cursor()
@@ -73,10 +86,18 @@ async def on_ready():
     except: pass
 
     for server in gc.client.servers:
+        # Null check to check server availability
+        if server is None:
+            continue
         serv_logs = []
-        count = 0
-        print("loading " + gc.term.magenta + server.name + gc.term.normal + " ...")
         for channel in server.channels:
+            # Null checks to test for bugged out channels
+            if channel is None or channel.type is None:
+                continue
+            # Null checks for bugged out members
+            if server.me is None or server.me.id is None \
+                    or channel.permissions_for(server.me) is None:
+                continue
             if channel.type == ChannelType.text:
                     if channel.permissions_for(server.me).read_messages:
                         try: # try/except in order to 'continue' out of multiple for loops
@@ -86,20 +107,7 @@ async def on_ready():
                                         if channel.name.lower() == name.lower():
                                             raise Found
                             serv_logs.append(ChannelLog(channel, []))
-                            #print("    loading " + gc.term.yellow + channel.name + gc.term.normal)
-                            #channel_log = []
-                            #try:
-                            #    async for msg in gc.client.logs_from(channel, limit=settings["max_log_entries"]):
-                            #        count+=1
-                            #        channel_log.insert(0, await calc_mutations(msg))
-                            #    serv_logs.append(ChannelLog(channel, channel_log))
-                            #except:
-                            #    print(gc.term.red + "Error loading logs from channel: " + \
-                            #        channel.name + " in server: " + server.name + gc.term.normal)
-                            #    continue
                         except: continue
-
-        print("\n - Channels loaded! Found " + str(count) + " messages. \n")
 
         # add the channellog to the tree
         gc.server_log_tree.append(ServerLog(server, serv_logs))
@@ -109,7 +117,16 @@ async def on_ready():
                 for clog in slog.get_logs():
                     print(slog.get_name() + " ---- " + clog.get_name())
 
-    await start_ui()
+    # start our own coroutines
+    try: asyncio.get_event_loop().create_task(key_input())
+    except SystemExit: pass
+    except KeyboardInterrupt: pass
+    try: asyncio.get_event_loop().create_task(input_handler())
+    except SystemExit: pass
+    except KeyboardInterrupt: pass
+    try: asyncio.get_event_loop().create_task(is_typing_handler())
+    except SystemExit: pass
+    except KeyboardInterrupt: pass
 
     # Print initial screen
     await print_screen()
@@ -154,12 +171,16 @@ async def on_message_delete(msg):
         # or the user was banned, (in which case all their msgs disappear)
         pass
 
+async def runTest(test):
+    # input_handler.py
+    if test == "input":
+        await inputTestLauncher()
 
 def main():
     # start the client coroutine
     TOKEN=""
     try:
-        if sys.argv[1] == "--help" or sys.argv[1] == "-help":
+        if sys.argv[1] == "--help" or sys.argv[1] == "-h":
             from utils.print_utils.help import print_help
             print_help()
             quit()
@@ -171,6 +192,14 @@ def main():
         elif sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":
             # handled in utils.settings.py
             pass
+        elif sys.argv[1] == "--test":
+            if len(sys.argv) < 3:
+                print(gc.term.red("Error: Incorrect syntax for --test"))
+                print(gc.term.yellow("Syntax: Discline.py --test testName"))
+                quit()
+            elif sys.argv[2] in ("input"):
+                asyncio.get_event_loop().run_until_complete(runTest(sys.argv[2]))
+                quit()
         else:
             print(gc.term.red("Error: Unknown command."))
             print(gc.term.yellow("See --help for options."))
@@ -179,13 +208,14 @@ def main():
 
     check_for_updates()
     token = get_token()
-    logging.basicConfig(filename="file.log", level=logging.INFO, filemode="w")
+    init_input()
 
     print(gc.term.yellow("Starting..."))
 
     # start the client
     try: gc.client.run(token, bot=False)
     except KeyboardInterrupt: pass
+    except SystemExit: pass
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()

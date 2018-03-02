@@ -1,37 +1,19 @@
 from sys import exit
-import logging
 from blessings import Terminal
 from utils.settings import settings
-from ui.curses_utils import CursesBase, MessageEdit, WrappedText
 
 class GlobalsContainer:
     def __init__(self):
         self.term = Terminal()
         self.client = None
-        self.ui = CursesUI()
         self.server_log_tree = []
+        self.input_buffer = []
+        self.user_input = ""
         self.channels_entered = []
 
     def initClient(self):
         from client.client import Client
         self.client = Client(max_messages=settings["max_messages"])
-
-class CursesUI(CursesBase):
-    def __init__(self):
-        super().__init__()
-        self.msgEdit = None
-        self.wrapText = None
-        self.isInitialized = False
-        self.areLogsRead = False
-
-    def waitUntilUserExit(self):
-        self.contentPad = self.createBoxedWin(self.max_y-1, self.max_x)
-        self.msgEdit = MessageEdit(self.max_x)
-        self.wrapText = WrappedText(self.max_y-2, self.max_x-3)
-
-        self.isInitialized = True
-
-gc = GlobalsContainer()
 
 # kills the program and all its elements gracefully
 def kill():
@@ -70,12 +52,14 @@ async def chan2log(chan):
             for clog in srvlog.get_logs():
                 if clog.get_name().lower() == chan.name.lower():
                     return clog
-
+ 
 # returns a "Serverlog" from a given "Server"
 async def serv2log(serv):
     for srvlog in gc.server_log_tree:
         if srvlog.get_name().lower() == serv.name.lower():
             return srvlog
+
+gc = GlobalsContainer()
 
 # takes in a string, returns the appropriate term.color
 async def get_color(string):

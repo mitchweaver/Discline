@@ -39,9 +39,11 @@ def store_token():
         token = token.strip('"')
         token = token.strip("'")
 
-    if token is None or len(token) < 59 or len(token) > 88:
-        print(Terminal().red("Error: Bad token. Did you paste it correctly?"))
-        quit()
+    # ------- Token format seems to vary, disabling this check for now -------- #
+    # if token is None or len(token) < 59 or len(token) > 88:
+        # print(Terminal().red("Error: Bad token. Did you paste it correctly?"))
+        # quit()
+    # ------------------------------------------------------------------------- #
     
     try:
         f = open(os.getenv("HOME") + "/.config/Discline/token", "w")
