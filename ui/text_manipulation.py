@@ -45,6 +45,13 @@ async def calc_mutations(msg):
 
         msg.content = text
 
+    # check for boldened italic font
+    if text.count("***") > 1:
+        while("***") in text:
+            text = await convert_bold_italic(text)
+
+        msg.content = text
+
     # check for boldened font
     if text.count("**") > 1:
         while("**") in text:
@@ -92,32 +99,39 @@ async def trim_emoji(full_name, short_name, string):
     return string.replace(full_name, ":" + short_name + ":")
 
 
-async def convert_bold(string):
-    sections = string.split("**")
+async def _convert_markdown(string, separator):
+    sections = string.split(separator)
     ret = ""
-    for normal, bold in zip(sections[::2], sections[1::2]):
+    for idx, section in enumerate(sections):
         # Iterate over pairs. The trick is that the second one is always bold
-        ret += gc.term.normal + gc.term.white + normal + \
-               gc.term.bold(bold) + gc.term.normal + gc.term.white
+        if idx % 2 == 0:
+            ret += gc.term.normal + gc.term.white + section
+        else:
+            if separator == "***":
+                ret += gc.term.italic(gc.term.bold(section))
+            elif separator == "**":
+                ret += gc.term.bold(section)
+            elif separator == "*":
+                ret += gc.term.italic(section)
+            elif separator == "__":
+                ret += gc.term.underline(section) + gc.term.no_underline
     return ret
 
 
+async def convert_bold_italic(string):
+    return await _convert_markdown(string, "***")
+
+
+async def convert_bold(string):
+    return await _convert_markdown(string, "**")
+
+
 async def convert_italic(string):
-    sections = string.split("*")
-    left = sections[0]
-    target = sections[1]
-    right = "".join(sections[2])
-    return gc.term.normal + gc.term.white + left + " " + gc.term.italic(target) + gc.term.normal + \
-        gc.term.white + " " + right
+    return await _convert_markdown(string, "*")
 
 
 async def convert_underline(string):
-    sections = string.split("__")
-    left = sections[0]
-    target = sections[1]
-    right = "".join(sections[2])
-    return gc.term.normal + gc.term.white + left + " " + gc.term.underline(target) + gc.term.normal + \
-        gc.term.white + " " + right
+    return await _convert_markdown(string, "__")
 
 
 async def convert_code(string):
