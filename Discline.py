@@ -11,7 +11,7 @@
 
 import sys
 import asyncio
-from os import system
+import os
 from discord import ChannelType
 from input.input_handler import input_handler, key_input, init_input
 from input.typing_handler import is_typing_handler
@@ -20,7 +20,7 @@ from ui.text_manipulation import calc_mutations
 from utils.print_utils.help import print_help
 from utils.print_utils.print_utils import *
 from utils.globals import *
-from utils.settings import copy_skeleton, settings
+from utils.settings import copy_skeleton, settings, load_config
 from utils.updates import check_for_updates
 from utils.token_utils import get_token
 from utils import hidecursor
@@ -41,6 +41,8 @@ init_complete = False
 # Set terminal X11 window title
 print('\33]0;Discline\a', end='', flush=True)
 
+os.system("clear")
+
 gc.initClient()
 
 @gc.client.event
@@ -53,7 +55,8 @@ async def on_ready():
     # these values are set in settings.yaml
     if settings["default_prompt"] is not None:
         gc.client.set_prompt(settings["default_prompt"].lower())
-    else: gc.client.set_prompt('~')
+    else: 
+        gc.client.set_prompt('~')
 
     if settings["default_server"] is not None:
         gc.client.set_current_server(settings["default_server"])
@@ -70,8 +73,10 @@ async def on_ready():
     await print_user()
     await print_line_break()
     print("Initializing... \n")
-    try: sys.stdout.flush()
-    except: pass
+    try: 
+        sys.stdout.flush()
+    except: 
+        pass
 
     for server in gc.client.servers:
         # Null check to check server availability
@@ -95,7 +100,8 @@ async def on_ready():
                                         if channel.name.lower() == name.lower():
                                             raise Found
                             serv_logs.append(ChannelLog(channel, []))
-                        except: continue
+                        except: 
+                            continue
 
         # add the channellog to the tree
         gc.server_log_tree.append(ServerLog(server, serv_logs))
@@ -174,13 +180,17 @@ def main():
             store_token()
             quit()
         elif sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":
-            # handled in utils.settings.py
+            # ---- now handled in utils.settings.py ---- #
+            pass
+        elif sys.argv[1] == "--config":
+            # --- now handled in utils.settings.py ---- #
             pass
         else:
             print(gc.term.red("Error: Unknown command."))
             print(gc.term.yellow("See --help for options."))
             quit()
-    except IndexError: pass
+    except IndexError: 
+        pass
 
     check_for_updates()
     token = get_token()

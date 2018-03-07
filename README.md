@@ -3,7 +3,7 @@
 
 ![screenshot_main.png](res/screenshots/screenshot_main.png)
 
-__**Warning**__: Currently Linux/Mac only, it may be a while before support for Windows comes back
+__**Warning**__: Currently Linux/BSD/Mac only, it may be a while before support for Windows comes back.
 
 **NOTE**: A total rewrite of Discline in curses/ncurses is underway!
 
@@ -217,10 +217,6 @@ and make sure it gets sourced upon opening your terminal.
 ![Image](https://0x0.st/sH5g.png)
 
 ![Image](https://0x0.st/sHjn.png)
-
-![Image](https://0x0.st/sHe8.png)
-
-![Image](https://0x0.st/sHez.png)
 
 It can even be configured to hide most elements of the UI in the config:
 

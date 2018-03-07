@@ -5,11 +5,13 @@ def print_help(gc):
     system("echo '" + gc.term.normal \
         + gc.term.green("Launch Arguments: \n") + gc.term.red \
         + "--------------------------------------------- \n" \
-        + get_line(gc, "--copy-skeleton ", " --- ", "copies template settings") \
+        + get_line(gc, "--copy-skeleton", " --- ", "copies template settings") \
         + gc.term.cyan("This file can be found at ~/.config/Discline/config \n") \
         + "\n"
-        + get_line(gc, "--store-token", " --- ", "stores your token") \
+        + get_line(gc, "--store-token", "   --- ", "stores your token") \
         + gc.term.cyan("This file can be found at ~/.config/Discline/token \n") \
+        + "\n"
+        + get_line(gc, "--config", "        --- ", "specify a specific config path") \
         + "\n"
         + gc.term.green("Available Commands: \n") + gc.term.red \
         + "--------------------------------------------- \n" \
@@ -20,7 +22,7 @@ def print_help(gc):
         + get_line(gc, "/servers", "   - ", "list available servers") \
         + get_line(gc, "/channels", "  - ", "list available channels") \
         + get_line(gc, "/users", "     - ", "list servers users") \
-        + get_line(gc, "/emojis", "     - ", "list servers custom emojis") \
+        + get_line(gc, "/emojis", "    - ", "list servers custom emojis") \
         + "\n" \
         + get_line(gc, "/nick", "      - ", "change server nick name") \
         + get_line(gc, "/game", "      - ", "change your game status") \
