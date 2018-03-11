@@ -11,6 +11,7 @@
 
 import sys
 import asyncio
+import logging
 from os import system
 from discord import ChannelType
 from input.input_handler import input_handler, key_input, init_input
@@ -29,6 +30,7 @@ from client.channellog import ChannelLog
 from client.on_message import on_incoming_message
 from client.client import Client
 from tests.input_test import inputTestLauncher
+from tests.formatting_test import formattingTestLauncher
 
 # check if using python 3.5+
 # TODO: this still fails if they're using python2
@@ -172,9 +174,12 @@ async def on_message_delete(msg):
         pass
 
 async def runTest(test):
+    logging.basicConfig(filename="file.log", filemode='w', level=logging.INFO)
     # input_handler.py
     if test == "input":
         await inputTestLauncher()
+    elif test == "formatting":
+        await formattingTestLauncher()
 
 def main():
     # start the client coroutine
@@ -197,7 +202,7 @@ def main():
                 print(gc.term.red("Error: Incorrect syntax for --test"))
                 print(gc.term.yellow("Syntax: Discline.py --test testName"))
                 quit()
-            elif sys.argv[2] in ("input"):
+            elif sys.argv[2] in ("input", "formatting"):
                 asyncio.get_event_loop().run_until_complete(runTest(sys.argv[2]))
                 quit()
         else:
