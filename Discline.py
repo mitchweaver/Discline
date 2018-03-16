@@ -31,6 +31,7 @@ from client.on_message import on_incoming_message
 from client.client import Client
 from tests.input_test import inputTestLauncher
 from tests.formatting_test import formattingTestLauncher
+from tests.scrolling_test import scrollingTestLauncher
 
 # check if using python 3.5+
 # TODO: this still fails if they're using python2
@@ -180,6 +181,8 @@ async def runTest(test):
         await inputTestLauncher()
     elif test == "formatting":
         await formattingTestLauncher()
+    elif test == "scrolling":
+        await scrollingTestLauncher()
 
 def main():
     # start the client coroutine
@@ -202,7 +205,7 @@ def main():
                 print(gc.term.red("Error: Incorrect syntax for --test"))
                 print(gc.term.yellow("Syntax: Discline.py --test testName"))
                 quit()
-            elif sys.argv[2] in ("input", "formatting"):
+            elif sys.argv[2] in ("input", "formatting", "scrolling"):
                 asyncio.get_event_loop().run_until_complete(runTest(sys.argv[2]))
                 quit()
         else:

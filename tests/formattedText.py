@@ -1,5 +1,6 @@
 import logging
 import curses
+from collections import deque
 from tests.textParser import parseText
 
 class TokenContainer:
@@ -12,18 +13,34 @@ class MessageContainer:
         self.name = name
         self.tokens = tokens
 
+class Line:
+    def __init__(self, isFirst=False, user=None):
+        self.words = []
+        if isFirst:
+            if user is None:
+                raise Exception
+        self.user = user
+        self.isFirst = isFirst
+
+    def add(self, token):
+        self.words.append(token)
+
 class WrappedText:
-    def __init__(self, w):
+    def __init__(self, w, maxlen=100):
         self.width = w
 
         self.oldMsgs = []
-        self.messages = [] #TextContainer list
+        self.messages = deque([], maxlen) #TextContainer list
 
     def addMessage(self, msg):
         self.format(msg)
 
-    def getMsgs(self):
-        return self.messages
+    def getLines(self):
+        lines = []
+        for message in self.messages:
+            for line in message.tokens:
+                lines.append(line)
+        return lines
 
     def resize(self):
         for msg in self.oldMsgs:
@@ -45,7 +62,7 @@ class WrappedText:
         for ptoken in ptokens:
             words = ptoken[0].split(' ')
             for idy, word in enumerate(words):
-                if len(word) < 2:
+                if len(word) < 1:
                     continue
                 elif len(word) >= width:
                     iters = int(len(word)/width)
@@ -60,16 +77,15 @@ class WrappedText:
                     continue
                 wtokens.append((word, ptoken[1]))
         cpos = 0
-        line = []
+        line = Line(True, name)
         ltokens = []
         for idx,wtoken in enumerate(wtokens):
             cpos += len(wtoken[0])+1
             if cpos > width+1:
                 ltokens.append(line)
-                line = [TokenContainer(wtoken[0], wtoken[1])]
+                line = Line()
                 cpos = 0
-            else:
-                line.append(TokenContainer(wtoken[0], wtoken[1]))
+            line.add(TokenContainer(wtoken[0], wtoken[1]))
             if idx == len(wtokens)-1:
                 ltokens.append(line)
         mc = MessageContainer(name, ltokens)
