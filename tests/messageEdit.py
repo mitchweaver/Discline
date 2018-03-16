@@ -22,10 +22,10 @@ class MessageEdit:
     def addKey(self, ch):
         # check if character is function character
         # Home, End, Left/Up, Right/Down, Enter
-        if ch == curses.KEY_HOME:
+        if ch == curses.KEY_HOME or ch == curses.KEY_PPAGE:
             self.offset = 0
             self.curPos = 0
-        elif ch == curses.KEY_END:
+        elif ch == curses.KEY_END or ch == curses.KEY_NPAGE:
             # if inputBuffer fits into line
             if len(self.inputBuffer) < self.maxWidth:
                 self.curPos = len(self.inputBuffer)

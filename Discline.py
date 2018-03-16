@@ -32,6 +32,7 @@ from client.client import Client
 from tests.input_test import inputTestLauncher
 from tests.formatting_test import formattingTestLauncher
 from tests.scrolling_test import scrollingTestLauncher
+from tests.sendrecv_test import sendrecvTestLauncher
 
 # check if using python 3.5+
 # TODO: this still fails if they're using python2
@@ -57,7 +58,6 @@ async def on_ready():
                 print(gc.term.red("Error: Incorrect syntax for --test"))
                 print(gc.term.yellow("Syntax: Discline.py --test testName"))
                 quit()
-            #await applySettings()
             await runTest(sys.argv[2])
             quit()
     except IndexError: pass
@@ -174,15 +174,17 @@ async def on_message_delete(msg):
         # or the user was banned, (in which case all their msgs disappear)
         pass
 
-async def runTest(test):
+def runTest(test):
     logging.basicConfig(filename="file.log", filemode='w', level=logging.INFO)
     # input_handler.py
     if test == "input":
-        await inputTestLauncher()
+        inputTestLauncher()
     elif test == "formatting":
-        await formattingTestLauncher()
+        formattingTestLauncher()
     elif test == "scrolling":
-        await scrollingTestLauncher()
+        scrollingTestLauncher()
+    elif test == "sendrecv":
+        sendrecvTestLauncher()
 
 def main():
     # start the client coroutine
@@ -205,8 +207,8 @@ def main():
                 print(gc.term.red("Error: Incorrect syntax for --test"))
                 print(gc.term.yellow("Syntax: Discline.py --test testName"))
                 quit()
-            elif sys.argv[2] in ("input", "formatting", "scrolling"):
-                asyncio.get_event_loop().run_until_complete(runTest(sys.argv[2]))
+            elif sys.argv[2] in ("input", "formatting", "scrolling", "sendrecv"):
+                runTest(sys.argv[2])
                 quit()
         else:
             print(gc.term.red("Error: Unknown command."))

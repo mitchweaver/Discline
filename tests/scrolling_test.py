@@ -1,10 +1,11 @@
+import sys
 import curses
 import random
 import logging
 from tests.utils import User, Message
 from tests.formattedText import WrappedText
 
-async def scrollingTestLauncher():
+def scrollingTestLauncher():
     curses.wrapper(scrollingTest)
 
 def scrollingTest(screen):
@@ -40,10 +41,14 @@ def scrollingTest(screen):
                     text_offset = len(line.user) + 2
                 win.move(idx,text_offset)
                 for idx, token in enumerate(line.words):
-                    if len(line.words)-1 != idx and token.attrs == line.words[idx+1].attrs:
-                        win.addstr(token.content + " ", token.attrs)
-                    else:
-                        win.addstr(token.content, token.attrs)
+                    try:
+                        if len(line.words)-1 != idx and token.attrs == line.words[idx+1].attrs:
+                            win.addstr(token.content + " ", token.attrs)
+                        else:
+                            win.addstr(token.content, token.attrs)
+                    except:
+                        logging.info(token.content)
+                        sys.exit(0)
                 win.refresh()
             ch = win.getch()
             if chr(ch) == 'q':

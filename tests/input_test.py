@@ -3,7 +3,7 @@ import logging
 import curses
 from tests.messageEdit import MessageEdit
 
-async def inputTestLauncher():
+def inputTestLauncher():
     try:
         curses.wrapper(inputTest)
     except Exception as e:

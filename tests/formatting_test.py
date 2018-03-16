@@ -9,7 +9,7 @@ hasItalic = False
 if sys.version_info >= (3,7):
     hasItalic = True
 
-async def formattingTestLauncher():
+def formattingTestLauncher():
     try:
         curses.wrapper(formattingTest)
     except Exception as e:
@@ -53,6 +53,7 @@ def formattingTest(screen):
                     win.addstr(token.content + " ", token.attrs)
                 else:
                     win.addstr(token.content, token.attrs)
+                    win.addstr(" ", curses.A_NORMAL)
             win.refresh()
             line_offset = 0
             if len(lines) > win_maxyx[0]:

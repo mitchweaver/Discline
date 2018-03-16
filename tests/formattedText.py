@@ -81,7 +81,7 @@ class WrappedText:
         ltokens = []
         for idx,wtoken in enumerate(wtokens):
             cpos += len(wtoken[0])+1
-            if cpos > width+1:
+            if cpos > width:
                 ltokens.append(line)
                 line = Line()
                 cpos = 0
