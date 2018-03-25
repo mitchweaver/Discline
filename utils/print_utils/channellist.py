@@ -19,6 +19,7 @@ async def print_channellist():
             name = name.replace("'", "")
             name = name.replace('"', "")
             name = name.replace("`", "")
+            name = name.replace("$(", "")
             buffer.append(name + "\n")
 
     await clear_screen()

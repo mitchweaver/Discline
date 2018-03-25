@@ -1,6 +1,14 @@
 from sys import exit
 from blessings import Terminal
 from utils.settings import settings
+import sys
+
+NO_SETTINGS=False
+try:
+    if sys.argv[1] == "--store-token" or sys.argv[1] == "--token":
+        NO_SETTINGS=True
+except IndexError: 
+    pass
 
 class GlobalsContainer:
     def __init__(self):
@@ -13,7 +21,13 @@ class GlobalsContainer:
 
     def initClient(self):
         from client.client import Client
-        self.client = Client(max_messages=settings["max_messages"])
+        if NO_SETTINGS:
+            messages=100
+        else:
+            messages=settings["max_messages"]
+        self.client = Client(max_messages=messages)
+
+gc = GlobalsContainer()
 
 # kills the program and all its elements gracefully
 def kill():
@@ -58,8 +72,6 @@ async def serv2log(serv):
     for srvlog in gc.server_log_tree:
         if srvlog.get_name().lower() == serv.name.lower():
             return srvlog
-
-gc = GlobalsContainer()
 
 # takes in a string, returns the appropriate term.color
 async def get_color(string):

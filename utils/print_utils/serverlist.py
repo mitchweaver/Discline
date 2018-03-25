@@ -14,6 +14,7 @@ async def print_serverlist():
         name = name.replace("'", "")
         name = name.replace('"', "")
         name = name.replace("`", "")
+        name = name.replace("$(", "")
 
         if slog.get_server() is gc.client.get_current_server():
             buffer.append(await get_color(settings["current_channel_color"]) + name + gc.term.normal + "\n")

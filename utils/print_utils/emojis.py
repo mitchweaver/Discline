@@ -12,6 +12,7 @@ async def print_emojilist():
     server_name = server_name.replace("'", "")
     server_name = server_name.replace('"', "")
     server_name = server_name.replace("`", "")
+    server_name = server_name.replace("$(", "")
 
     emojis = []
     server_emojis = ""
@@ -25,6 +26,7 @@ async def print_emojilist():
             name = name.replace("'", "")
             name = name.replace('"', "")
             name = name.replace("`", "")
+            name = name.replace("$(", "")
             emojis.append(gc.term.yellow + ":" + name + ":" + "\n")
 
     await clear_screen()

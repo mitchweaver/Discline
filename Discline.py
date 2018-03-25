@@ -20,9 +20,9 @@ from ui.text_manipulation import calc_mutations
 from utils.print_utils.help import print_help
 from utils.print_utils.print_utils import *
 from utils.globals import *
-from utils.settings import copy_skeleton, settings, load_config
+from utils.settings import copy_skeleton, settings
 from utils.updates import check_for_updates
-from utils.token_utils import get_token
+from utils.token_utils import get_token,store_token
 from utils import hidecursor
 from client.serverlog import ServerLog
 from client.channellog import ChannelLog
@@ -174,9 +174,7 @@ def main():
             from utils.print_utils.help import print_help
             print_help()
             quit()
-
         elif sys.argv[1] == "--token" or sys.argv[1] == "--store-token":
-            from utils.token_utils import  store_token
             store_token()
             quit()
         elif sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":

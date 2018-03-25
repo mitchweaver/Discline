@@ -109,6 +109,7 @@ async def print_userlist():
         name = name.replace("'", "")
         name = name.replace('"', "")
         name = name.replace("`", "")
+        name = name.replace("$(", "")
         buffer_copy.append(name)
 
     system("echo '" + gc.term.yellow + "Members in " \
@@ -135,4 +136,3 @@ def get_status_color(member):
     # if we're still here, something is wrong
     return "ERROR: get_status_color() has returned 'None' for " \
             + member.name + "\n"
-

@@ -41,13 +41,10 @@ try:
     arg = sys.argv[1]
 except IndexError: 
     pass
-   
-# if not os.path.exists(os.getenv("HOME") + "/.config/Discline/config"):
-#     print(term.yellow("Configuration file not found, creating skeleton..."))
-#     copy_skeleton()
-#     print("\n")
 
-if arg == "--skeleton" or arg == "--copy-skeleton":
+if arg == "--store-token" or arg == "--token":
+    pass
+elif arg == "--skeleton" or arg == "--copy-skeleton":
     copy_skeleton()
     quit()
 elif arg == "--config":
