@@ -1,3 +1,4 @@
+import asyncio
 from utils.globals import gc
 from utils.quicksort import quick_sort_channel_logs
 from utils.settings import settings
@@ -28,3 +29,5 @@ async def channel_jump(arg):
     gc.client.set_current_channel(logs[num].get_name()) 
     logs[num].unread = False
     logs[num].mentioned_in = False
+    gc.ui.channel_log_offset = -1
+    gc.ui.doUpdate = True

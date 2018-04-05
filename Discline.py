@@ -11,20 +11,17 @@
 
 import sys
 import asyncio
-import logging
-from os import system
-from discord import ChannelType
-from input.input_handler import input_handler, key_input, init_input
-from input.typing_handler import is_typing_handler
-from ui.ui import print_screen
-from ui.text_manipulation import calc_mutations
-from utils.print_utils.help import print_help
-from utils.print_utils.print_utils import *
+from utils.log import log
+import curses
+import os
+from discord import ChannelType, MessageType
+from input.input_handler import key_input, typing_handler
+from ui.ui import draw_screen, start_ui, draw_help
 from utils.globals import *
 from utils.settings import copy_skeleton, settings
 from utils.updates import check_for_updates
-from utils.token_utils import get_token
-from utils import hidecursor
+from utils.token_utils import get_token, store_token
+from utils.log import startLogging
 from client.serverlog import ServerLog
 from client.channellog import ChannelLog
 from client.on_message import on_incoming_message
@@ -52,23 +49,11 @@ gc.initClient()
 async def on_ready():
     await gc.client.wait_until_login()
 
-    try:
-        if sys.argv[1] == "--test":
-            if len(sys.argv) < 3:
-                print(gc.term.red("Error: Incorrect syntax for --test"))
-                print(gc.term.yellow("Syntax: Discline.py --test testName"))
-                quit()
-            await runTest(sys.argv[2])
-            quit()
-    except IndexError: pass
-
-    # completely hide the system's cursor
-    await hidecursor.hide_cursor()
-
     # these values are set in settings.yaml
     if settings["default_prompt"] is not None:
         gc.client.set_prompt(settings["default_prompt"].lower())
-    else: gc.client.set_prompt('~')
+    else:
+        gc.client.set_prompt('~')
 
     if settings["default_server"] is not None:
         gc.client.set_current_server(settings["default_server"])
@@ -78,15 +63,6 @@ async def on_ready():
 
     if settings["default_game"] is not None:
         await gc.client.set_game(settings["default_game"])
-
-    # --------------- INIT SERVERS ----------------------------------------- #
-    print("Welcome to " + gc.term.cyan + "Discline" + gc.term.normal + "!")
-    await print_line_break()
-    await print_user()
-    await print_line_break()
-    print("Initializing... \n")
-    try: sys.stdout.flush()
-    except: pass
 
     for server in gc.client.servers:
         # Null check to check server availability
@@ -110,29 +86,21 @@ async def on_ready():
                                         if channel.name.lower() == name.lower():
                                             raise Found
                             serv_logs.append(ChannelLog(channel, []))
-                        except: continue
+                        except:
+                            continue
 
         # add the channellog to the tree
         gc.server_log_tree.append(ServerLog(server, serv_logs))
 
-        if settings["debug"]:
-            for slog in gc.server_log_tree:
-                for clog in slog.get_logs():
-                    print(slog.get_name() + " ---- " + clog.get_name())
-
     # start our own coroutines
-    try: asyncio.get_event_loop().create_task(key_input())
+    await start_ui()
+    loop = asyncio.get_event_loop()
+    try:
+        loop.create_task(draw_screen())
+        loop.create_task(key_input())
+        loop.create_task(typing_handler())
     except SystemExit: pass
     except KeyboardInterrupt: pass
-    try: asyncio.get_event_loop().create_task(input_handler())
-    except SystemExit: pass
-    except KeyboardInterrupt: pass
-    try: asyncio.get_event_loop().create_task(is_typing_handler())
-    except SystemExit: pass
-    except KeyboardInterrupt: pass
-
-    # Print initial screen
-    await print_screen()
 
     global init_complete
     init_complete = True
@@ -147,13 +115,24 @@ async def on_message(message):
 @gc.client.event
 async def on_message_edit(msg_old, msg_new):
     await gc.client.wait_until_ready()
-    msg_new.content = msg_new.content + " *(edited)*"
+    if msg_old.clean_content == msg_new.clean_content: return
+    channellog = gc.client.get_current_channel()
+    ft = gc.ui.formattedText[channellog.id]
+    msg_new.content = msg_new.content + " **(edited)**"
+    idx = 0
+    while True:
+        if ft.messages[idx].id == msg_old.id:
+            ft.messages[idx].content = msg_new.content
+            break
+        idx += 1
+    ft.refresh()
 
     if init_complete:
-        await print_screen()
+        gc.ui.doUpdate = True
 
 @gc.client.event
 async def on_message_delete(msg):
+    log("Attempting to delete")
     await gc.client.wait_until_ready()
     # TODO: PM's have 'None' as a server -- fix this later
     if msg.server is None: return
@@ -162,10 +141,13 @@ async def on_message_delete(msg):
         for serverlog in gc.server_log_tree:
             if serverlog.get_server() == msg.server:
                 for channellog in serverlog.get_logs():
-                    if channellog.get_channel()== msg.channel:
+                    if channellog.get_channel() == msg.channel:
+                        ft = gc.ui.formattedText[channellog.get_channel().id]
                         channellog.get_logs().remove(msg)
-                        if init_complete:
-                            await print_screen()
+                        ft.messages.remove(msg)
+                        ft.refresh()
+                        log("Deleted, updating")
+                        gc.ui.doUpdate = True
                         return
     except:
         # if the message cannot be found, an exception will be raised
@@ -175,7 +157,6 @@ async def on_message_delete(msg):
         pass
 
 def runTest(test):
-    logging.basicConfig(filename="file.log", filemode='w', level=logging.INFO)
     # input_handler.py
     if test == "input":
         inputTestLauncher()
@@ -188,19 +169,21 @@ def runTest(test):
 
 def main():
     # start the client coroutine
+    if settings and settings["debug"]:
+        startLogging()
     TOKEN=""
     try:
         if sys.argv[1] == "--help" or sys.argv[1] == "-h":
-            from utils.print_utils.help import print_help
-            print_help()
+            draw_help()
             quit()
-
         elif sys.argv[1] == "--token" or sys.argv[1] == "--store-token":
-            from utils.token_utils import  store_token
             store_token()
             quit()
         elif sys.argv[1] == "--skeleton" or sys.argv[1] == "--copy-skeleton":
-            # handled in utils.settings.py
+            # -- now handled in utils.settings.py --- #
+            pass
+        elif sys.argv[1] == "--config":
+            # -- now handled in utils.settings.py --- #
             pass
         elif sys.argv[1] == "--test":
             if len(sys.argv) < 3:
@@ -214,11 +197,11 @@ def main():
             print(gc.term.red("Error: Unknown command."))
             print(gc.term.yellow("See --help for options."))
             quit()
-    except IndexError: pass
+    except IndexError:
+        pass
 
     check_for_updates()
     token = get_token()
-    init_input()
 
     print(gc.term.yellow("Starting..."))
 
@@ -226,6 +209,11 @@ def main():
     try: gc.client.run(token, bot=False)
     except KeyboardInterrupt: pass
     except SystemExit: pass
+
+    curses.nocbreak()
+    gc.ui.screen.keypad(False)
+    curses.echo()
+    curses.endwin()
 
     # if we are here, the client's loop was cancelled or errored, or user exited
     try: kill()

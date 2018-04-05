@@ -2,18 +2,17 @@ import sys
 import curses
 import random
 import logging
-from tests.utils import User, Message
-from tests.formattedText import WrappedText
+from tests.utils import User, Role, Message
+from ui.formattedText import FormattedText
 
 def scrollingTestLauncher():
     curses.wrapper(scrollingTest)
 
 def scrollingTest(screen):
     users = [
-            User("NatOsaka"),
-            User("mitch"),
-            User("E5ten"),
-            User("Nep")
+            User("NatOsaka", Role("Contributor")),
+            User("mitch", Role("Dev")),
+            User("E5ten", Role("User"))
     ]
 
     maxyx = screen.getmaxyx()
@@ -22,13 +21,13 @@ def scrollingTest(screen):
     win = curses.newwin(maxyx[0]-2, maxyx[1]-2, 1,1)
     win.keypad(True)
     win_maxyx = win.getmaxyx()
-    wt = WrappedText(win_maxyx[1], 100)
+    ft = FormattedText(win_maxyx[1], 100)
 
     with open("tests/loremSample.txt", 'r') as f:
         for line in f:
-            wt.addMessage(Message(random.choice(users), line.rstrip()))
-        wt.addMessage(Message(users[0], "Last message"))
-        lines = wt.getLines()
+            ft.addMessage(Message(random.choice(users), line.rstrip()))
+        ft.addMessage(Message(users[0], "Last message"))
+        lines = ft.getLines()
         line_offset = 0
         if len(lines) > win_maxyx[0]:
             line_offset = len(lines)-win_maxyx[0]

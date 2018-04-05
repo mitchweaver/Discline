@@ -1,19 +1,34 @@
 from sys import exit
 from blessings import Terminal
 from utils.settings import settings
+from ui.ui import CursesUI
+import sys
+
+NO_SETTINGS=False
+try:
+    if sys.argv[1] == "--store-token" or sys.argv[1] == "--token":
+        NO_SETTINGS=True
+except IndexError: 
+    pass
 
 class GlobalsContainer:
     def __init__(self):
         self.term = Terminal()
         self.client = None
+        self.ui = CursesUI()
         self.server_log_tree = []
-        self.input_buffer = []
-        self.user_input = ""
         self.channels_entered = []
+        self.typingBeingHandled = False
 
     def initClient(self):
         from client.client import Client
-        self.client = Client(max_messages=settings["max_messages"])
+        if NO_SETTINGS:
+            messages=100
+        else:
+            messages=settings["max_messages"]
+        self.client = Client(max_messages=messages)
+
+gc = GlobalsContainer()
 
 # kills the program and all its elements gracefully
 def kill():
@@ -58,8 +73,6 @@ async def serv2log(serv):
     for srvlog in gc.server_log_tree:
         if srvlog.get_name().lower() == serv.name.lower():
             return srvlog
-
-gc = GlobalsContainer()
 
 # takes in a string, returns the appropriate term.color
 async def get_color(string):

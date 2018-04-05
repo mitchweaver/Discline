@@ -1,7 +1,8 @@
+from utils.log import log
 import discord
 from utils.globals import gc
 from utils.settings import settings
-import ui.text_manipulation as tm
+from ui.ui_utils import calc_mutations
 
 # inherits from discord.py's Client
 class Client(discord.Client):
@@ -56,8 +57,13 @@ class Client(discord.Client):
             if clog.get_channel().type is discord.ChannelType.text:
                 if clog.get_channel().name.lower() == self.__current_channel.lower():
                     if clog.get_channel().permissions_for(slog.get_server().me).read_messages:
-                        async for msg in self.logs_from(clog.get_channel(), limit=settings["max_log_entries"]):
-                            clog.insert(0, await tm.calc_mutations(msg))
+                        async for msg in self.logs_from(clog.get_channel(),
+                                limit=settings["max_log_entries"]):
+                            if msg.edited_timestamp is not None:
+                                msg.content += " **(edited)**"
+                            # needed for modification of past messages
+                            self.messages.append(msg)
+                            clog.insert(0, await calc_mutations(msg))
 
     def get_current_channel_log(self):
         slog = self.get_current_server_log()

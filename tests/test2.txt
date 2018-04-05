@@ -1,0 +1,7 @@
+i'm not sure how arch does it, but this is what I use in my ~/.profile:
+
+```bash
+export {LANG,LC_ALL,LOCALE,LC_CTYPE}='en_US.UTF-8'
+export LESSCHARSET='utf-8'
+export PYTHONIOENCODING='UTF-8'
+```

@@ -22,7 +22,6 @@ async def on_message(msg):
     offset = len(msg.author.name)+2
     scr.addstr(0,0, msg.author.name + ": ", curses.A_BOLD)
     scr.addstr(0,offset, msg.content)
-    scr.move(nlines-1,0)
     scr.refresh()
 
 @client.event

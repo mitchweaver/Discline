@@ -1,7 +1,11 @@
 import asyncio
+import time
 import logging
 import curses
-from tests.messageEdit import MessageEdit
+from blessings import Terminal
+from input.messageEdit import MessageEdit
+
+scr = None
 
 def inputTestLauncher():
     try:
@@ -10,21 +14,39 @@ def inputTestLauncher():
         logging.critical(e)
         quit()
 
+async def print_bottom_bar():
+    editBar = scr
+    editBar.clear()
+    # TODO: Add colors
+    editBar.addstr(0,0, "[#{}]: ".format("general"))
+
 def inputTest(screen):
+    global scr
+    scr = screen
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(doWork())
+
+async def doWork():
+    offset = len("general")+5
     curses.cbreak()
     curses.noecho()
-    screen.keypad(True)
-    edit = MessageEdit(screen.getmaxyx()[1])
+    scr.keypad(True)
+    scr.nodelay(True)
+    edit = MessageEdit(scr.getmaxyx()[1])
+    await print_bottom_bar()
     while True:
-        ch = screen.getch()
+        ch = scr.getch()
+        if ch == -1:
+            asyncio.sleep(0.01)
+            continue
         ret = edit.addKey(ch)
         if ret is not None:
-            for i in range(5):
-                screen.move(i+1,0);screen.clrtoeol()
-            screen.addstr(1,0, ret)
+            logging.info(ret)
+            await print_bottom_bar()
             edit.reset()
         else:
             data = edit.getCurrentData()
-            screen.move(0,0);screen.clrtoeol()
-            screen.addstr(0,0, data[0])
-            screen.move(0,data[1])
+            scr.clear()
+            await print_bottom_bar()
+            scr.addstr(0,offset, data[0])
+            scr.move(0,offset+data[1])

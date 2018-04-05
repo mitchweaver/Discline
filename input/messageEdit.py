@@ -1,7 +1,7 @@
 import curses
 
 class MessageEdit:
-    SCROLL = 10
+    SCROLL = 20
     def __init__(self, maxWidth):
         self.maxWidth = maxWidth
         self.offset = 0
@@ -22,10 +22,10 @@ class MessageEdit:
     def addKey(self, ch):
         # check if character is function character
         # Home, End, Left/Up, Right/Down, Enter
-        if ch == curses.KEY_HOME or ch == curses.KEY_PPAGE:
+        if ch == curses.KEY_HOME:
             self.offset = 0
             self.curPos = 0
-        elif ch == curses.KEY_END or ch == curses.KEY_NPAGE:
+        elif ch == curses.KEY_END:
             # if inputBuffer fits into line
             if len(self.inputBuffer) < self.maxWidth:
                 self.curPos = len(self.inputBuffer)

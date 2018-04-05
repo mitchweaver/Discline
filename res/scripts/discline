@@ -8,13 +8,13 @@
 # These are just examples of what I use,
 # edit them to match your system and needs.
 
-TERM='st'
-FONT='MonteCarlo'
-SHELL='/usr/bin/env dash'
+term='st'
+font='MonteCarlo'
+shell='/bin/dash'
 DISCLINE_DIR="${HOME}/workspace/Discline"
 PYTHON_VERSION='3.6'
 
 # ------------------------------------------------------- 
 
-$TERM -f $FONT -e $SHELL -c "cd $DISCLINE_DIR  && \
+$term -f $font -e $shell -c "cd $DISCLINE_DIR  && \
     python$PYTHON_VERSION Discline.py" &

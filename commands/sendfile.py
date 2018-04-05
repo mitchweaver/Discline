@@ -5,7 +5,7 @@ from ui.ui import set_display
 async def send_file(client, filepath):
 
     # try to open the file exactly as user inputs it
-    try: 
+    try:
         await client.send_file(client.get_current_channel(), filepath)
     except:
         # assume the user ommited the prefix of the dir path,
@@ -17,5 +17,4 @@ async def send_file(client, filepath):
             # Either a bad file path, the file was too large,
             # or encountered a connection problem during upload
             msg = "Error: Bad filepath"
-            await set_display(gc.term.bold + gc.term.red + gc.term.move(gc.term.height - 1, \
-                gc.term.width - len(msg) - 1) + msg)
+            await set_display(msg, curses.A_BOLD|gc.ui.colors["red"])

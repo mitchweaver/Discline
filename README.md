@@ -3,7 +3,7 @@
 
 ![screenshot_main.png](res/screenshots/screenshot_main.png)
 
-__**Warning**__: Currently Linux/Mac only, it may be a while before support for Windows comes back
+__**Warning**__: Currently Linux/BSD/Mac only, it may be a while before support for Windows comes back
 
 **NOTE**: A total rewrite of Discline in curses/ncurses is underway!
 
@@ -12,7 +12,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 
 1. Install the dependencies:
 
-    `sudo pip3 install asyncio discord blessings pyyaml`
+    `sudo pip3 install asyncio discord blessings pyyaml mistletoe`
 
 2. Clone the repo
 
@@ -91,6 +91,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 * [discord.py](https://github.com/Rapptz/discord.py)
 * [blessings.py](https://pypi.python.org/pypi/blessings/)
 * [PyYAML](https://pypi.python.org/pypi/PyYAML/)
+* [mistletoe](https://github.com/miyuchina/mistletoe/)
 * asyncio
 
 **To install dependencies**:
@@ -99,7 +100,7 @@ __**Warning**__: Currently Linux/Mac only, it may be a while before support for 
 2. Install `pip3`, normally called `python3-pip` in package managers
 3. Download the dependencies using pip with the following command:
 
-    `sudo pip3 install asyncio discord blessings pyyaml`
+    `sudo pip3 install asyncio discord blessings pyyaml mistletoe`
 
 
 ### Color Customization
@@ -109,16 +110,16 @@ Almost all aspects of the client can be colored to
 the user's wishes. You can set these colors from within `~/.config/Discline/config`
 
 Note: These assume that you're using the standard terminal colors. If you
-have colors already defined in your ~/.Xresources or similar, this will 
+have colors already defined in your ~/.Xresources or similar, this will
 be very confusing.
 
 ## Launching
 ------------------------
 Discline uses git for automatic updates, so you must be within the Discline
-directory upon starting. Manually you can launch via `python3.6 ./Discline.py`, 
+directory upon starting. Manually you can launch via `python3.6 ./Discline.py`,
 however it is advised to create a helper script to do this for you.
 
-An example script is in the /res/scripts folder, 
+An example script is in the /res/scripts folder,
 edit it to suit your system and tastes.
 
 ### A Note On Emojis
@@ -217,10 +218,6 @@ and make sure it gets sourced upon opening your terminal.
 ![Image](https://0x0.st/sH5g.png)
 
 ![Image](https://0x0.st/sHjn.png)
-
-![Image](https://0x0.st/sHe8.png)
-
-![Image](https://0x0.st/sHez.png)
 
 It can even be configured to hide most elements of the UI in the config:
 
