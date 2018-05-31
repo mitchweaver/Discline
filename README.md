@@ -1,3 +1,6 @@
+# Notice:
+This repo is deprecated. Please clone from [here](https://github.com/NatTupper/Discline) for updates.
+
 # ![logo_small.png](res/logo/logo_small.png) Discline
 ------------------------------
 
