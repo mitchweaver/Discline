@@ -1,6 +1,11 @@
 # ![logo_small.png](res/logo/logo_small.png) Discline
 ------------------------------
 
+## This repo is outdated and is not being updated. Please use @NatTupper's fork for the time being.
+https://github.com/NatTupper/Discline
+
+------------------------------
+
 ![screenshot_main.png](res/screenshots/screenshot_main.png)
 
 __**Warning**__: Currently Linux/BSD/Mac only, it may be a while before support for Windows comes back.
