@@ -189,7 +189,6 @@ async def print_left_bar(left_bar_width):
                 pass
 
             if log.get_channel() is not client.get_current_channel():
-
                 if log.unread and settings["blink_unreads"]:
                     text = await get_color(settings["unread_channel_color"]) + text + term.normal
                 elif log.mentioned_in and settings["blink_mentions"]:

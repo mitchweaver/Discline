@@ -150,8 +150,10 @@ async def print_left_bar(left_bar_width):
             else:
                 text = text[0:left_bar_width - 4] + "..."
 
+        maxiw = (left_bar_width-1) - (len(str(count)) + 2)
         if log.get_channel() is gc.client.get_current_channel():
             if settings["number_channels"]:
+                text = text[:maxiw]
                 buffer.append(gc.term.normal + str(count) + ". " + gc.term.green + text + gc.term.normal + "\n")
             else: 
                 buffer.append(gc.term.green + text + gc.term.normal + "\n")
@@ -167,6 +169,7 @@ async def print_left_bar(left_bar_width):
                     text = await get_color(settings["unread_mention_color"]) + text + gc.term.normal
             
             if settings["number_channels"]:
+                text = text[:maxiw]
                 buffer.append(gc.term.normal + str(count) + ". " + text + "\n")
             else:
                 buffer.append(text + "\n")
