@@ -1,5 +1,5 @@
 import sys
-from os import system
+from os import system, popen
 from discord import ChannelType
 from blessings import Terminal
 from ui.line import Line
@@ -220,7 +220,7 @@ async def print_channel_log(left_bar_width):
  
     # the max number of lines that can be shown on the screen
     MAX_LINES = await get_max_lines()
-
+    
     for server_log in gc.server_log_tree:
         if server_log.get_server() is gc.client.get_current_server():
             for channel_log in server_log.get_logs():
@@ -275,7 +275,11 @@ async def print_channel_log(left_bar_width):
 
                             line_length = len(line)
                             # Loop through, wrapping the lines until it behaves
-                            while line_length > MAX_LENGTH:
+                            offset = 0
+                            if author_prefix not in line:
+                                offset = min(author_name_length + settings["margin"], 10)
+
+                            while line_length > (MAX_LENGTH - offset - 1):
 
                                 line = line.strip()
 
@@ -290,7 +294,7 @@ async def print_channel_log(left_bar_width):
                                 offset = 0
                                 if author_prefix not in sect:
                                     if line is not msg_lines[0]:
-                                        offset = author_name_length + settings["margin"]
+                                        offset = min(author_name_length + settings["margin"], 10)
                                 # add in now formatted line!
                                 formatted_lines.append(Line(sect.strip(), offset))
                             
@@ -308,9 +312,6 @@ async def print_channel_log(left_bar_width):
                                 # so instead we will simply subtract the length
                                 # of the shortest for each that it has.
                                 line_length = len(line)
-                                target = "\e"
-                                for target in line:
-                                    line_length -= 5
 
                             # Once here, the string was either A: already short enough
                             # to begin with, or B: made through our while loop and has
@@ -319,7 +320,7 @@ async def print_channel_log(left_bar_width):
                                 
                                 offset = 0
                                 if author_prefix not in line:
-                                    offset = author_name_length + settings["margin"]
+                                    offset = min(author_name_length + settings["margin"], 10) + 4
 
                                 formatted_lines.append(Line(line.strip(), offset))
                                 
