@@ -15,6 +15,7 @@ class UserList:
         self.offline = []
         self.idle = []
         self.dnd = []
+        self.disp_offline = False
 
     def add(self, member, tag):
         listing = member.name + tag + " \n"
@@ -48,16 +49,16 @@ class UserList:
         del tmp[:]
        
         for name in self.dnd: 
-            tmp.append(gc.term.black + name)
+            tmp.append(gc.term.red + name)
         self.dnd = list(tmp)
         del tmp[:]
 
         for name in self.offline: 
-            tmp.append(gc.term.red + name)
+            tmp.append(gc.term.black + name)
         self.offline = list(tmp)
         del tmp[:]
 
-        return "".join(self.online) + "".join(self.offline) \
+        return "".join(self.online) + str("".join(self.offline))*self.disp_offline \
                 + "".join(self.idle) + "".join(self.dnd)
 
 async def print_userlist():
@@ -92,14 +93,19 @@ async def print_userlist():
     # the final buffer that we're actually going to print
     buffer = []
 
+    buffer.append("\n" + gc.term.magenta + "| ADMINS AND MODERATORS      ")
+    buffer.append("\n" + gc.term.magenta + "---------------------------- \n\n")
+
     if admins is not None: buffer.append(admins.sort())
     if mods is not None: buffer.append(mods.sort())
 
+    buffer.append("\n" + gc.term.magenta + "| BOTS AND PEOPLE WITH A ROLE")
     buffer.append("\n" + gc.term.magenta + "---------------------------- \n\n")
 
     if bots is not None: buffer.append(bots.sort())
     if everything_else is not None: buffer.append(everything_else.sort())
-
+    
+    buffer.append("\n" + gc.term.magenta + "| PEOPLE WITH NO ROLE        ")
     buffer.append("\n" + gc.term.magenta + "---------------------------- \n\n")
 
     if nonroles is not None: buffer.append(nonroles.sort())
@@ -113,12 +119,12 @@ async def print_userlist():
         buffer_copy.append(name)
 
     system("echo '" + gc.term.yellow + "Members in " \
-           + gc.client.get_current_server().name + ": \n" \
-           + gc.term.magenta + "---------------------------- \n \n" \
+           + gc.client.get_current_server().name + ": \n\n" \
+           + gc.term.magenta + "----------------------------" \
            + "".join(buffer_copy) \
-           + gc.term.green + "~ \n" \
-           + gc.term.green + "~ \n" \
-           + gc.term.green + "(press \'q\' to quit this dialog) \n" \
+           + gc.term.green + "\n" \
+           + gc.term.green + "\n" \
+           + gc.term.blue + "(press \'q\' to quit this dialog) \n" \
            # NOTE: the -R flag here enables color escape codes
            + "' | less -R")
 
@@ -131,7 +137,7 @@ def get_status_color(member):
     if member.status is Status.offline:
         return gc.term.red
     if member.status is Status.dnd: # do not disturb
-        return gc.term.black
+        return gc.term.gray
 
     # if we're still here, something is wrong
     return "ERROR: get_status_color() has returned 'None' for " \
