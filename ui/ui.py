@@ -18,10 +18,6 @@ screen_buffer = []
 display = ""
 display_frames = 0
 
-def printclean(content):
-    for line in content.split("\n"):
-        print(line + " "*(gc.term.width - len(line)))
-
 async def print_screen():
     # Get ready to redraw the screen
     left_bar_width = await get_left_bar_width()
@@ -205,10 +201,9 @@ async def clear_screen():
     ## instead of "clearing", we're actually just overwriting
     ## everything with white space. This mitigates the massive
     ## screen flashing that goes on with "cls" and "clear"
-    #del screen_buffer[:]
-    #wipe = (" " * (gc.term.width) + "\n") * gc.term.height
-    #print(gc.term.move(0,0) + wipe, end="")
-    pass
+    del screen_buffer[:]
+    wipe = (" " * (gc.term.width) + "\n") * gc.term.height
+    print(gc.term.move(0,0) + wipe, end="")
 
 async def print_channel_log(left_bar_width):
     global INDEX
