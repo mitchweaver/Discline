@@ -35,21 +35,21 @@ async def print_screen():
     if settings["show_top_bar"]:
         if settings["show_separators"]:
             with gc.term.location(0, 2):
-                printclean("".join(screen_buffer))
+                print("".join(screen_buffer))
         else:
             with gc.term.location(0, 1):
-                printclean("".join(screen_buffer))
+                print("".join(screen_buffer))
 
     else:
         with gc.term.location(0, 0):
-            printclean("".join(screen_buffer))
+            print("".join(screen_buffer))
 
     if settings["show_left_bar"]:
         await print_left_bar(left_bar_width)
 
     global display, display_frames
     if display != "":
-        printclean(display)
+        print(display)
         display_frames -= 1
         if display_frames <=  0:
             display = ""
