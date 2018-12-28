@@ -46,6 +46,18 @@ __**Warning**__: Currently Linux/BSD/Mac only, it may be a while before support 
 
     *(alternatively if you have python3.6 you can simply use `./Discline.py`)*
 
+## Using docker
+--------------------------
+
+1. Clone the repository
+
+2. Build the docker image
+
+    `docker build -t discipline .`
+
+3. Run the docker image using your token
+
+    `docker run -it discipline:latest $DISCORD_TOKEN`
 
 ### Current Features
 --------------------------
