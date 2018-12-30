@@ -17,25 +17,25 @@ async def print_serverlist():
         name = name.replace("$(", "")
 
         if slog.get_server() is gc.client.get_current_server():
-            buffer.append(await get_color(settings["current_channel_color"]) + name + gc.term.normal + "\n")
+            buffer.append(await get_color(settings["current_channel_color"]) + name + "\033[0m" + "\n")
             continue
 
         string = ""
         for clog in slog.get_logs():
             if clog.mentioned_in:
-                string = await get_color(settings["unread_mention_color"]) + name + gc.term.normal + "\n"
+                string = await get_color(settings["unread_mention_color"]) + name + "\033[0m" + "\n"
                 break
             elif clog.unread:
-                string = await get_color(settings["unread_channel_color"]) + name + gc.term.normal + "\n"
+                string = await get_color(settings["unread_channel_color"]) + name + "\033[0m" + "\n"
                 break
         
         if string == "":
-            string = await get_color(settings["text_color"]) + name + gc.term.normal + "\n"
+            string = await get_color(settings["text_color"]) + name + "\033[0m" + "\n"
 
         buffer.append(string)
             
     await clear_screen()
-    system("echo '" + gc.term.magenta + "Available Servers: \n" + gc.term.normal \
+    system("echo '" + gc.term.magenta + "Available Servers: \n" + "\033[0m" \
         + "---------------------------- \n \n" \
         + "".join(buffer) \
         + gc.term.green + "~ \n" \
