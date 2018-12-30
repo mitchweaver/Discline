@@ -11,7 +11,12 @@ async def get_prompt():
         middle = await get_color(settings["prompt_hash_color"]) + "#" \
                 + await get_color(settings["prompt_color"]) + gc.client.get_prompt()
 
-    return left + middle + right
+    colors = {"dnd":gc.term.red, "online":gc.term.green, "offline":gc.term.black, "idle":gc.term.yellow}
+    userstatus = str(await gc.client.get_status())
+    username = gc.client.user.name
+    status = colors[userstatus] + "<" + username + ">  " + gc.term.normal
+
+    return status + left + middle + right
 
 
 async def get_max_lines():
