@@ -262,7 +262,7 @@ async def print_channel_log(left_bar_width):
                             except: author_name = "Unknown Author"
                         
                         author_name_length = len(author_name)
-                        author_prefix = await get_role_color(msg) + author_name + ": "*print_column + "  "*(not print_column)
+                        author_prefix = await get_role_color(msg) + author_name + ": "*print_column + "| "*(not print_column)
 
                         color = ""
                         if HAS_MENTION:
