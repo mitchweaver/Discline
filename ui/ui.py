@@ -233,22 +233,36 @@ async def print_channel_log(left_bar_width):
                     # TODO: private messages are not "text" channeltypes
                     if channel_log.get_channel().type != ChannelType.text: continue
                     
+                    last_author = ""
                     for msg in channel_log.get_logs():
                         # The lines of this unformatted message
                         msg_lines = []
-           
+                        print_column = True
+
                         HAS_MENTION = False
                         if "@" + gc.client.get_current_server().me.display_name in msg.clean_content:
                             HAS_MENTION = True
 
                         author_name = ""
-                        try: author_name = msg.author.display_name
+                        try:
+                            author_name = msg.author.display_name
+                            if author_name == last_author:
+                                author_name = " "*len(last_author)
+                                print_column = False
+                            else:
+                                last_author = author_name
                         except:
-                            try: author_name = msg.author.name
+                            try:
+                                author_name = msg.author.name
+                                if author_name == last_author:
+                                    author_name = " "*len(last_author)
+                                    print_column = False
+                                else:
+                                    last_author = author_name
                             except: author_name = "Unknown Author"
                         
                         author_name_length = len(author_name)
-                        author_prefix = await get_role_color(msg) + author_name + ": "
+                        author_prefix = await get_role_color(msg) + author_name + ": "*print_column + "  "*(not print_column)
 
                         color = ""
                         if HAS_MENTION:

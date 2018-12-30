@@ -1,0 +1,6 @@
+Do not disturb and offline are swapped
+    to change
+Add an indicator to see what is my status
+Make a "waiting for connection" screen when disconnected
+    instead of just raising an Exception
+Make a little noise when receiving a message
