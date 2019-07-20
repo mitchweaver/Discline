@@ -3,9 +3,24 @@
 
 ![screenshot_main.png](res/screenshots/screenshot_main.png)
 
-__**Warning**__: Currently Linux/BSD/Mac only, it may be a while before support for Windows comes back.
 
-**NOTE**: A total rewrite of Discline in curses/ncurses is underway!
+# NOTICE: July 20th, 2019
+
+AFAIK discline has become non-functional.
+
+* Python3.7 has changed the syntax of its async libraries.
+
+* discord.py has also gone through a new release cycle which's syntax is not backwards compatible.
+
+Discline will require a full rewrite, possibly done in a new language.
+
+Stay tuned for updates via this readme.
+
+Thanks to all that have supported the project thus far, 
+I hope you stick around for whats to come.
+
+<sub>With that said, I'll leave the remainder of the readme intact:</sub>
+
 
 ## How to use:
 -------------------------
@@ -252,8 +267,9 @@ Otherwise it will become public.
 ### License
 -------------------------------
 
-Licensed under GNU-GPLv3
-
+<a href="http://www.wtfpl.net/"><img
+       src="http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png"
+       width="80" height="15" alt="WTFPL" /></a>
 
 ### Legal Disclaimer
 --------------------------------
